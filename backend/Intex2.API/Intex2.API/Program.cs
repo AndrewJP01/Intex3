@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Intex2.API.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
