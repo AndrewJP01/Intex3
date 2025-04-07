@@ -27,10 +27,10 @@ C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\n
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Intex2.API.props
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Intex2.API.props
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.csproj.Up2Date
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.dll
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\refint\Intex2.API.dll
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.pdb
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.genruntimeconfig.cache
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\ref\Intex2.API.dll
+C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.sourcelink.json
