@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Intex2.API.Models
+﻿namespace Intex2.API.Models
 {
-    public class Movie
+    public class MovieCreateDto
     {
-        [Key]
         public string show_id { get; set; }
         public string type { get; set; }
         public string title { get; set; }
@@ -15,8 +12,6 @@ namespace Intex2.API.Models
         public string rating { get; set; }
         public string duration { get; set; }
         public string description { get; set; }
-
-        public ICollection<MovieGenre> genres { get; set; }
-        public ICollection<MovieRating>? ratings { get; set; }
+        public List<string> genres { get; set; }
     }
 }

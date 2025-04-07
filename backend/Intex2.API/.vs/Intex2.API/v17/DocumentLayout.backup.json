@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|c:\\users\\andre\\onedrive\\desktop\\intex2\\backend\\intex2.api\\intex2.api\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|solutionrelative:intex2.api\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|c:\\users\\andre\\onedrive\\desktop\\intex2\\backend\\intex2.api\\intex2.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|solutionrelative:intex2.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|c:\\users\\andre\\onedrive\\desktop\\intex2\\backend\\intex2.api\\intex2.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|solutionrelative:intex2.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|c:\\users\\andre\\onedrive\\desktop\\intex2\\backend\\intex2.api\\intex2.api\\models\\movie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|solutionrelative:intex2.api\\models\\movie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|c:\\users\\andre\\onedrive\\desktop\\intex2\\backend\\intex2.api\\intex2.api\\models\\moviegenre.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|solutionrelative:intex2.api\\models\\moviegenre.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|c:\\users\\andre\\onedrive\\desktop\\intex2\\backend\\intex2.api\\intex2.api\\models\\movierating.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CE83234-DFA8-41CC-88E6-A8559D388096}|Intex2.API\\Intex2.API.csproj|solutionrelative:intex2.api\\models\\movierating.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,42 +50,52 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Program.cs",
+              "RelativeDocumentMoniker": "Intex2.API\\Program.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Program.cs",
+              "RelativeToolTip": "Intex2.API\\Program.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAAwD8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T20:51:53.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Intex2.API\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Intex2.API\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAAwHMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T20:49:38.98Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Movie.cs",
               "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Models\\Movie.cs",
               "RelativeDocumentMoniker": "Intex2.API\\Models\\Movie.cs",
               "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Models\\Movie.cs",
               "RelativeToolTip": "Intex2.API\\Models\\Movie.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAowBMAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T20:15:12.966Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T20:44:11.78Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Intex2.API\\Data\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "Intex2.API\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwB4AAABBAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "MovieRating.cs",
+              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Models\\MovieRating.cs",
+              "RelativeDocumentMoniker": "Intex2.API\\Models\\MovieRating.cs",
+              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Models\\MovieRating.cs",
+              "RelativeToolTip": "Intex2.API\\Models\\MovieRating.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T20:13:15.797Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MovieGenre.cs",
-              "DocumentMoniker": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Models\\MovieGenre.cs",
-              "RelativeDocumentMoniker": "Intex2.API\\Models\\MovieGenre.cs",
-              "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Models\\MovieGenre.cs",
-              "RelativeToolTip": "Intex2.API\\Models\\MovieGenre.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T20:10:38.102Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T20:44:06.747Z"
             }
           ]
         }

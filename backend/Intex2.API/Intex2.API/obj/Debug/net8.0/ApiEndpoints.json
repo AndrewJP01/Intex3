@@ -21,6 +21,22 @@
   },
   {
     "ContainingType": "Intex2.API.Controllers.AdminController",
+    "Method": "AddMovie",
+    "RelativePath": "api/Admin/movies",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Intex2.API.Models.MovieCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Intex2.API.Controllers.AdminController",
     "Method": "DeleteMovie",
     "RelativePath": "api/Admin/movies/{id}",
     "HttpMethod": "DELETE",
@@ -30,6 +46,27 @@
       {
         "Name": "id",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Intex2.API.Controllers.AdminController",
+    "Method": "UpdateMovie",
+    "RelativePath": "api/Admin/movies/{show_id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "show_id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedMovie",
+        "Type": "Intex2.API.Models.Movie",
         "IsRequired": true
       }
     ],
