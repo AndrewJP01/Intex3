@@ -56,7 +56,7 @@
               "RelativeDocumentMoniker": "Intex2.API\\Program.cs",
               "ToolTip": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Program.cs",
               "RelativeToolTip": "Intex2.API\\Program.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAUwD8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAAwD8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T20:51:53.208Z",
               "EditorCaption": ""
@@ -71,8 +71,7 @@
               "RelativeToolTip": "Intex2.API\\Controllers\\AdminController.cs",
               "ViewState": "AgIAAFwAAAAAAAAAAAAAwHMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T20:49:38.98Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T20:49:38.98Z"
             },
             {
               "$type": "Document",
@@ -84,8 +83,7 @@
               "RelativeToolTip": "Intex2.API\\Models\\Movie.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAowBMAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T20:44:11.78Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T20:44:11.78Z"
             },
             {
               "$type": "Document",
@@ -97,8 +95,7 @@
               "RelativeToolTip": "Intex2.API\\Models\\MovieRating.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-07T20:44:06.747Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-07T20:44:06.747Z"
             }
           ]
         }
