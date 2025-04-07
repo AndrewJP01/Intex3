@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/0a56a555-f2b0-42c3-9c7b-7fad5c3e2358/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/Bookstore-Potter-Backend/subscriptions/0a56a555-f2b0-42c3-9c7b-7fad5c3e2358/resourceGroups/appsvc_windows_eastus/providers/Microsoft.Web/sites/Intex2-backend",
+  "appService.deploySubpath": "backend\\Intex2.API\\Intex2.API\\publish"
+}
