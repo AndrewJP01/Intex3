@@ -1,43 +1,85 @@
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\appsettings.Development.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\appsettings.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.staticwebassets.endpoints.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.exe
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.deps.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.runtimeconfig.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.pdb
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Microsoft.OpenApi.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.csproj.AssemblyReference.cache
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.AssemblyInfoInputs.cache
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.AssemblyInfo.cs
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.csproj.CoreCompileInputs.cache
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\scopedcss\bundle\Intex2.API.styles.css
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.development.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.Intex2.API.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.Intex2.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.build.Intex2.API.props
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Intex2.API.props
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Intex2.API.props
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.csproj.Up2Date
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\refint\Intex2.API.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.pdb
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.genruntimeconfig.cache
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\ref\Intex2.API.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.sourcelink.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\web.config
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\appsettings.Development.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\appsettings.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\Intex2.API.deps.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\Intex2.API.runtimeconfig.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\Intex2.API.staticwebassets.endpoints.json
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/appsettings.Development.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/appsettings.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.staticwebassets.endpoints.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.exe
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.deps.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.runtimeconfig.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.pdb
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.OpenApi.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.csproj.AssemblyReference.cache
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.AssemblyInfoInputs.cache
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.AssemblyInfo.cs
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.csproj.CoreCompileInputs.cache
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.MvcApplicationPartsAssemblyInfo.cs
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.MvcApplicationPartsAssemblyInfo.cache
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/scopedcss/bundle/Intex2.API.styles.css
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.build.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.development.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.Intex2.API.Microsoft.AspNetCore.StaticWebAssets.props
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.Intex2.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.build.Intex2.API.props
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.Intex2.API.props
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.Intex2.API.props
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.pack.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.csproj.Up2Date
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/refint/Intex2.API.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.pdb
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.genruntimeconfig.cache
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/ref/Intex2.API.dll
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.sourcelink.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/web.config
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/appsettings.Development.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/appsettings.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.deps.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.runtimeconfig.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.staticwebassets.endpoints.json
+C:/Users/andre/OneDrive/Desktop/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.upToDateCheck.txt
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/appsettings.Development.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/appsettings.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/web.config
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/appsettings.Development.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/appsettings.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.deps.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.runtimeconfig.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.staticwebassets.endpoints.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.staticwebassets.endpoints.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.deps.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.runtimeconfig.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.pdb
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.OpenApi.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.csproj.AssemblyReference.cache
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.GeneratedMSBuildEditorConfig.editorconfig
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.AssemblyInfoInputs.cache
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.AssemblyInfo.cs
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.csproj.CoreCompileInputs.cache
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.MvcApplicationPartsAssemblyInfo.cs
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.MvcApplicationPartsAssemblyInfo.cache
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.sourcelink.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/scopedcss/bundle/Intex2.API.styles.css
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.build.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.development.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.Intex2.API.Microsoft.AspNetCore.StaticWebAssets.props
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.Intex2.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.build.Intex2.API.props
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.Intex2.API.props
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.Intex2.API.props
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/staticwebassets.pack.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.csproj.Up2Date
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/refint/Intex2.API.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.pdb
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.genruntimeconfig.cache
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/ref/Intex2.API.dll
