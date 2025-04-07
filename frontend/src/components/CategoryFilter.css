@@ -1,0 +1,49 @@
+.category-filter {
+    position: relative;
+    width: 250px;
+    font-family: Roboto, sans-serif;
+  }
+  
+  .dropdown-toggle {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #1c1c1c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-align: left;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 10;
+  }
+  
+  .category-item {
+    margin-bottom: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+  
+  .category-checkbox {
+    margin-right: 10px;
+  }
+  
+  .dropdown-menu label {
+    font-size: 14px;
+    color: #eaeaea;
+  }
+  
+  
