@@ -1,11 +1,10 @@
 ﻿namespace Intex2.API.Models
 {
     public class MovieGenre
-    {
-        public int Id { get; set; }
-        public string ShowId { get; set; }
-        public string Genre { get; set; }
+        {
+            public string show_id { get; set; }
+            public string genre { get; set; }
 
-        public Movie Movie { get; set; }
+            public Movie movie { get; set; }
+        }
     }
-}

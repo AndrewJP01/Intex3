@@ -2,11 +2,11 @@
 {
     public class MovieRating
     {
-        public int UserId { get; set; }
-        public string ShowId { get; set; }
-        public int Rating { get; set; }
+        public int user_id { get; set; }
+        public string show_id { get; set; }
+        public int rating { get; set; }
 
-        public MovieUser User { get; set; }
-        public Movie Movie { get; set; }
+        public MovieUser user { get; set; }
+        public Movie movie { get; set; }
     }
 }

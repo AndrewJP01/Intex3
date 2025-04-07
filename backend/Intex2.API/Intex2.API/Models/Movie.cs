@@ -1,19 +1,22 @@
-﻿namespace Intex2.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Intex2.API.Models
 {
     public class Movie
     {
-        public string ShowId { get; set; }
-        public string Title { get; set; }
-        public string Type { get; set; }
-        public string Director { get; set; }
-        public string Cast { get; set; }
-        public string Country { get; set; }
-        public int ReleaseYear { get; set; }
-        public string Rating { get; set; }
-        public string Duration { get; set; }
-        public string Description { get; set; }
+        [Key]
+        public string show_id { get; set; }
+        public string type { get; set; }
+        public string title { get; set; }
+        public string director { get; set; }
+        public string cast { get; set; }
+        public string country { get; set; }
+        public int release_year { get; set; }
+        public string rating { get; set; }
+        public string duration { get; set; }
+        public string description { get; set; }
 
-        public ICollection<MovieGenre> Genres { get; set; }
-        public ICollection<MovieRating> Ratings { get; set; }
+        public ICollection<MovieGenre> genres { get; set; }
+        public ICollection<MovieRating> ratings { get; set; }
     }
 }

@@ -9,21 +9,38 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add EF Core DbContext here ⬇️
+// ✅ Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// ✅ Add EF Core DbContext
 var connectionString = builder.Configuration.GetConnectionString("MovieConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
+// ✅ Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+// ✅ Use CORS BEFORE authorization
+app.UseCors("AllowAll");
+
 app.UseAuthorization();
+
 app.MapControllers();
 
-// Test connection (optional)
+// ✅ Optional: test SQL connection on startup
 try
 {
     using (var connection = new SqlConnection(connectionString))
@@ -38,4 +55,5 @@ catch (Exception ex)
 }
 
 app.Run();
+
 
