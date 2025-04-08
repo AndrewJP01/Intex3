@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../pages/MovieHomePage.module.css";
 import { useNavigate } from "react-router-dom";
 
-type Movie = {
+export type Movie = {
   title: string;
   category: string;
   imageUrl?: string;
   id?: string | number;
+  description?: string; // Include this if it's used in ContentCarousel
 };
 
 type ContentCarouselProps = {
   title: string;
-  movies: {
-    title: string;
-    category: string;
-    imageUrl?: string;
-    id?: string | number;
-  }[];
+  movies: Movie[];
 };
 
 export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies }) => {
@@ -24,6 +20,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
   const [validMovies, setValidMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const moviesPerPage = 7;
+  const imageCache = useRef<Map<string, boolean>>(new Map());
 
   useEffect(() => {
     const loadValidMovies = async () => {
@@ -38,7 +35,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
     };
 
     loadValidMovies();
-  }, [movies]);
+  }, [movies]);  // Dependency array ensures this only reruns when `movies` changes
 
   const handleMovieClick = (movieId: string | number | undefined) => {
     if (movieId) {
@@ -48,33 +45,30 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
 
   const handleNextClick = () => {
     const maxIndex = Math.ceil(validMovies.length / moviesPerPage) - 1;
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1;
-      return nextIndex <= maxIndex ? nextIndex : prevIndex;
-    });
+    setCurrentIndex(prevIndex => Math.min(prevIndex + 1, maxIndex));
   };
 
   const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = prevIndex - 1;
-      return nextIndex >= 0 ? nextIndex : prevIndex;
-    });
+    setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
   };
-
-  // Only show the movies for the current page
-  const visibleMovies = validMovies.slice(currentIndex * moviesPerPage, (currentIndex + 1) * moviesPerPage);
 
   const getMovieImageUrl = (movieTitle: string) => {
-    const formattedTitle = encodeURIComponent(movieTitle);
-    return `http://localhost:5166/Movie%20Posters/${formattedTitle}.jpg`;
+    return `http://localhost:5166/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
   };
 
-  const checkImage = async (url: RequestInfo | URL) => {
+  const checkImage = async (url: string) => {
+    if (imageCache.current.has(url)) {
+      return imageCache.current.get(url);
+    }
+
     try {
       const response = await fetch(url);
-      return response.ok;
+      const isValid = response.ok;
+      imageCache.current.set(url, isValid);
+      return isValid;
     } catch (error) {
       console.log("Error fetching image:", error);
+      imageCache.current.set(url, false);
       return false;
     }
   };
@@ -87,7 +81,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
           &#10094;
         </button>
         <div className={styles.carouselTrack}>
-          {visibleMovies.map((movie) => (
+          {movies.map((movie) => (
             <div
               key={movie.title}
               className={styles.carouselItem}
@@ -98,7 +92,10 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
                 alt={movie.title}
                 className={styles.movieImage}
               />
-              <div className={styles.movieTitle}>{movie.title || "Untitled"}</div>
+              <div className={styles.movieInfo}>
+                <div className={styles.movieTitle}>{movie.title || "Untitled"}</div>
+                <div className={styles.movieDescription}>{movie.description}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -108,4 +105,4 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
       </div>
     </section>
   );
-};
+}

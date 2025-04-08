@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+
+
 export type Movie = {
   title: string;
   category: string;
@@ -23,8 +25,9 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
           category: item.genres?.[0] || "Uncategorized",
-          id: item.show_id,
+          id: item.show_id.toString(),  // Make sure id is a string if required by your type
           imageUrl: item.imageUrl || undefined,
+          description: item.description || 'No description available',
         }));
 
         setAllMovies(transformed);

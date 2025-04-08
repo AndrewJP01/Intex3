@@ -20,6 +20,16 @@ namespace Intex2.API.Controllers
             _context = context;
         }
 
+        [HttpGet("descriptions")]
+        public async Task<IActionResult> GetAllDescriptions()
+        {
+                // Fetching only the description field from all movies
+                var descriptions = await _context.Movies
+                    .Select(m => m.description) // Select only the description property
+                    .ToListAsync();
+                return Ok(descriptions);
+        }
+
         // Example: GET all movies
         [HttpGet("movies")]
         public async Task<IActionResult> GetMovies()
