@@ -11,13 +11,11 @@ function App() {
   return (
     <>
       <BrowserRouter>  
-      <Routes>
-        <Route path="/MoviesPage" element={<MoviesPage />} />
-        <Route path="/LoginPage" element={<LoginPage />} />
-        <Route path="/AdminMovieManager" element={<AdminMovieManager />} />
-
-      </Routes>
-
+        <Routes>
+          <Route path="/MoviesPage" element={<MoviesPage />} />
+          <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/AdminMovieManager" element={<AdminMovieManager />} />
+        </Routes>
       </BrowserRouter>
 
     </>
