@@ -1,0 +1,131 @@
+.category-dropdown {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    font-family: sans-serif;
+    margin-bottom: 20px;
+  }
+  
+  .dropdown-toggle {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #1a1a1a;
+    color: #eee;
+    border: 1px solid #444;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .tag-container {
+    scroll-behavior: smooth;
+  }
+
+  .dropdown-toggle:hover {
+    outline: none;
+    border-color: #0096e6;  /* Blue border */
+    box-shadow: 0 0 5px rgba(76, 110, 245, 0.6); /* Light blue glow */
+  }
+  
+  
+  .category-panel {
+    background-color: #0e0e0e;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 260px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  
+  .filter-subtitle {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: white;
+  }
+  
+  .tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .genre-tag {
+    padding: 8px 16px;
+    background-color: #2a2a2a;   /* Lighter background than before */
+    color: #f0f0f0;  
+    font-weight: 500;
+             /* Brighter text */
+             font-size: 15px;
+
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #444;      /* Optional: subtle border for definition */
+  }
+  
+  .genre-tag:hover {
+    background-color: #3c3c3c;
+    color: #ffffff;
+  }
+  
+  .genre-tag.selected {
+    background-color: #0096e6;   /* CINENICHE blue */
+    color: white;
+    font-weight: bold;
+    border: 1px solid #0096e6;
+  }
+  
+  
+  .reset-button {
+    background: none;
+    color: white;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+  }
+  
+  .reset-button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Target scrollable tag container */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;              /* Firefox */
+    scrollbar-color: #0096e6 #111111;   /* Firefox */
+  }
+  
+  /* Chrome, Edge, Safari scrollbar */
+  .tag-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .tag-container::-webkit-scrollbar-track {
+    background: #111111;                /* Track background */
+    border-radius: 4px;
+  }
+  
+  .tag-container::-webkit-scrollbar-thumb {
+    background-color: #0096e6;          /* CINENICHE blue */
+    border-radius: 6px;                 /* Rounded thumb */
+    transition: background-color 0.3s;
+  }
+  
+  .tag-container::-webkit-scrollbar-thumb:hover {
+    background-color: #007cc1;          /* Slightly darker blue on hover */
+  }
+  

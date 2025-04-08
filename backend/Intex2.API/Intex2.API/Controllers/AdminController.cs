@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Intex2.API.Data;
 using Intex2.API.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Intex2.API.Controllers
 {
@@ -17,11 +19,30 @@ namespace Intex2.API.Controllers
 
         // Example: GET all movies
         [HttpGet("movies")]
-        public IActionResult GetAllMovies()
+        public async Task<IActionResult> GetMovies()
         {
-            var movies = _context.Movies.ToList();
+            var movies = await _context.Movies
+                .Include(m => m.genres) // ✅ Include genre data
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.type,
+                    m.director,
+                    m.cast,
+                    m.country,
+                    m.release_year,
+                    m.rating,
+                    m.duration,
+                    m.description,
+                    genres = m.genres.Select(g => g.genre).ToList() // ✅ extract genre names
+                })
+                .ToListAsync();
+
             return Ok(movies);
         }
+
+
 
         // Example: DELETE a movie
         [HttpDelete("movies/{id}")]
