@@ -42,7 +42,6 @@ app.UseHttpsRedirection();
 // ✅ Use CORS BEFORE authorization
 app.UseCors("AllowAll");
 
-
 app.UseStaticFiles();
 
 app.UseAuthorization();
@@ -64,6 +63,3 @@ catch (Exception ex)
 }
 
 app.Run();
-
-
-

@@ -12,6 +12,8 @@ import {
   FaTag,
 } from 'react-icons/fa';
 import './AdminPage.css';
+import ManageMovieModal from '../components/ManageMovieModal';
+import DeleteMovieModal from '../components/DeleteMovieModal';
 
 type Movie = {
   show_id: string;
@@ -28,7 +30,7 @@ const AdminPage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(15); // 👈 NEW
+  const [visibleCount, setVisibleCount] = useState(15);
 
   const [availableGenres, setAvailableGenres] = useState<string[]>([]);
   const [availableRatings, setAvailableRatings] = useState<string[]>([]);
@@ -40,6 +42,15 @@ const AdminPage = () => {
   const [endYear, setEndYear] = useState<number | null>(null);
   const [directorInput, setDirectorInput] = useState<string>('');
   const [sortOption, setSortOption] = useState<string>('none');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null);
+
 
   const [pendingFilters, setPendingFilters] = useState({
     selectedGenres: [] as string[],
@@ -59,9 +70,6 @@ const AdminPage = () => {
       directorInput,
       sortOption,
     });
-    
-    console.log("Opening filter modal");
-
     setIsFilterModalOpen(true);
   };
 
@@ -75,7 +83,7 @@ const AdminPage = () => {
     setDirectorInput(pendingFilters.directorInput);
     setSortOption(pendingFilters.sortOption);
     setIsFilterModalOpen(false);
-    setVisibleCount(15); // Reset to show only 15 results after applying filters
+    setVisibleCount(15);
   };
 
   const toggleGenre = (genre: string) => {
@@ -103,48 +111,83 @@ const AdminPage = () => {
     setEndYear(null);
     setDirectorInput('');
     setSortOption('none');
-    setVisibleCount(15); // Reset count
+    setVisibleCount(15);
+  };
+
+  const handleDelete = (id: string) => {
+    const movie = movies.find((m) => m.show_id === id);
+    if (movie) {
+      setMovieToDelete(movie);
+      setIsDeleteModalOpen(true);
+    }
+  };
+
+  const handleEdit = (id: string) => {
+    const movie = movies.find((m) => m.show_id === id);
+    if (movie) {
+      setSelectedMovie(movie);
+      setModalMode('edit');
+      setIsManageModalOpen(true);
+    }
+  };  
+  
+
+
+  const confirmDelete = async () => {
+    if (!movieToDelete) return;
+  
+    try {
+      const res = await fetch(`http://localhost:5166/api/admin/movies/${movieToDelete.show_id}`, {
+        method: 'DELETE',
+      });
+  
+      if (!res.ok) throw new Error('Delete failed');
+  
+      setMovies((prev) => prev.filter((m) => m.show_id !== movieToDelete.show_id));
+      setIsDeleteModalOpen(false);
+      setMovieToDelete(null);
+    } catch (err) {
+      console.error('Failed to delete:', err);
+      alert('Failed to delete movie.');
+    }
   };
 
   useEffect(() => {
-    // Remove all non-alphanumeric characters (including spaces and punctuation)
     const normalizeTitle = (title: string) =>
-    encodeURIComponent(
-        title
-        .replace(/[^\w\s]/g, '') // Remove all punctuation, keep spaces exactly as they are
-        .trim()
-    );
-  
+      encodeURIComponent(title.replace(/[^\w\s]/g, '').trim());
+
     const getMovieImageUrl = (title: string) =>
       `http://localhost:5166/posters/${normalizeTitle(title)}.jpg`;
-  
+
     fetch('http://localhost:5166/api/admin/movies')
       .then((res) => res.json())
       .then((data) => {
         const moviesWithImages = data.map((m: any) => ({
-          show_id: m.show_id,
-          title: m.title,
-          genres: Array.isArray(m.genres) ? m.genres.join(', ') : 'Unknown',
-          type: m.type || 'Unknown',
-          rating: m.rating || 'Unrated',
-          director: m.director || 'Unknown',
-          release_year: m.release_year,
-          imageUrl: getMovieImageUrl(m.title),
-        }));
-  
+            show_id: m.show_id,
+            title: m.title,
+            genres: Array.isArray(m.genres) ? m.genres.join(', ') : 'Unknown',
+            type: m.type || 'Unknown',
+            rating: m.rating || 'Unrated',
+            director: m.director || 'Unknown',
+            release_year: m.release_year,
+            imageUrl: getMovieImageUrl(m.title),
+            description: m.description || '',
+            duration: m.duration || '',
+          }));
+
         setMovies(moviesWithImages);
         setLoading(false);
-  
+
         const genreSet = new Set<string>();
         const ratingSet = new Set<string>();
         const directorSet = new Set<string>();
-  
+
         data.forEach((m: any) => {
           if (Array.isArray(m.genres)) m.genres.forEach((g: any) => genreSet.add(g));
           if (m.rating) ratingSet.add(m.rating);
           if (m.director) directorSet.add(m.director);
         });
-  
+
         setAvailableGenres(Array.from(genreSet).sort());
         setAvailableRatings(Array.from(ratingSet).sort());
         setAvailableDirectors(Array.from(directorSet).sort());
@@ -154,11 +197,13 @@ const AdminPage = () => {
         setLoading(false);
       });
   }, []);
-  
-  
 
   const getFilteredMovies = () => {
     let filtered = movies.filter((movie) => {
+      const titleMatch =
+        searchQuery.trim() === '' ||
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase());
+
       const genreMatch =
         selectedGenres.length === 0 || selectedGenres.some((g) => movie.genres.includes(g));
       const ratingMatch =
@@ -170,7 +215,7 @@ const AdminPage = () => {
         directorInput.trim() === '' ||
         movie.director.toLowerCase().includes(directorInput.toLowerCase());
 
-      return genreMatch && ratingMatch && yearMatch && directorMatch;
+      return titleMatch && genreMatch && ratingMatch && yearMatch && directorMatch;
     });
 
     switch (sortOption) {
@@ -185,6 +230,77 @@ const AdminPage = () => {
     return filtered;
   };
 
+  const handleSaveMovie = async (movieData: any) => {
+    const isAdd = modalMode === 'add';
+  
+    const endpoint = isAdd
+      ? 'http://localhost:5166/api/admin/movies'
+      : `http://localhost:5166/api/admin/movies/${selectedMovie?.show_id}`;
+  
+    const method = isAdd ? 'POST' : 'PUT';
+  
+    const payload = {
+      show_id: selectedMovie?.show_id || crypto.randomUUID(),
+      title: movieData.title,
+      director: movieData.director,
+      cast: movieData.cast || '',
+      country: movieData.country || '',
+      description: movieData.description,
+      genres: movieData.genres, // expects string[]
+      rating: movieData.rating,
+      duration: movieData.duration.toString(),
+      type: movieData.type,
+      release_year: parseInt(movieData.year),
+    };
+  
+    try {
+      const res = await fetch(endpoint, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Failed to save:', errorText);
+        alert(`Failed to ${isAdd ? 'add' : 'edit'} movie.\n${errorText}`);
+        return;
+      }
+  
+      const updatedMovie = isAdd ? await res.json() : payload;
+  
+      const imageUrl = `http://localhost:5166/posters/${encodeURIComponent(
+        updatedMovie.title.replace(/[^\w\s]/g, '').trim()
+      )}.jpg`;
+  
+      const movieWithImage = {
+        ...updatedMovie,
+        genres: updatedMovie.genres.join(', '),
+        imageUrl,
+        description: updatedMovie.description,
+        duration: updatedMovie.duration,
+      };
+  
+      if (isAdd) {
+        setMovies((prev) => [movieWithImage, ...prev]);
+      } else {
+        setMovies((prev) =>
+          prev.map((m) => (m.show_id === selectedMovie?.show_id ? movieWithImage : m))
+        );
+      }
+  
+      setIsManageModalOpen(false);
+      setSelectedMovie(null);
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      alert(`Something went wrong while saving.`);
+    }
+  };
+  
+  
+
   const filteredMovies = getFilteredMovies();
   const filtersAreActive =
     selectedGenres.length > 0 ||
@@ -194,24 +310,31 @@ const AdminPage = () => {
     directorInput.trim() !== '' ||
     sortOption !== 'none';
 
-  const handleEdit = (id: string) => console.log(`Edit movie with id: ${id}`);
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this movie?')) {
-      setMovies((prev) => prev.filter((m) => m.show_id !== id));
-    }
-  };
-
   return (
     <>
       <div className="admin-background">
         <div className="admin-page-wrapper">
           <header className="admin-header"><h1>Admin Dashboard</h1></header>
-  
+
           <section className="admin-controls">
-            <button className="btn primary"><FaPlus /> Add New</button>
+            <button
+              className="btn primary"
+              onClick={() => {
+                setModalMode('add');
+                setSelectedMovie(null);
+                setIsManageModalOpen(true);
+              }}
+            >
+              <FaPlus /> Add New
+            </button>
             <div className="search-box">
               <FaSearch className="search-icon" />
-              <input type="text" placeholder="Search Movies..." />
+              <input
+                type="text"
+                placeholder="Search Movies..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             <button className={`btn ${filtersAreActive ? 'active-filter' : ''}`} onClick={openFilterModal}>
               Filter Movies
@@ -222,7 +345,7 @@ const AdminPage = () => {
               </button>
             )}
           </section>
-  
+
           <div className="movie-table-header">
             <span style={{ width: '90px' }}>Poster</span>
             <span style={{ marginLeft: '45px' }}>Title</span>
@@ -233,7 +356,7 @@ const AdminPage = () => {
             <span>Year</span>
             <span>Actions</span>
           </div>
-  
+
           {loading ? (
             <p>Loading movies...</p>
           ) : (
@@ -242,9 +365,9 @@ const AdminPage = () => {
                 {filteredMovies.slice(0, visibleCount).map((movie) => (
                   <div key={movie.show_id} className="movie-row">
                     <img
-                    src={movie.imageUrl}
-                    alt={movie.title}
-                    onError={(e) => (e.currentTarget.src = 'http://localhost:5166/posters/fallback.jpg')}
+                      src={movie.imageUrl}
+                      alt={movie.title}
+                      onError={(e) => (e.currentTarget.src = 'http://localhost:5166/posters/fallback.jpg')}
                     />
                     <span>{movie.title}</span>
                     <span className="icon-text"><FaFilm /> {movie.genres}</span>
@@ -259,9 +382,9 @@ const AdminPage = () => {
                   </div>
                 ))}
               </section>
-  
+
               {visibleCount < filteredMovies.length && (
-                <div className="load-more-wrapper" style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+                <div className="load-more-wrapper">
                   <button className="btn load-more" onClick={() => setVisibleCount(visibleCount + 15)}>
                     Load More
                   </button>
@@ -271,7 +394,7 @@ const AdminPage = () => {
           )}
         </div>
       </div>
-  
+
       {isFilterModalOpen && (
         <div className="modal-backdrop">
           <div className="modal">
@@ -281,12 +404,13 @@ const AdminPage = () => {
               <div className="filter-bubbles">
                 {availableGenres.map((genre) => (
                   <button
-                    key={genre}
-                    className={`bubble ${pendingFilters.selectedGenres.includes(genre) ? 'active' : ''}`}
-                    onClick={() => toggleGenre(genre)}
-                  >
-                    {genre}
-                  </button>
+                  key={genre}
+                  className={`bubble ${pendingFilters.selectedGenres.includes(genre) ? 'active' : ''}`}
+                  onClick={() => toggleGenre(genre)}
+                >
+                  {genre}
+                </button>
+                
                 ))}
               </div>
   
@@ -294,12 +418,13 @@ const AdminPage = () => {
               <div className="filter-bubbles">
                 {availableRatings.map((rating) => (
                   <button
-                    key={rating}
-                    className={`bubble ${pendingFilters.selectedRatings.includes(rating) ? 'active' : ''}`}
-                    onClick={() => toggleRating(rating)}
-                  >
-                    {rating}
-                  </button>
+                  key={rating}
+                  className={`bubble ${pendingFilters.selectedRatings.includes(rating) ? 'active' : ''}`}
+                  onClick={() => toggleRating(rating)}
+                >
+                  {rating}
+                </button>
+                
                 ))}
               </div>
   
@@ -376,9 +501,31 @@ const AdminPage = () => {
           </div>
         </div>
       )}
+
+      {isManageModalOpen && (
+        <ManageMovieModal
+          mode={modalMode}
+          onClose={() => setIsManageModalOpen(false)}
+          onSave={handleSaveMovie}
+          initialData={selectedMovie}
+          genres={availableGenres}
+          ratings={availableRatings}
+          directors={availableDirectors}
+        />
+      )}
+
+        {isDeleteModalOpen && movieToDelete && (
+        <DeleteMovieModal
+            title={movieToDelete.title}
+            onCancel={() => {
+            setIsDeleteModalOpen(false);
+            setMovieToDelete(null);
+            }}
+            onConfirm={confirmDelete}
+        />
+        )}
     </>
   );
-  
 };
 
 export default AdminPage;
