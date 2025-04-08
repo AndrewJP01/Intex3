@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./MovieHomePage.module.css";
-import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
 import { ContentCarousel } from "../components/ContentCarousel";
 import { SearchBar } from "../components/SearchBar";
