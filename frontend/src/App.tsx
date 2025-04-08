@@ -1,19 +1,27 @@
-// src/App.tsx
-import './index.css';
-import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import AdminPage from './pages/AdminPage';
-import PrivacyPage from './pages/PrivacyPage';
+
+import './App.css'
+import { MoviesPage } from './pages/MoviesPage'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from './pages/LoginPage'
+import AdminMovieManager from './pages/test'
 
 function App() {
+
+
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="admin" element={<AdminPage />} />
-        <Route path="privacy" element={<PrivacyPage />} />
-      </Route>
-    </Routes>
-  );
+    <>
+      <BrowserRouter>  
+      <Routes>
+        <Route path="/MoviesPage" element={<MoviesPage />} />
+        <Route path="/LoginPage" element={<LoginPage />} />
+        <Route path="/AdminMovieManager" element={<AdminMovieManager />} />
+
+      </Routes>
+
+      </BrowserRouter>
+
+    </>
+  )
 }
 
 export default App;

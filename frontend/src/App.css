@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   text-align: center;
@@ -33,9 +33,45 @@
 }
 
 .card {
-  padding: 2em;
+  padding: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+.row {
+  background-color: white;
+}
+
+.logout {
+  color: #fff;
+  font-size: large;
+  font-weight: bold;
+}
+
+.resultsCount {
+  margin: 1em;
+} */
+
+/* Apply globally */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0096e6 #111;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #111;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #0096e6;
+  border-radius: 6px;
 }
