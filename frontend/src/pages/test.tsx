@@ -30,7 +30,7 @@ const AdminMovieManager: React.FC = () => {
     genres: []
   });
 
-  const baseUrl = 'https://localhost:7023/api/Admin/movies'; // Change to Azure when needed
+  const baseUrl = 'https://localhost:7023/api/Admin/movies';
 
   useEffect(() => {
     fetch(baseUrl)
@@ -65,6 +65,15 @@ const AdminMovieManager: React.FC = () => {
       .catch(err => console.error('Failed to delete movie', err));
   };
 
+  const getPosterUrl = (title: string): string => {
+    const cleaned = title
+      .trim()
+      .replace(/\s+/g, ' ')               // collapse multiple spaces
+      .replace(/[^a-zA-Z0-9 ]/g, '');     // remove special characters (keep letters, numbers, spaces)
+    const encoded = encodeURIComponent(cleaned);
+    return `https://localhost:7023/Movie%20Posters/${encoded}.jpg`;
+  };
+
   return (
     <div style={{ padding: '2rem' }}>
       <h2>Admin Movie Manager</h2>
@@ -95,11 +104,24 @@ const AdminMovieManager: React.FC = () => {
 
       <h4>Movie List</h4>
       {movies.length > 0 ? (
-        <ul>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
           {movies.map(movie => (
-            <li key={movie.show_id}>
-              <b>{movie.title}</b> ({movie.release_year})
-              <button style={{ marginLeft: '1rem' }} onClick={() => handleDelete(movie.show_id)}>Delete</button>
+            <li key={movie.show_id} style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
+              <img
+                src={getPosterUrl(movie.title)}
+                alt={movie.title}
+                width={150}
+                style={{ marginRight: '1rem', borderRadius: '8px' }}
+                onError={(e) => {
+                  console.warn(`🛑 Poster not found for: ${movie.title}`);
+                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Missing+Poster';
+                }}
+              />
+              <div>
+                <b>{movie.title}</b> ({movie.release_year})
+                <br />
+                <button style={{ marginTop: '0.5rem' }} onClick={() => handleDelete(movie.show_id)}>Delete</button>
+              </div>
             </li>
           ))}
         </ul>

@@ -145,6 +145,18 @@
         }
       }
     },
+    "/api/Movies": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Test/movies": {
       "get": {
         "tags": [

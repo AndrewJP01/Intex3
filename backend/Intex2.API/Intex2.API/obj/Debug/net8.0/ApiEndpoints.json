@@ -93,6 +93,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Intex2.API.Controllers.MoviesController",
+    "Method": "GetMovies",
+    "RelativePath": "api/Movies",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Intex2.API.Controllers.TestController",
     "Method": "GetMovies",
     "RelativePath": "api/Test/movies",
