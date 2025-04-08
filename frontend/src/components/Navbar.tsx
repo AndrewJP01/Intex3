@@ -43,3 +43,5 @@ export const NavBar: React.FC = () => {
     </header>
   );
 };
+
+export default Navbar;
