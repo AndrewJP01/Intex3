@@ -138,6 +138,15 @@
     background-color: #e6e6e6;
     transform: translateY(-2px);
   }
+
+  .movieImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keep this if you want to fill the container */
+    /* Or you can use object-fit: contain to avoid clipping */
+    /* object-fit: contain; */
+  }
+  
   
   /* More Info Button */
   .moreInfoButton {
@@ -227,14 +236,13 @@
     gap: 36px;
     padding-bottom: 20px;
     display: flex;
-    overflow-x: auto;
+    overflow-x: auto; /* Ensures horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
   }
-  
   .carouselItem {
-    flex-shrink: 0;
-    background-color: #d9d9d9;
-    width: 256px;
-    height: 160px;
+    width: 200px;  /* Example width */
+    height: 300px; /* Example height */
+    overflow: hidden; /* Hides any overflow from the image */
   }
   
   .carouselNextButton {

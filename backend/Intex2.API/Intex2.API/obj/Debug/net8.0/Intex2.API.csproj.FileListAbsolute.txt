@@ -359,3 +359,4 @@ C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.
 =======
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.staticwebassets.runtime.json
 >>>>>>> main
+C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.api\Intex2.api\bin\Debug\net8.0\Intex2.API.staticwebassets.runtime.json
