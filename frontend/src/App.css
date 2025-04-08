@@ -56,3 +56,23 @@
 .resultsCount {
   margin: 1em;
 } */
+
+/* Apply globally */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0096e6 #111;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #111;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #0096e6;
+  border-radius: 6px;
+}

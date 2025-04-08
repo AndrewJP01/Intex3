@@ -3,51 +3,40 @@ import { useEffect, useState } from "react";
 export type Movie = {
   title: string;
   category: string;
+  imageUrl?: string;
+  id?: string | number;
 };
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const movies: Movie[] = [
-        { title: "Avengers", category: "Action" },
-        { title: "Indiana Jones", category: "Adventure" },
-        { title: "Spirited Away", category: "Anime Series International TV Shows" },
-        { title: "The Crown", category: "British TV Shows Docuseries International TV Shows" },
-        { title: "Finding Nemo", category: "Children" },
-        { title: "The Hangover", category: "Comedies" },
-        { title: "Parasite", category: "Comedies Dramas International Movies" },
-        { title: "Lupin", category: "Comedies International Movies" },
-        { title: "Crazy Rich Asians", category: "Comedies Romantic Movies" },
-        { title: "Making a Murderer", category: "Crime TV Shows Docuseries" },
-        { title: "Planet Earth", category: "Documentaries" },
-        { title: "My Octopus Teacher", category: "Documentaries International Movies" },
-        { title: "Tiger King", category: "Docuseries" },
-        { title: "The Godfather", category: "Dramas" },
-        { title: "Roma", category: "Dramas International Movies" },
-        { title: "The Notebook", category: "Dramas Romantic Movies" },
-        { title: "The Incredibles", category: "Family Movies" },
-        { title: "Harry Potter", category: "Fantasy" },
-        { title: "The Conjuring", category: "Horror Movies" },
-        { title: "Train to Busan", category: "International Movies Thrillers" },
-        { title: "Crash Landing on You", category: "International TV Shows Romantic TV Shows TV Dramas" },
-        { title: "Paw Patrol", category: "Kids' TV" },
-        { title: "Money Heist", category: "Language TV Shows" },
-        { title: "La La Land", category: "Musicals" },
-        { title: "Our Planet", category: "Nature TV" },
-        { title: "Too Hot to Handle", category: "Reality TV" },
-        { title: "The Chosen", category: "Spirituality" },
-        { title: "Jack Ryan", category: "TV Action" },
-        { title: "Brooklyn Nine-Nine", category: "TV Comedies" },
-        { title: "Breaking Bad", category: "TV Dramas" },
-        { title: "Comedians in Cars Getting Coffee", category: "Talk Shows TV Comedies" },
-        { title: "Gone Girl", category: "Thrillers" },
-      ];
-      
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch("http://localhost:5166/api/Admin/movies");
+        if (!res.ok) throw new Error("Failed to fetch movies");
 
-    setAllMovies(movies);
-    setFilteredMovies(movies);
+        const data = await res.json();
+        const transformed: Movie[] = data.map((item: any) => ({
+          title: item.title,
+          category: item.genres?.[0] || "Uncategorized",
+          id: item.show_id,
+          imageUrl: item.imageUrl || undefined,
+        }));
+
+        setAllMovies(transformed);
+        setFilteredMovies(transformed);
+        setIsLoading(false);
+      } catch (err: any) {
+        setError(err.message || "Unknown error");
+        setIsLoading(false);
+      }
+    };
+
+    fetchMovies();
   }, []);
 
   useEffect(() => {
@@ -67,5 +56,5 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     return acc;
   }, {} as Record<string, Movie[]>);
 
-  return { groupedByCategory };
+  return { groupedByCategory, isLoading, error };
 }

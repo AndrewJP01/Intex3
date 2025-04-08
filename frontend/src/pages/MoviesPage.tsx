@@ -8,30 +8,53 @@ import { SearchBar } from "../components/SearchBar";
 import { CategoryFilter } from "../components/CategoryFilter";
 import { useMovieData } from "../api/useMovieData";
 import { NavBar } from "../components/NavBar";
+import { useGenres } from "../api/useGenres";
 
 export const MoviesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const { groupedByCategory } = useMovieData(searchTerm, selectedCategories);
+
+  const {
+    groupedByCategory,
+    isLoading: moviesLoading,
+    error: movieError
+  } = useMovieData(searchTerm, selectedCategories);
+
+  const {
+    genres: availableGenres,
+    isLoading: genresLoading,
+    error: genresError
+  } = useGenres();
 
   return (
-    <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-        rel="stylesheet"
+    <main className={styles.mainContainer}>
+      <NavBar />
+      <Hero
+        featuredMovie={{
+          title: "Midnight Mass",
+          description: "A chilling, slow-burn mystery from Mike Flanagan...",
+          imageUrl: "/image.png"
+        }}
       />
-      <main className={styles.mainContainer}>
-        <NavBar />
-        <Hero />
-        <SearchBar searchTerm={searchTerm} onChange={setSearchTerm} />
-        <CategoryFilter
-          selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
-        />
-        {Object.entries(groupedByCategory).map(([category, movies]) => (
-          <ContentCarousel key={category} title={category} movies={movies} />
-        ))}
-      </main>
-    </>
+      <SearchBar searchTerm={searchTerm} onChange={setSearchTerm} />
+      <CategoryFilter
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+        availableGenres={availableGenres}
+      />
+
+
+      {moviesLoading || genresLoading ? (
+        <p className={styles.loading}>Loading movies...</p>
+      ) : movieError || genresError ? (
+        <p className={styles.error}>Error loading data. Please try again later.</p>
+      ) : (
+        Object.entries(groupedByCategory).map(([category, movies]) => (
+          movies.length > 0 && (
+            <ContentCarousel key={category} title={category} movies={movies} />
+          )
+        ))
+      )}
+    </main>
   );
 };
