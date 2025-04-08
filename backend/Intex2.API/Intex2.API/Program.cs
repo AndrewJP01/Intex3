@@ -13,10 +13,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-builder.Services.Configure<MvcOptions>(options =>
-{
-    options.Filters.Add(new RequireHttpsAttribute());
-});
+// builder.Services.Configure<MvcOptions>(options =>
+// {
+//     options.Filters.Add(new RequireHttpsAttribute());
+// });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,6 +32,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 // ✅ Add EF Core DbContext
 var connectionString = builder.Configuration.GetConnectionString("MovieConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -45,7 +46,7 @@ app.UseSwaggerUI();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
+    // app.UseHttpsRedirection();
 }
 
 // ✅ Use CORS BEFORE authorization
