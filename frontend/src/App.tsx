@@ -14,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/MoviesPage" element={<MoviesPage />} />
         <Route path="/LoginPage" element={<LoginPage />} />
+        <Route path="/CreateAccount/:email" element={<LoginPage />} />
 
       </Routes>
 
