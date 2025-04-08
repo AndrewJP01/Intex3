@@ -1,7 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import background from '../assets/movie-collage.jpg';
 
-const HeroBanner: React.FC = () => {
+interface HeroBannerProps {
+  email: string;
+  setEmail: (email: string) => void;
+}
+
+const HeroBanner: React.FC<HeroBannerProps> = ({ email, setEmail }) => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    if (email.trim()) {
+      navigate(`/create-account?email=${encodeURIComponent(email)}`);
+    }
+  };
+
   return (
     <section
       className="h-screen w-full relative bg-cover bg-center bg-no-repeat"
@@ -25,9 +39,14 @@ const HeroBanner: React.FC = () => {
           <input
             type="email"
             placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="p-3 rounded-md w-80 text-black shadow focus:outline-none"
           />
-          <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-md font-medium">
+          <button
+            onClick={handleGetStarted}
+            className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-md font-medium"
+          >
             Get Started
           </button>
         </div>
