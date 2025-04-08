@@ -49,9 +49,9 @@ body,
   color: #888;
 }
 
-.row {
+/* .row {
   background-color: white;
-}
+} */
 
 .logout {
   color: #fff;
@@ -64,7 +64,7 @@ body,
 } */
 
 /* Apply globally */
-* {
+ {
   scrollbar-width: thin;
   scrollbar-color: #0096e6 #111;
 }
@@ -81,4 +81,4 @@ body,
 *::-webkit-scrollbar-thumb {
   background-color: #0096e6;
   border-radius: 6px;
-}
+}  

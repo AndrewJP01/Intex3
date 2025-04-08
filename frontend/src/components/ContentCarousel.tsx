@@ -23,7 +23,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
   const navigate = useNavigate();
   const [validMovies, setValidMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const moviesPerPage = 5;  // Assuming you want to show 5 movies at a time
+  const moviesPerPage = 10;  // Assuming you want to show 5 movies at a time
   
 
   useEffect(() => {

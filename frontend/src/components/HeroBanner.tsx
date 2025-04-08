@@ -5,6 +5,7 @@ import background from '../assets/movie-collage.jpg';
 interface HeroBannerProps {
   email: string;
   setEmail: (email: string) => void;
+  onGetStarted: () => void;
 }
 
 const HeroBanner: React.FC<HeroBannerProps> = ({ email, setEmail }) => {
@@ -41,7 +42,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ email, setEmail }) => {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="p-3 rounded-md w-80 text-black shadow focus:outline-none"
+            className="p-3 rounded-md w-80 text-white shadow focus:outline-none"
           />
           <button
             onClick={handleGetStarted}

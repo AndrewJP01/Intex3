@@ -13,11 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Intex2.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11841d3581254d49f37cd713d3a9aceffdde2d53")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ebfe0cf00d69215463e5b55b974f4c657047e2c")]
->>>>>>> main
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+564aa3dfd31df01c977accb93e6a8efa4c3ec8b0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Intex2.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Intex2.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
