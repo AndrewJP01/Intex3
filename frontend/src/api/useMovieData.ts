@@ -7,6 +7,8 @@ export type Movie = {
   category: string;
   imageUrl?: string;
   id?: string | number;
+  description: string | null; // Adjust based on actual data possibility
+
 };
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {

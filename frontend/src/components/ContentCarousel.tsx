@@ -7,7 +7,7 @@ export type Movie = {
   category: string;
   imageUrl?: string;
   id?: string | number;
-  description?: string; // Include this if it's used in ContentCarousel
+  description?: string | null; // Adjust based on actual data possibility
 };
 
 type ContentCarouselProps = {

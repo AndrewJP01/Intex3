@@ -29,7 +29,7 @@ var app = builder.Build();
 // :white_check_mark: Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 // :white_check_mark: Use CORS BEFORE authorization
 app.UseCors("AllowAll");
 app.UseStaticFiles();

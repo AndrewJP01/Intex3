@@ -7,6 +7,7 @@ import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import CreateAccount from './pages/CreateAccount';
 import PrivacyPage from './pages/PrivacyPage';
+import MovieDetails from './components/MovieDetails';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/create-account/:email" element={<CreateAccount />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/PrivacyPage" element={<PrivacyPage />} />
+        <Route path="/MovieDetails" element={<MovieDetails />} />
 
 
 

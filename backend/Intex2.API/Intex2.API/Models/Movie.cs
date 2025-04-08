@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace Intex2.API.Models
 {
     public class Movie
@@ -11,11 +10,10 @@ namespace Intex2.API.Models
         public string director { get; set; }
         public string cast { get; set; }
         public string country { get; set; }
-        public int? release_year { get; set; }
+        public int release_year { get; set; }
         public string rating { get; set; }
         public string duration { get; set; }
         public string description { get; set; }
-
         public ICollection<MovieGenre> genres { get; set; }
         public ICollection<MovieRating>? ratings { get; set; }
     }
