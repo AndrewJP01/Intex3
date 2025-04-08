@@ -3,7 +3,7 @@ import React from "react";
 import styles from "../pages/MovieHomePage.module.css";
 import { useNavigate } from "react-router-dom";
 
-export const NavBar: React.FC = () => {
+export const Navbar: React.FC = () => {
     const navigate = useNavigate();
   return (
     <header className={styles.header}>
