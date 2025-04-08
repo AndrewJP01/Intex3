@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import {NavBar} from '../components/NavBar';
+import {NavBar} from '../components/Navbar';
 import HeroBanner from '../components/HeroBanner';
 import TrendingCarousel from '../components/TrendingCarousel';
 import FeatureGrid from '../components/FeatureGrid';

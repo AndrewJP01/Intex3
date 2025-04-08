@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Identity.css';
-import '@fortawesome/fontawesome-free/css/all.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavBar } from '../components/NavBar';
+// import '@fortawesome/fontawesome-free/css/all.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import { NavBar } from '../components/Navbar';
 
 function LoginPage() {
   const [email, setEmail] = useState('');

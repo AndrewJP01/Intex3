@@ -3,7 +3,7 @@ import './App.css'
 import { MoviesPage } from './pages/MoviesPage'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage'
-import AdminMovieManager from './pages/test'
+import AdminPage from './pages/AdminPage';
 
 function App() {
 
@@ -14,7 +14,8 @@ function App() {
       <Routes>
         <Route path="/MoviesPage" element={<MoviesPage />} />
         <Route path="/LoginPage" element={<LoginPage />} />
-        <Route path="/AdminMovieManager" element={<AdminMovieManager />} />
+        <Route path="/Admin" element={<AdminPage />} />
+
 
       </Routes>
 
