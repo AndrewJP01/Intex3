@@ -59,6 +59,9 @@ const AdminPage = () => {
       directorInput,
       sortOption,
     });
+    
+    console.log("Opening filter modal");
+
     setIsFilterModalOpen(true);
   };
 
@@ -104,6 +107,17 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
+    // Remove all non-alphanumeric characters (including spaces and punctuation)
+    const normalizeTitle = (title: string) =>
+    encodeURIComponent(
+        title
+        .replace(/[^\w\s]/g, '') // Remove all punctuation, keep spaces exactly as they are
+        .trim()
+    );
+  
+    const getMovieImageUrl = (title: string) =>
+      `http://localhost:5166/posters/${normalizeTitle(title)}.jpg`;
+  
     fetch('http://localhost:5166/api/admin/movies')
       .then((res) => res.json())
       .then((data) => {
@@ -115,21 +129,22 @@ const AdminPage = () => {
           rating: m.rating || 'Unrated',
           director: m.director || 'Unknown',
           release_year: m.release_year,
-          imageUrl: `/posters/${encodeURIComponent(m.title)}.jpg`,
+          imageUrl: getMovieImageUrl(m.title),
         }));
+  
         setMovies(moviesWithImages);
         setLoading(false);
-
+  
         const genreSet = new Set<string>();
         const ratingSet = new Set<string>();
         const directorSet = new Set<string>();
-
+  
         data.forEach((m: any) => {
           if (Array.isArray(m.genres)) m.genres.forEach((g: any) => genreSet.add(g));
           if (m.rating) ratingSet.add(m.rating);
           if (m.director) directorSet.add(m.director);
         });
-
+  
         setAvailableGenres(Array.from(genreSet).sort());
         setAvailableRatings(Array.from(ratingSet).sort());
         setAvailableDirectors(Array.from(directorSet).sort());
@@ -139,6 +154,8 @@ const AdminPage = () => {
         setLoading(false);
       });
   }, []);
+  
+  
 
   const getFilteredMovies = () => {
     let filtered = movies.filter((movie) => {
@@ -224,7 +241,11 @@ const AdminPage = () => {
               <section className="movie-list">
                 {filteredMovies.slice(0, visibleCount).map((movie) => (
                   <div key={movie.show_id} className="movie-row">
-                    <img src={movie.imageUrl} alt={movie.title} />
+                    <img
+                    src={movie.imageUrl}
+                    alt={movie.title}
+                    onError={(e) => (e.currentTarget.src = 'http://localhost:5166/posters/fallback.jpg')}
+                    />
                     <span>{movie.title}</span>
                     <span className="icon-text"><FaFilm /> {movie.genres}</span>
                     <span className="icon-text"><FaVideo /> {movie.type}</span>
@@ -329,8 +350,8 @@ const AdminPage = () => {
                     <option value="none">None</option>
                     <option value="title-asc">Title A-Z</option>
                     <option value="title-desc">Title Z-A</option>
-                    <option value="year-asc">Year ↑</option>
-                    <option value="year-desc">Year ↓</option>
+                    <option value="year-asc">Year (Oldest to Newest)</option>
+                    <option value="year-desc">Year (Newest to Oldest)</option>
                     <option value="genre-asc">Genre A-Z</option>
                     <option value="genre-desc">Genre Z-A</option>
                   </select>

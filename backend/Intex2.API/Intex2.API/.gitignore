@@ -1,3 +1,10 @@
+<<<<<<< HEAD
 wwwroot/Movie Posters/
 obj/
 bin/
+=======
+wwwroot/posters/
+bin/
+obj/
+.DS_Store
+>>>>>>> Josh-branch

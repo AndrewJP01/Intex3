@@ -32,7 +32,10 @@ app.UseSwaggerUI();
 // app.UseHttpsRedirection();
 // :white_check_mark: Use CORS BEFORE authorization
 app.UseCors("AllowAll");
+
+
 app.UseStaticFiles();
+
 app.UseAuthorization();
 app.MapControllers();
 // :white_check_mark: Optional: test SQL connection on startup

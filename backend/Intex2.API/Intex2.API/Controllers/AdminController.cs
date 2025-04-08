@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Intex2.API.Data;
 using Intex2.API.Models;
+
 namespace Intex2.API.Controllers
 {
     [ApiController]
@@ -48,7 +49,11 @@ public async Task<IActionResult> GetMovie(string id)
         public async Task<IActionResult> GetMovies()
         {
             var movies = await _context.Movies
-                .Include(m => m.genres) // :white_check_mark: Load related genres
+<<<<<<< HEAD
+                .Include(m => m.genres) // ✅ Load related genres
+=======
+                .Include(m => m.genres) // ✅ Include genre data
+>>>>>>> main
                 .Select(m => new
                 {
                     m.show_id,
@@ -61,11 +66,21 @@ public async Task<IActionResult> GetMovie(string id)
                     m.rating,
                     m.duration,
                     m.description,
-                    genres = m.genres.Select(g => g.genre).ToList() // :white_check_mark: Extract just the genre names
+<<<<<<< HEAD
+                    genres = m.genres.Select(g => g.genre).ToList() // ✅ Extract just the genre names
+=======
+                    genres = m.genres.Select(g => g.genre).ToList() // ✅ extract genre names
+>>>>>>> main
                 })
                 .ToListAsync();
             return Ok(movies);
         }
+
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
         // Example: DELETE a movie
         [HttpDelete("movies/{id}")]
         public IActionResult DeleteMovie(string id)

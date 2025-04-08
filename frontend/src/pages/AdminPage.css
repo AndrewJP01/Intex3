@@ -144,9 +144,9 @@ body, html, #root {
   
   .movie-row img {
     width: 90px;
-    height: 120px;
+    height: 135px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 6px;
   }
   
   .movie-row span:nth-child(2) {
@@ -185,7 +185,7 @@ body, html, #root {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.6);
-    z-index: 999;
+    z-index: 9999; /* 🔥 Higher than page content */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -202,6 +202,8 @@ body, html, #root {
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
+    z-index: 10000; /* 🔥 Above the backdrop */
+    color: black;
   }
   
   .modal h2 {
@@ -271,10 +273,11 @@ body, html, #root {
   
   .input-group input,
   .input-group select {
-    padding: 0.5rem;
+    padding: .5rem;
     font-size: 1rem;
     border-radius: 6px;
     border: 1px solid #ccc;
+    height: 2.8rem;
   }
   
   .apply-btn {
@@ -345,4 +348,35 @@ body, html, #root {
   .btn.load-more:hover {
     background-color: #0056b3;
   }
+  
+/* DEBUG MODAL OVERLAY */
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.4) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: flex-start !important; /* 👈 starts it from the top */
+    justify-content: center !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    padding: 4rem 2rem !important; /* 👈 pushes modal down from the top */
+  }
+  
+  .modal {
+    max-height: unset !important;
+    background: white !important;
+    color: black !important;
+    padding: 2rem !important;
+    border-radius: 12px !important;
+    z-index: 1000000 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 800px !important; /* 👈 squish the modal width */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3) !important;
+    
+  }
+  
   

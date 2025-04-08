@@ -10,8 +10,6 @@ import PrivacyPage from './pages/PrivacyPage';
 import MovieDetails from './components/MovieDetails';
 
 function App() {
-
-
   return (
     <>
       <Routes>
