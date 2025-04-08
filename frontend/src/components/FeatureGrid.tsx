@@ -21,14 +21,14 @@ const FeatureGrid: React.FC = () => {
   ];
 
   return (
-    <section className="bg-gray-900 text-white py-12 px-6">
-      <h2 className="text-3xl font-bold text-center mb-10">Why CineNiche?</h2>
+    <section className="bg-black text-white py-12 px-6">
+      <h2 className="text-3xl font-bold text-center mb-10">Why CINENICHE?</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {features.map((feature, index) => (
-          <div key={index} className="text-center p-6 bg-gray-800 rounded-lg shadow-md">
+          <div key={index} className="text-center p-6 bg-zinc-900 rounded-lg shadow-md">
             <div className="flex justify-center mb-4 text-red-500">{feature.icon}</div>
             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-            <p className="text-gray-300">{feature.description}</p>
+            <p className="text-gray-400">{feature.description}</p>
           </div>
         ))}
       </div>

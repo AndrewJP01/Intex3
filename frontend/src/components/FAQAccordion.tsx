@@ -23,19 +23,19 @@ const FAQAccordion: React.FC = () => {
   };
 
   return (
-    <section className="bg-gray-950 text-white py-12 px-6">
-      <h2 className="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
+    <section className="bg-black text-white py-20 px-6">
+      <h2 className="text-4xl font-extrabold text-center mb-12 text-white drop-shadow-sm">Frequently Asked Questions</h2>
       <div className="max-w-3xl mx-auto space-y-4">
         {faqData.map((item, index) => (
-          <div key={index} className="border border-gray-700 rounded-md">
+          <div key={index} className="border border-gray-700 rounded-lg shadow-sm bg-zinc-900">
             <button
               onClick={() => toggle(index)}
-              className="w-full text-left p-4 font-semibold focus:outline-none hover:bg-gray-800"
+              className="w-full text-left p-5 font-extrabold text-lg text-blue-600 focus:outline-none hover:bg-cineBlue/90 hover:text-white transition-colors duration-200 rounded-t-lg"
             >
               {item.question}
             </button>
             {openIndex === index && (
-              <div className="p-4 text-gray-300 bg-gray-900 border-t border-gray-700">
+              <div className="p-5 bg-zinc-800 text-white rounded-b-lg">
                 {item.answer}
               </div>
             )}
