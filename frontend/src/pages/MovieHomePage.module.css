@@ -5,6 +5,27 @@
     font-family: Roboto;
     overflow-x: hidden;
   }
+
+
+  button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 2000px;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #baaeae;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #0096e6;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
   
   /* Header Styles */
   .header {
@@ -229,6 +250,7 @@
   
   .carouselContainer {
     display: flex;
+    align-items: center; /* This centers items vertically and can help manage varying heights */
     overflow-x: auto;  /* Allows horizontal scrolling */
     gap: 16px;  /* Adjust the gap between items */
   }
@@ -239,16 +261,17 @@
     display: flex;
     align-items: center; /* This centers items vertically and can help manage varying heights */
     justify-content: center;
-    flex-wrap: nowrap; /* Prevents wrapping of items */
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) m !important; /* Adjust the bezier curve to smooth out the animation */
+    padding: 20px 0; 
     overflow-x: auto; /* Allows horizontal scroll */
     -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
-}
+    transition: opacity 10s ease-in-out; /* Smooth opacity transition */
+  }
 
 
+/* 
   .carouselTrack::-webkit-scrollbar {
     display: none;
-  }
+  } */
   .carouselItem {
     flex: 0 0 auto;  /* Do not grow, do not shrink, and base size on content */
     width: 200px;  /* Adjust based on your design needs */
@@ -276,36 +299,40 @@
 }
 
 
-  .carouselNextButton:hover {
-    border-color: #0096e6 !important; /* Blue border on focus */
-  }
+.carouselPrev, .carouselNext {
+  border-radius: 50%; /* Makes the button completely round */
+  width: 50px; /* Adjust size as necessary */
+  height: 50px; /* Adjust size as necessary */
+  background-color: #fff; /* Button background color */
+  color: #333; /* Button text/icon color */
+  border: none; /* No border */
+  cursor: pointer; /* Cursor indicates it's clickable */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .carouselNextButton, .carouselPrevButton {
+/* You might want to adjust hover styles as well */
+.carouselPrev:hover, .carouselNext:hover {
+  background-color: #ddd; /* Lighter grey on hover */
+}
+
+
+  .carouselNextButton {
     position: absolute;
     top: 50%;
-    z-index: 100; /* Ensure they are above other content */
-    background-color: rgba(132, 127, 127, 0.5) !important; /* Semi-transparent black */
-    color: white !important; /* White text */
+    right: 0;
+    font-size: xx-large;
+    transform: translateY(-50%);
+    background: none;
     border: none;
     cursor: pointer;
-    padding: 10px 20px; /* Larger clickable area */
-    font-size: 24px; /* Larger font size */
-    transform: translateY(-50%);
-    border-radius: 50%; /* Circular buttons */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Soft shadow for 3D effect */
-}
+    padding: 0;
+  }
 
-.carouselNextButton {
-    right: 10px !important; /* Position on the right */
-}
-
-.carouselPrevButton {
-    left: 10px !important; /* Position on the left */
-}
-
-.carouselNextButton:hover, .carouselPrevButton:hover {
-    background-color: rgba(99, 94, 94, 0.7) !important; /* Darker on hover */
-}
+  .carouselNextButton:hover {
+    border-color: #0096e6; /* Blue border on focus */
+  }
 
   
   /* Media Queries */

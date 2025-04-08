@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "../pages/MovieHomePage.module.css";
 import { useNavigate } from "react-router-dom";
-import '@fortawesome/fontawesome-free/css/all.css';  // In your component or main entry file
-
 
 type Movie = {
   title: string;
   category: string;
-  imageUrl?: string; // make sure this is defined
+  imageUrl?: string;
   id?: string | number;
 };
 
@@ -16,8 +14,8 @@ type ContentCarouselProps = {
   movies: {
     title: string;
     category: string;
-    imageUrl?: string; // optional
-    id?: string | number; // optional for navigation
+    imageUrl?: string;
+    id?: string | number;
   }[];
 };
 
@@ -25,11 +23,9 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
   const navigate = useNavigate();
   const [validMovies, setValidMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
   const moviesPerPage = 7;
 
   useEffect(() => {
-    setLoading(true);
     const loadValidMovies = async () => {
       const filteredMovies = [];
       for (const movie of movies) {
@@ -39,7 +35,6 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
         }
       }
       setValidMovies(filteredMovies);
-      setLoading(false);
     };
 
     loadValidMovies();
@@ -53,29 +48,34 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
 
   const handleNextClick = () => {
     const maxIndex = Math.ceil(validMovies.length / moviesPerPage) - 1;
-    setCurrentIndex((prevIndex) => (prevIndex < maxIndex ? prevIndex + 1 : prevIndex));
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      return nextIndex <= maxIndex ? nextIndex : prevIndex;
+    });
   };
 
   const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex - 1;
+      return nextIndex >= 0 ? nextIndex : prevIndex;
+    });
   };
 
-  const transformX = -(100 / moviesPerPage) * currentIndex;
+  // Only show the movies for the current page
+  const visibleMovies = validMovies.slice(currentIndex * moviesPerPage, (currentIndex + 1) * moviesPerPage);
 
   const getMovieImageUrl = (movieTitle: string) => {
     const formattedTitle = encodeURIComponent(movieTitle);
-    const url = `http://localhost:5166/Movie%20Posters/${formattedTitle}.jpg`;
-    console.log("Image URL:", url);
-    return url;
+    return `http://localhost:5166/Movie%20Posters/${formattedTitle}.jpg`;
   };
 
   const checkImage = async (url: RequestInfo | URL) => {
     try {
       const response = await fetch(url);
-      return response.ok; // Returns true if the status code is within 200-299
+      return response.ok;
     } catch (error) {
       console.log("Error fetching image:", error);
-      return false; // Assume image is not valid if an error occurs
+      return false;
     }
   };
 
@@ -83,33 +83,28 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
     <section className={styles.carouselSection}>
       <h2 className={styles.carouselTitle}>{title}</h2>
       <div className={styles.carouselContainer}>
-        {loading ? (
-          <div className={styles.spinner}></div>
-        ) : (
-          <>
-            <button className={styles.carouselPrev} onClick={handlePrevClick}>&#10094;</button>
-            <div className={styles.carouselTrack} style={{ transform: `translateX(${transformX})`, transition: 'transform 0.5s ease' }}>
-              {validMovies
-                .slice(currentIndex * moviesPerPage, (currentIndex + 1) * moviesPerPage)
-                .map((movie) => (
-                  <div
-                    key={movie.title}
-                    className={styles.carouselItem}
-                    onClick={() => handleMovieClick(movie.id)}
-                  >
-                    <img
-                      src={movie.imageUrl || getMovieImageUrl(movie.title)}
-                      alt={movie.title}
-                      className={styles.movieImage}
-                    />
-                    <div className={styles.movieTitle}>{movie.title || "Untitled"}</div>
-                  </div>
-                ))
-              }
+        <button className={styles.carouselPrev} onClick={handlePrevClick}>
+          &#10094;
+        </button>
+        <div className={styles.carouselTrack}>
+          {visibleMovies.map((movie) => (
+            <div
+              key={movie.title}
+              className={styles.carouselItem}
+              onClick={() => handleMovieClick(movie.id)}
+            >
+              <img
+                src={movie.imageUrl || getMovieImageUrl(movie.title)}
+                alt={movie.title}
+                className={styles.movieImage}
+              />
+              <div className={styles.movieTitle}>{movie.title || "Untitled"}</div>
             </div>
-            <button className={styles.carouselNext} onClick={handleNextClick}>&#10095;</button>
-          </>
-        )}
+          ))}
+        </div>
+        <button className={styles.carouselNext} onClick={handleNextClick}>
+          &#10095;
+        </button>
       </div>
     </section>
   );
