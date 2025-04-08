@@ -1,6 +1,7 @@
 ﻿using Intex2.API.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,11 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
+
+builder.Services.Configure<MvcOptions>(options =>
+{
+    options.Filters.Add(new RequireHttpsAttribute());
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -37,12 +43,14 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 // ✅ Use CORS BEFORE authorization
 app.UseCors("AllowAll");
 app.UseStaticFiles();
-
 
 app.UseAuthorization();
 
@@ -63,6 +71,3 @@ catch (Exception ex)
 }
 
 app.Run();
-
-
-
