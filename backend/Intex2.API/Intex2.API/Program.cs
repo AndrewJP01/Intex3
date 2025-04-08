@@ -3,6 +3,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +15,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-builder.Services.Configure<MvcOptions>(options =>
-{
-    options.Filters.Add(new RequireHttpsAttribute());
-});
+// builder.Services.Configure<MvcOptions>(options =>
+// {
+//     options.Filters.Add(new RequireHttpsAttribute());
+// });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -37,22 +39,27 @@ var connectionString = builder.Configuration.GetConnectionString("MovieConnectio
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+// ✅ Add Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
 var app = builder.Build();
 
 // ✅ Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+// if (!app.Environment.IsDevelopment())
+// {
+//     app.UseHttpsRedirection();
+// }
 
 // ✅ Use CORS BEFORE authorization
 app.UseCors("AllowAll");
 app.UseStaticFiles();
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 
