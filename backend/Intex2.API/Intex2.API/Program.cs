@@ -41,11 +41,8 @@ app.UseHttpsRedirection();
 
 // ✅ Use CORS BEFORE authorization
 app.UseCors("AllowAll");
-<<<<<<< HEAD
-=======
 app.UseStaticFiles();
 
->>>>>>> main
 
 app.UseAuthorization();
 
