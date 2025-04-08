@@ -1,0 +1,164 @@
+/* Set full black background with cover image */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+    background: url('SignIn.png') no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    backdrop-filter: brightness(0.5); /* darkens the background */
+  }
+  
+  .login-card {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    padding: 60px 50px;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 400px;
+    color: white;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+  }
+  
+  h2 {
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: white;
+  }
+  
+  .form-control {
+    background-color: #333;
+    border: 1px solid #444;
+    color: white;
+    height: 50px;
+    font-size: 16px;
+    padding: 0 15px;
+  }
+  
+  .form-control::placeholder {
+    color: #8c8c8c;
+  }
+  
+  .btn-login {
+    background-color: #e50914;
+    color: white !important;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 15px;
+    width: 100%;
+    margin-top: 15px;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 4px 10px rgba(229, 9, 20, 0.4);
+  }
+
+
+  .btn-login:hover {
+    background-color: #f40612;
+    transform: translateY(-1px);
+  }
+  
+  .form-check-label {
+    color: #b3b3b3;
+  }
+  
+  .error {
+    color: #e87c03;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .text-white,
+  .text-danger {
+    color: #b3b3b3 !important;
+  }
+  
+  .text-danger:hover {
+    color: white !important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+.btn-google {
+  background-color: #4285F4;
+  color: white !important;
+  font-weight: bold;
+  padding: 13px;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 15px;
+  font-size: 15px;
+  box-shadow: 0 4px 10px rgba(66, 133, 244, 0.4);
+}
+
+.btn-google:hover {
+  background-color: #357ae8;
+  transform: translateY(-1px);
+}
+
+.btn-facebook {
+  background-color: #3b5998;
+  color: white !important;
+  font-weight: bold;
+  padding: 13px;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 15px;
+  box-shadow: 0 4px 10px rgba(59, 89, 152, 0.4);
+}
+
+.btn-facebook:hover {
+  background-color: #2d4373;
+  transform: translateY(-1px);
+}
+
+.forgot-password {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .forgot-password:hover {
+    text-decoration: underline;
+    color: white;
+  }
+  
+  .create-account-btn {
+    background-color: transparent;
+    color: #b3b3b3;
+    font-weight: bold;
+    border: 1px solid #555;
+    padding: 12px;
+    transition: 0.3s ease;
+  }
+
+  .signup-blue {
+    color: #00b0ff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .signup-blue:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  
+  .create-account-btn:hover {
+    background-color: #333;
+    color: white;
+    border-color: #888;
+  }
+  

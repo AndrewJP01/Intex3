@@ -1,0 +1,308 @@
+.mainContainer {
+    width: 100%;
+    min-height: screen;
+    background-color: #141414;
+    font-family: Roboto;
+    overflow-x: hidden;
+  }
+  
+  /* Header Styles */
+  .header {
+    background-color: #000;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 120px;
+    padding-left: 45px;
+    padding-right: 45px;
+    display: flex;
+  }
+  
+  .logo {
+    width: 175px;
+    height: 116px;
+  }
+  
+  .navigation {
+    align-items: center;
+    gap: 50px;
+    display: flex;
+  }
+  
+  .navList {
+    display: flex;
+    gap: 50px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navLink {
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .userControls {
+    align-items: center;
+    gap: 20px;
+    display: flex;
+  }
+  
+  .userProfile {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profileIcon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  
+  .profileIcon:hover {
+    transform: scale(1.05);
+  }
+  
+  
+  .menuIcon {
+    color: #fff;
+    font-size: 24px;
+    display: none;
+  }
+  
+  /* Hero Section Styles */
+  .heroSection {
+    position: relative;
+    width: 100%;
+    height: 60vh; /* Adjust the height to 60% of the viewport */
+    overflow: hidden;
+  }
+  
+  .heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(60%);
+  }
+  
+  .heroContent {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+    color: white;
+    z-index: 10;
+    max-width: 600px;
+  }
+  
+  .heroTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .heroDescription {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #d1d1d1;
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Watch Button */
+  .watchButton {
+    background-color: white;
+    color: black;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .watchButton:hover {
+    background-color: #e6e6e6;
+    transform: translateY(-2px);
+  }
+
+  
+
+  .movieImage {
+    width: 100%;  /* Make image fill the container */
+    height: auto;  /* Maintain aspect ratio */
+    object-fit: cover;  /* Cover the area without distorting aspect ratio */
+  }
+  
+  /* More Info Button */
+  .moreInfoButton {
+    background-color: rgba(109, 109, 110, 0.7);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .moreInfoButton:hover {
+    background-color: rgba(90, 90, 91, 0.85);
+    transform: translateY(-2px);
+  }
+  
+  .infoIcon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Content below the Hero Section */
+  .content {
+    margin-top: 40px; /* Space below the hero image */
+    padding: 20px;
+  }
+  
+  .searchBarContainer {
+    position: relative;
+    width: 300px;  /* Adjust based on your desired width */
+    display: flex;
+    align-items: center;
+  }
+  
+  .searchBar {
+    width: 100%;
+    padding: 12px 20px;
+    padding-left: 35px; /* Space for the icon inside the input */
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid #333;
+    background-color: #111;
+    color: white;
+    transition: all 0.3s ease;
+  }
+  
+  .searchBar:focus {
+    outline: none;
+    border-color: #0096e6; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(76, 110, 245, 0.6); /* Light blue glow */
+  }
+  
+  /* Move the search icon inside the input field */
+  .searchIcon {
+    position: absolute;
+    left: 10px;  /* Align icon to the left */
+    color: white;
+    font-size: 20px;
+  }
+  
+  /* Carousel Section Styles */
+  .carouselSection {
+    padding-top: 20px;
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+  
+  .carouselTitle {
+    color: #fff;
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  
+  .carouselContainer {
+    display: flex;
+    overflow-x: auto;  /* Allows horizontal scrolling */
+    gap: 16px;  /* Adjust the gap between items */
+  }
+  
+  .carouselTrack {
+    gap: 36px;
+    padding-bottom: 20px;
+    display: flex;
+    overflow-x: auto; /* Ensures horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
+  }
+  .carouselItem {
+    flex: 0 0 auto;  /* Do not grow, do not shrink, and base size on content */
+    width: 200px;  /* Adjust based on your design needs */
+  }
+
+  .carouselNextButton {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 991px) {
+    .navigation {
+      display: none;
+    }
+  
+    .userProfile {
+      display: none;
+    }
+  
+    .menuIcon {
+      display: block;
+    }
+  
+    .carouselNextButton {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .header {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  
+    .heroContent {
+      bottom: 20px;
+      left: 16px;
+    }
+  
+    .heroTitle {
+      width: 100%;
+      font-size: 16px;
+    }
+  
+    .actionButtons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .carouselSection {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  
+    .carouselTrack {
+      gap: 16px;
+    }
+  }
+  
