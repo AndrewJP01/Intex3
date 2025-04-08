@@ -177,6 +177,7 @@ C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\n
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.pdb
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.genruntimeconfig.cache
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\ref\Intex2.API.dll
+<<<<<<< HEAD
 C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\appsettings.json
 C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\web.config
@@ -355,3 +356,6 @@ C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.
 C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.pdb
 C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.genruntimeconfig.cache
 C:\Users\colto\onedrive\desktop\holder\Intext2\intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\ref\Intex2.API.dll
+=======
+C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.staticwebassets.runtime.json
+>>>>>>> main

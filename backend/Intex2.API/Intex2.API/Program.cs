@@ -1,11 +1,17 @@
 ﻿using Intex2.API.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -35,6 +41,8 @@ app.UseHttpsRedirection();
 
 // ✅ Use CORS BEFORE authorization
 app.UseCors("AllowAll");
+app.UseStaticFiles();
+
 
 app.UseAuthorization();
 
@@ -55,5 +63,6 @@ catch (Exception ex)
 }
 
 app.Run();
+
 
 
