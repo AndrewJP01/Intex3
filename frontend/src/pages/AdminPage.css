@@ -55,14 +55,17 @@ text-align: center;
 
 
 .admin-background {
-background: 
-    linear-gradient(to bottom right, rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-    url('/foggy-bg.jpg') no-repeat center center;
-background-size: cover;
-min-height: 100vh;
-color: white;
-}
-
+    background-image: 
+      linear-gradient(to bottom right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url('/foggy-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;   /* <-- this is key */
+    background-position: center;
+    min-height: 100vh;
+    color: white;
+  }
+  
 .search-box {
 position: relative;
 flex: 1 1 300px; /* allows shrinking + growing with a base size */
@@ -117,7 +120,7 @@ opacity: 0.9;
 
 .movie-table-header {
 display: grid;
-grid-template-columns: 100px 1fr 1fr 1fr 1fr 150px;
+grid-template-columns: 60px 1.2fr 1.5fr 1fr 1fr 1fr 0.8fr 150px;
 background-color: #f7f7f7;
 padding: 0.75rem 1rem;
 font-weight: bold;
@@ -138,28 +141,43 @@ width: 100%;
 }
 
 .movie-row {
-display: grid;
-grid-template-columns: 100px 1fr 1fr 1fr 1fr auto; /* changed 150px to auto */
-align-items: center;
-padding: 0.75rem 1rem;
-background-color: lightgray;
-opacity: 80%;
-border: 1px solid #ddd;
-border-radius: 6px;
-overflow: hidden; /* prevent overflow */
-box-sizing: border-box;
-}
+    display: grid;
+    grid-template-columns:
+      60px    /* Poster */
+      1.2fr   /* Title */
+      1.5fr   /* Genre */
+      1fr     /* Type */
+      1fr     /* Rating */
+      1fr     /* Director */
+      0.8fr   /* Year */
+      auto;   /* Actions */
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: lightgray;
+    opacity: 80%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    box-sizing: border-box;
+    gap: 0.5rem;
+    min-width: 0; /* important for shrinking */
+  }
+  
 
 .movie-row:hover {
 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .movie-row img {
-width: 80px;
+width: 90px;
 height: 120px;
 object-fit: cover;
 border-radius: 4px;
 }
+
+.movie-row span:nth-child(2) {
+    margin-left: 45px;
+  }
 
 .icon-text {
 display: flex;
@@ -167,6 +185,12 @@ align-items: center;
 gap: 0.5rem;
 color: #555;
 }
+
+.icon-text svg {
+    flex-shrink: 0;
+    font-size: 1rem; /* Keep the icon size consistent */
+    margin-top: 0.2rem; /* Optional tweak to better align with text */
+  }
 
 .actions {
 display: flex;

@@ -1,5 +1,5 @@
 // src/pages/AdminPage.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FaFilm,
   FaUser,
@@ -8,47 +8,58 @@ import {
   FaTrash,
   FaSearch,
   FaPlus,
+  FaVideo,      // ✅ For "Type"
+  FaTag // ✅ For "Rating"
 } from 'react-icons/fa';
 import './AdminPage.css';
 
 type Movie = {
-  id: number;
+  show_id: string;
   title: string;
-  genre: string;
+  genres: string; // changed to string since we're joining them
+  type: string;            // 👈 Add this line
+  rating: string;          // 👈 Add this line
   director: string;
-  year: number;
+  release_year: number;
   imageUrl: string;
 };
 
-const sampleMovies: Movie[] = [
-  {
-    id: 1,
-    title: 'The Indie Hit',
-    genre: 'Drama',
-    director: 'Jane Doe',
-    year: 2021,
-    imageUrl: 'https://via.placeholder.com/100x150',
-  },
-  {
-    id: 2,
-    title: 'Cult Classic',
-    genre: 'Horror',
-    director: 'John Smith',
-    year: 1987,
-    imageUrl: 'https://via.placeholder.com/100x150',
-  },
-];
-
 const AdminPage = () => {
-  const [movies, setMovies] = useState(sampleMovies);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleEdit = (id: number) => {
+  useEffect(() => {
+    fetch('http://localhost:5166/api/admin/movies')
+      .then((res) => res.json())
+      .then((data) => {
+        const moviesWithImages = data.map((m: any) => ({
+          show_id: m.show_id,
+          title: m.title,
+          genres: Array.isArray(m.genres)
+            ? m.genres.join(', ')
+            : 'Unknown',
+          type: m.type || 'Unknown',         // 👈 New
+          rating: m.rating || 'Unrated',     // 👈 New
+          director: m.director || 'Unknown',
+          release_year: m.release_year,
+          imageUrl: `/posters/${encodeURIComponent(m.title)}.jpg`,
+        }));
+        setMovies(moviesWithImages);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch movies:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleEdit = (id: string) => {
     console.log(`Edit movie with id: ${id}`);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     if (confirm('Are you sure you want to delete this movie?')) {
-      setMovies((prev) => prev.filter((m) => m.id !== id));
+      setMovies((prev) => prev.filter((m) => m.show_id !== id));
     }
   };
 
@@ -71,39 +82,53 @@ const AdminPage = () => {
         </section>
 
         <div className="movie-table-header">
-          <span>Poster</span>
-          <span>Title</span>
-          <span>Genre</span>
-          <span>Director</span>
-          <span>Year</span>
-          <span>Actions</span>
+            <span style={{ width: '90px' }}>Poster</span>
+            <span style={{ marginLeft: '45px' }}>Title</span>
+            <span>Genre</span>
+            <span>Type</span>
+            <span>Rating</span>
+            <span>Director</span>
+            <span>Year</span>
+            <span>Actions</span>
         </div>
 
-        <section className="movie-list">
-          {movies.map((movie) => (
-            <div key={movie.id} className="movie-row">
-              <img src={movie.imageUrl} alt={movie.title} />
-              <span>{movie.title}</span>
-              <span className="icon-text">
-                <FaFilm /> {movie.genre}
-              </span>
-              <span className="icon-text">
-                <FaUser /> {movie.director}
-              </span>
-              <span className="icon-text">
-                <FaCalendarAlt /> {movie.year}
-              </span>
-              <span className="actions">
-                <button className="btn edit" onClick={() => handleEdit(movie.id)}>
-                  <FaEdit /> Edit
-                </button>
-                <button className="btn delete" onClick={() => handleDelete(movie.id)}>
-                  <FaTrash /> Delete
-                </button>
-              </span>
-            </div>
-          ))}
-        </section>
+
+        {loading ? (
+          <p>Loading movies...</p>
+        ) : (
+          <section className="movie-list">
+            {movies.map((movie) => (
+                <div key={movie.show_id} className="movie-row">
+                    <img src={movie.imageUrl} alt={movie.title} />
+                    <span>{movie.title}</span>
+                    <span className="icon-text">
+                        <FaFilm /> {movie.genres}
+                    </span>
+                    <span className="icon-text">
+                    <FaVideo /> {movie.type}
+                    </span>
+                    <span className="icon-text">
+                    <FaTag /> {movie.rating}
+                    </span>
+
+                    <span className="icon-text">
+                        <FaUser /> {movie.director}
+                    </span>
+                    <span className="icon-text">
+                        <FaCalendarAlt /> {movie.release_year}
+                    </span>
+                    <span className="actions">
+                    <button className="btn edit" onClick={() => handleEdit(movie.show_id)}>
+                        <FaEdit /> Edit
+                    </button>
+                    <button className="btn delete" onClick={() => handleDelete(movie.show_id)}>
+                        <FaTrash /> Delete
+                    </button>
+                    </span>
+                </div>
+            ))}
+          </section>
+        )}
       </div>
     </div>
   );

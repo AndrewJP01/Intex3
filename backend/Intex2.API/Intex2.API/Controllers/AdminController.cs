@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Intex2.API.Data;
 using Intex2.API.Models;
 
@@ -17,11 +18,29 @@ namespace Intex2.API.Controllers
 
         // Example: GET all movies
         [HttpGet("movies")]
-        public IActionResult GetAllMovies()
+        public async Task<IActionResult> GetMovies()
         {
-            var movies = _context.Movies.ToList();
+            var movies = await _context.Movies
+                .Include(m => m.genres) // ✅ Load related genres
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.type,
+                    m.director,
+                    m.cast,
+                    m.country,
+                    m.release_year,
+                    m.rating,
+                    m.duration,
+                    m.description,
+                    genres = m.genres.Select(g => g.genre).ToList() // ✅ Extract just the genre names
+                })
+                .ToListAsync();
+
             return Ok(movies);
         }
+
 
         // Example: DELETE a movie
         [HttpDelete("movies/{id}")]
@@ -111,7 +130,7 @@ namespace Intex2.API.Controllers
             _context.Movies.Add(newMovie);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetAllMovies), new { id = newMovie.show_id }, newMovie);
+            return CreatedAtAction(nameof(GetMovies), new { id = newMovie.show_id }, newMovie);
         }
 
         // More admin routes here...
