@@ -6,6 +6,7 @@ C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\n
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\Intex2.API.deps.json
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\Intex2.API.runtimeconfig.json
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\publish\Intex2.API.staticwebassets.endpoints.json
+C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.staticwebassets.runtime.json
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.staticwebassets.endpoints.json
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.exe
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.deps.json
@@ -177,4 +178,3 @@ C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\n
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.pdb
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\Intex2.API.genruntimeconfig.cache
 C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\obj\Debug\net8.0\ref\Intex2.API.dll
-C:\Users\andre\OneDrive\Desktop\Intex2\backend\Intex2.API\Intex2.API\bin\Debug\net8.0\Intex2.API.staticwebassets.runtime.json

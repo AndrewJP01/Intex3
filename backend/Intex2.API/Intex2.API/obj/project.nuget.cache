@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lZojWc6Fung=",
+  "dgSpecHash": "dVt9NJteJ6c=",
   "success": true,
-  "projectFilePath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj",
+  "projectFilePath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.APi\\Intex2.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\andre\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\andre\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

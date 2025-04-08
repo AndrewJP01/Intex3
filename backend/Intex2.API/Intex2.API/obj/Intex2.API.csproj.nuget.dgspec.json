@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj": {}
+    "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.APi\\Intex2.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj": {
+    "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.APi\\Intex2.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj",
+        "projectUniqueName": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.APi\\Intex2.API.csproj",
         "projectName": "Intex2.API",
-        "projectPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj",
+        "projectPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.APi\\Intex2.API.csproj",
         "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\obj\\",
+        "outputPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.APi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
