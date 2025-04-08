@@ -6,7 +6,7 @@ import { ContentCarousel } from "../components/ContentCarousel";
 import { SearchBar } from "../components/SearchBar";
 import { CategoryFilter } from "../components/CategoryFilter";
 import { useMovieData } from "../api/useMovieData";
-import { NavBar } from "../components/Navbar";
+import { Navbar } from "../components/Navbar";
 import { useGenres } from "../api/useGenres";
 
 export const MoviesPage: React.FC = () => {
@@ -29,7 +29,7 @@ export const MoviesPage: React.FC = () => {
 
   return (
     <main className={styles.mainContainer}>
-      <NavBar />
+      <Navbar />
       <Hero
         featuredMovie={{
           title: "Midnight Mass",

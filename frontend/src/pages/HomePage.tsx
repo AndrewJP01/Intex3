@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import {NavBar} from '../components/Navbar';
+import {Navbar} from '../components/Navbar';
 import HeroBanner from '../components/HeroBanner';
 import TrendingCarousel from '../components/TrendingCarousel';
 import FeatureGrid from '../components/FeatureGrid';
@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      <NavBar />
+      <Navbar />
       <HeroBanner email={email} setEmail={setEmail} onGetStarted={handleGetStarted} />
       <TrendingCarousel />
       <FeatureGrid />

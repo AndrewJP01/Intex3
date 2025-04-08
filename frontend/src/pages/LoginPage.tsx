@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Identity.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NavBar } from '../components/Navbar';
+import { Navbar } from '../components/Navbar';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -54,7 +54,7 @@ function LoginPage() {
 
   return (
     <>
-    <NavBar />
+    <Navbar />
     <div className="container">
       <div className="card login-card">
         <h2 className="text-white text-center mb-4">Sign In</h2>
