@@ -23,10 +23,11 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
   const navigate = useNavigate();
   const [validMovies, setValidMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const moviesPerPage = 10;  // Assuming you want to show 5 movies at a time
-  
+  const [loading, setLoading] = useState(true);
+  const moviesPerPage = 7;
 
   useEffect(() => {
+    setLoading(true);
     const loadValidMovies = async () => {
       const filteredMovies = [];
       for (const movie of movies) {
@@ -36,10 +37,11 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
         }
       }
       setValidMovies(filteredMovies);
+      setLoading(false);
     };
 
     loadValidMovies();
-  }, [movies]); // Dependency array ensures the effect runs when movies prop changes
+  }, [movies]);
 
   const handleMovieClick = (movieId: string | number | undefined) => {
     if (movieId) {
@@ -47,16 +49,16 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies 
     }
   };
 
-
-const handleNextClick = () => {
+  const handleNextClick = () => {
     const maxIndex = Math.ceil(validMovies.length / moviesPerPage) - 1;
     setCurrentIndex((prevIndex) => (prevIndex < maxIndex ? prevIndex + 1 : prevIndex));
-};
+  };
 
-const handlePrevClick = () => {
+  const handlePrevClick = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-};
+  };
 
+  const transformX = -(100 / moviesPerPage) * currentIndex;
 
   const getMovieImageUrl = (movieTitle: string) => {
     const formattedTitle = encodeURIComponent(movieTitle);
@@ -79,29 +81,34 @@ const handlePrevClick = () => {
     <section className={styles.carouselSection}>
       <h2 className={styles.carouselTitle}>{title}</h2>
       <div className={styles.carouselContainer}>
-    <button className={styles.carouselPrev} onClick={handlePrevClick}>&#10094;</button>
-          <div className={styles.carouselTrack}>
-          {validMovies
-              .slice(currentIndex * moviesPerPage, (currentIndex + 1) * moviesPerPage)
-              .map((movie) => (
+        {loading ? (
+          <div className={styles.spinner}></div>
+        ) : (
+          <>
+            <button className={styles.carouselPrev} onClick={handlePrevClick}>&#10094;</button>
+            <div className={styles.carouselTrack} style={{ transform: `translateX(${transformX})`, transition: 'transform 0.5s ease' }}>
+              {validMovies
+                .slice(currentIndex * moviesPerPage, (currentIndex + 1) * moviesPerPage)
+                .map((movie) => (
                   <div
-                      key={movie.title}
-                      className={styles.carouselItem}
-                      onClick={() => handleMovieClick(movie.id)}
+                    key={movie.title}
+                    className={styles.carouselItem}
+                    onClick={() => handleMovieClick(movie.id)}
                   >
-                      <img
-                          src={movie.imageUrl || getMovieImageUrl(movie.title)}
-                          alt={movie.title}
-                          className={styles.movieImage}
-                      />
-                      <div className={styles.movieTitle}>{movie.title || "Untitled"}</div>
+                    <img
+                      src={movie.imageUrl || getMovieImageUrl(movie.title)}
+                      alt={movie.title}
+                      className={styles.movieImage}
+                    />
+                    <div className={styles.movieTitle}>{movie.title || "Untitled"}</div>
                   </div>
-              ))}
+                ))
+              }
+            </div>
+            <button className={styles.carouselNext} onClick={handleNextClick}>&#10095;</button>
+          </>
+        )}
       </div>
-
-          <button className={styles.carouselNext} onClick={handleNextClick}>&#10095;</button>
-      </div>
-
     </section>
   );
 };

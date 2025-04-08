@@ -237,13 +237,35 @@
     gap: 36px;
     padding-bottom: 20px;
     display: flex;
-    overflow-x: auto; /* Ensures horizontal scroll */
+    flex-wrap: nowrap; /* Prevents wrapping of items */
+    transition: transform 0.5s ease; /* Smooth transition for sliding */
+    overflow-x: auto; /* Allows horizontal scroll */
     -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
+}
+
+
+  .carouselTrack::-webkit-scrollbar {
+    display: none;
   }
   .carouselItem {
     flex: 0 0 auto;  /* Do not grow, do not shrink, and base size on content */
     width: 200px;  /* Adjust based on your design needs */
   }
+
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2); /* Light grey border */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 
   .carouselNextButton {
     position: absolute;
@@ -255,6 +277,11 @@
     cursor: pointer;
     padding: 0;
   }
+
+  .carouselNextButton:hover {
+    border-color: #0096e6; /* Blue border on focus */
+  }
+
   
   /* Media Queries */
   @media (max-width: 991px) {
