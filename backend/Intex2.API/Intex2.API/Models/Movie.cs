@@ -16,11 +16,7 @@ namespace Intex2.API.Models
         public string duration { get; set; }
         public string description { get; set; }
 
-<<<<<<< HEAD
-        public List<MovieGenre> genres { get; set; } = new List<MovieGenre>();
-=======
         public ICollection<MovieGenre> genres { get; set; }
->>>>>>> main
         public ICollection<MovieRating>? ratings { get; set; }
     }
 }

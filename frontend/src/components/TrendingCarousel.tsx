@@ -3,10 +3,10 @@ import React, { useRef } from 'react';
 const TrendingCarousel: React.FC = () => {
   // Temporary mock data for movie posters
   const trendingMovies = [
-    { id: 1, title: 'Movie One', image: '/posters/movie1.jpg' },
-    { id: 2, title: 'Movie Two', image: '/posters/movie2.jpg' },
-    { id: 3, title: 'Movie Three', image: '/posters/movie3.jpg' },
-    { id: 4, title: 'Movie Four', image: '/posters/movie4.jpg' },
+    { id: 1, title: 'Movie One', image: '/posters/foggy-bg.jpg' },
+    { id: 2, title: 'Movie Two', image: '/posters/foggy-bg.jpg' },
+    { id: 3, title: 'Movie Three', image: '/posters/foggy-bg.jpg' },
+    { id: 4, title: 'Movie Four', image: '/posters/foggy-bg.jpg' },
   ];
 
   const scrollRef = useRef<HTMLDivElement>(null);
