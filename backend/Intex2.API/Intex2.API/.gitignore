@@ -1,3 +1,4 @@
-wwwroot/Movie Posters/
+wwwroot/posters/
 bin/
 obj/
+.DS_Store
