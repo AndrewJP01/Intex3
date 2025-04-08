@@ -46,7 +46,11 @@ export const MoviesPage: React.FC = () => {
 
 
       {moviesLoading || genresLoading ? (
-        <p className={styles.loading}>Loading movies...</p>
+        <>
+             <p className={styles.loading}>Loading...</p>
+             <p className={styles.spinner}></p>
+        </>
+           
       ) : movieError || genresError ? (
         <p className={styles.error}>Error loading data. Please try again later.</p>
       ) : (

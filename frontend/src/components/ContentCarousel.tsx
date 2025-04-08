@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "../pages/MovieHomePage.module.css";
 import { useNavigate } from "react-router-dom";
+import '@fortawesome/fontawesome-free/css/all.css';  // In your component or main entry file
+
 
 type Movie = {
   title: string;

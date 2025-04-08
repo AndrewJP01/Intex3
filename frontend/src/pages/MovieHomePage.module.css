@@ -237,8 +237,10 @@
     gap: 36px;
     padding-bottom: 20px;
     display: flex;
+    align-items: center; /* This centers items vertically and can help manage varying heights */
+    justify-content: center;
     flex-wrap: nowrap; /* Prevents wrapping of items */
-    transition: transform 0.5s ease; /* Smooth transition for sliding */
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) m !important; /* Adjust the bezier curve to smooth out the animation */
     overflow-x: auto; /* Allows horizontal scroll */
     -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
 }
@@ -251,6 +253,13 @@
     flex: 0 0 auto;  /* Do not grow, do not shrink, and base size on content */
     width: 200px;  /* Adjust based on your design needs */
   }
+
+  .carouselItem img {
+    display: block; /* Removes bottom space/gap */
+    max-width: 100%; /* Ensures the image scales within the carousel item */
+    height: auto; /* Keeps the image aspect ratio */
+}
+
 
   .spinner {
     border: 4px solid rgba(255, 255, 255, 0.2); /* Light grey border */
@@ -267,20 +276,36 @@
 }
 
 
-  .carouselNextButton {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+  .carouselNextButton:hover {
+    border-color: #0096e6 !important; /* Blue border on focus */
   }
 
-  .carouselNextButton:hover {
-    border-color: #0096e6; /* Blue border on focus */
-  }
+  .carouselNextButton, .carouselPrevButton {
+    position: absolute;
+    top: 50%;
+    z-index: 100; /* Ensure they are above other content */
+    background-color: rgba(132, 127, 127, 0.5) !important; /* Semi-transparent black */
+    color: white !important; /* White text */
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px; /* Larger clickable area */
+    font-size: 24px; /* Larger font size */
+    transform: translateY(-50%);
+    border-radius: 50%; /* Circular buttons */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Soft shadow for 3D effect */
+}
+
+.carouselNextButton {
+    right: 10px !important; /* Position on the right */
+}
+
+.carouselPrevButton {
+    left: 10px !important; /* Position on the left */
+}
+
+.carouselNextButton:hover, .carouselPrevButton:hover {
+    background-color: rgba(99, 94, 94, 0.7) !important; /* Darker on hover */
+}
 
   
   /* Media Queries */
