@@ -14,6 +14,8 @@ export const MoviesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
+  
+
   const {
     groupedByCategory,
     isLoading: moviesLoading,

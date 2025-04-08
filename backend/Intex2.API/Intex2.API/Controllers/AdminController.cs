@@ -132,7 +132,7 @@ namespace Intex2.API.Controllers
             _context.Movies.Add(newMovie);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetAllMovies), new { id = newMovie.show_id }, newMovie);
+            return CreatedAtAction(nameof(GetMovies), new { id = newMovie.show_id }, newMovie);
         }
 
         // More admin routes here...

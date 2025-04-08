@@ -139,14 +139,13 @@
     transform: translateY(-2px);
   }
 
-  .movieImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Keep this if you want to fill the container */
-    /* Or you can use object-fit: contain to avoid clipping */
-    /* object-fit: contain; */
-  }
   
+
+  .movieImage {
+    width: 100%;  /* Make image fill the container */
+    height: auto;  /* Maintain aspect ratio */
+    object-fit: cover;  /* Cover the area without distorting aspect ratio */
+  }
   
   /* More Info Button */
   .moreInfoButton {
@@ -229,7 +228,9 @@
   }
   
   .carouselContainer {
-    position: relative;
+    display: flex;
+    overflow-x: auto;  /* Allows horizontal scrolling */
+    gap: 16px;  /* Adjust the gap between items */
   }
   
   .carouselTrack {
@@ -240,11 +241,10 @@
     -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
   }
   .carouselItem {
-    width: 200px;  /* Example width */
-    height: 300px; /* Example height */
-    overflow: hidden; /* Hides any overflow from the image */
+    flex: 0 0 auto;  /* Do not grow, do not shrink, and base size on content */
+    width: 200px;  /* Adjust based on your design needs */
   }
-  
+
   .carouselNextButton {
     position: absolute;
     top: 50%;
