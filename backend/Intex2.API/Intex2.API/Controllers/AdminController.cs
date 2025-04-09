@@ -148,7 +148,7 @@ namespace Intex2.API.Controllers
         }
 
         // 🔒 Admin only
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("genres")]
         public IActionResult GetAllGenres() => Ok(_context.MovieGenres.ToList());
 
