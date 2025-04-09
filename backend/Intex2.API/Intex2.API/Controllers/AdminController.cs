@@ -157,12 +157,10 @@ namespace Intex2.API.Controllers
         [HttpGet("users")]
         public IActionResult GetAllUsers() => Ok(_context.MovieUsers.ToList());
 
-        // 🔒 Admin only
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet("ratings")]
         public IActionResult GetAllRatings() => Ok(_context.MovieRatings.ToList());
 
-        // 🔒 Admin only
         [Authorize(Roles = "Admin")]
         [HttpPut("movies/{show_id}")]
         public IActionResult UpdateMovie(string show_id, [FromBody] MovieUpdateDto dto)
