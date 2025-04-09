@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import styles from "../pages/MovieHomePage.module.css";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import styles from '../pages/MovieHomePage.module.css';
+import { useNavigate } from 'react-router-dom';
 
 type Movie = {
   title: string;
@@ -22,7 +22,11 @@ type ContentCarouselProps = {
   onScrollEnd?: () => void;
 };
 
-export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies, delayRender }) => {
+export const ContentCarousel: React.FC<ContentCarouselProps> = ({
+  title,
+  movies,
+  delayRender,
+}) => {
   const navigate = useNavigate();
   const [validMovies, setValidMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +38,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
   const moviesPerPage = 6;
 
   const getMovieImageUrl = (movieTitle: string) => {
-    return `http://localhost:5166/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
+    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
   };
 
   const checkImage = async (url: string) => {
@@ -57,27 +61,26 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
     const loadValidMovies = async () => {
       setLoading(true);
       const filtered: Movie[] = [];
-  
+
       for (const movie of movies) {
         const url = movie.imageUrl || getMovieImageUrl(movie.title);
         const valid = await checkImage(url);
         filtered.push({
           ...movie,
-          imageUrl: valid ? url : "/fallback.jpg",
+          imageUrl: valid ? url : '/fallback.jpg',
         });
       }
-  
+
       setValidMovies(filtered);
       setLoading(false);
     };
-  
+
     const timeout = setTimeout(() => {
       loadValidMovies();
     }, delayRender || 0);
-  
+
     return () => clearTimeout(timeout);
   }, [movies, delayRender]);
-  
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -86,13 +89,13 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
       }
     };
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelectedMovie(null);
+      if (e.key === 'Escape') setSelectedMovie(null);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, []);
 
@@ -117,45 +120,63 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
         <div className={styles.spinnerRow}></div>
       ) : (
         <div className={styles.carouselContainer}>
-          <button className={styles.carouselPrev} onClick={handlePrevClick} hidden={currentIndex === 0} disabled={currentIndex === 0}>
+          <button
+            className={styles.carouselPrev}
+            onClick={handlePrevClick}
+            disabled={currentIndex === 0}
+          >
             &#10094;
           </button>
 
           <div className={styles.carouselTrack}>
             {validMovies
-              .slice(currentIndex * moviesPerPage, (currentIndex + 1) * moviesPerPage)
+              .slice(
+                currentIndex * moviesPerPage,
+                (currentIndex + 1) * moviesPerPage
+              )
               .map((movie) => (
                 <div
                   key={movie.title}
-                  className={`${styles.carouselItem} ${selectedMovie?.title === movie.title ? styles.selected : ""}`}
+                  className={`${styles.carouselItem} ${selectedMovie?.title === movie.title ? styles.selected : ''}`}
                   onMouseEnter={() => setHoveredMovie(movie)}
                   onMouseLeave={() => setHoveredMovie(null)}
                   onClick={() => setSelectedMovie(movie)}
                 >
                   <div className={styles.cardWrapper}>
-                <img
-                  src={movie.imageUrl}
-                  alt={movie.title}
-                  className={styles.movieImage}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "fill",
-                    borderRadius: "10px",
-                  }}
-                />
-                {hoveredMovie?.title === movie.title && !selectedMovie && (
-                  <div className={styles.titleOverlay}>{movie.title}</div>
-                )}
-              </div>
-            </div>
+                    <img
+                      src={movie.imageUrl}
+                      alt={movie.title}
+                      className={styles.movieImage}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'fill',
+                        borderRadius: '10px',
+                      }}
+                    />
+                  </div>
+
+                  {hoveredMovie?.title === movie.title && !selectedMovie && (
+                    <div className={styles.hoverPopup}>
+                      <div className={styles.hoverPopupContent}>
+                        <h4 className={styles.hoverTitle}>{movie.title}</h4>
+                        <p className={styles.meta}>
+                          {movie.genre || 'Genre'} • {movie.rating || 'Rating'}{' '}
+                          • {movie.duration || 'Length'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ))}
           </div>
 
           <button
             className={styles.carouselNext}
-            onClick={handleNextClick} hidden={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
-            disabled={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
+            onClick={handleNextClick}
+            disabled={
+              currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
+            }
           >
             &#10095;
           </button>
@@ -175,15 +196,29 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
               <h3>{selectedMovie.title}</h3>
               <p>{selectedMovie.description}</p>
               <p>
-                {selectedMovie.releaseDate || "TBD"} <br />
-                {selectedMovie.genre || "Genre"} • {selectedMovie.rating || "Rating"} •{" "}
-                {selectedMovie.duration || "Length"}
+                {selectedMovie.releaseDate || 'TBD'} <br />
+                {selectedMovie.genre || 'Genre'} •{' '}
+                {selectedMovie.rating || 'Rating'} •{' '}
+                {selectedMovie.duration || 'Length'}
               </p>
-              <button className={styles.playButton} onClick={() => handleMovieClick(selectedMovie.show_id)}>▶</button>
-              <button className={styles.moreInfoButton} onClick={() => handleMovieClick(selectedMovie.show_id)}>
+              <button
+                className={styles.playButton}
+                onClick={() => handleMovieClick(selectedMovie.show_id)}
+              >
+                ▶
+              </button>
+              <button
+                className={styles.moreInfoButton}
+                onClick={() => handleMovieClick(selectedMovie.show_id)}
+              >
                 More Info
               </button>
-              <button className={styles.closeButton} onClick={() => setSelectedMovie(null)}>✕</button>
+              <button
+                className={styles.closeButton}
+                onClick={() => setSelectedMovie(null)}
+              >
+                ✕
+              </button>
             </div>
           </div>
         </div>
