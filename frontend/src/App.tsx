@@ -1,4 +1,3 @@
-
 import './App.css'
 import { MoviesPage } from './pages/MoviesPage'
 import { Routes, Route } from "react-router-dom";
@@ -8,10 +7,12 @@ import HomePage from './pages/HomePage';
 import CreateAccount from './pages/CreateAccount';
 import PrivacyPage from './pages/PrivacyPage';
 import MovieDetails from './pages/MovieDetails';
+import CookieConsent from './components/CookieConsent';
 
 function App() {
   return (
     <>
+      <CookieConsent />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/MoviesPage" element={<MoviesPage />} />
@@ -21,12 +22,7 @@ function App() {
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/PrivacyPage" element={<PrivacyPage />} />
         <Route path="/:id" element={<MovieDetails />} />
-
-
-
       </Routes>
-
-
     </>
   )
 };
