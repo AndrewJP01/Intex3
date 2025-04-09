@@ -1,4 +1,4 @@
-import { useState, useEffect, JSX } from "react";
+import { useState, JSX } from "react";
 import "./CategoryFilter.css";
 
 type CategoryFilterProps = {

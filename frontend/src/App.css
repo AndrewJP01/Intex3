@@ -1,7 +1,15 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+#root {
+  width: 100%;
+  height: 100%;
 }
 
 .logo {
@@ -42,9 +50,9 @@
   color: #888;
 }
 
-.row {
+/* .row {
   background-color: white;
-}
+} */
 
 .logout {
   color: #fff;
@@ -57,7 +65,7 @@
 } */
 
 /* Apply globally */
-* {
+ {
   scrollbar-width: thin;
   scrollbar-color: #0096e6 #111;
 }
@@ -74,4 +82,4 @@
 *::-webkit-scrollbar-thumb {
   background-color: #0096e6;
   border-radius: 6px;
-}
+}  
