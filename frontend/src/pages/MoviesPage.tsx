@@ -1,18 +1,18 @@
-"use client";
-import React, { useState } from "react";
-import styles from "./MovieHomePage.module.css";
-import { Hero } from "../components/Hero";
-import { ContentCarousel } from "../components/ContentCarousel";
-import { SearchBar } from "../components/SearchBar";
-import { CategoryFilter } from "../components/CategoryFilter";
-import { useMovieData } from "../api/useMovieData";
-import { Navbar } from "../components/Navbar";
-import { useGenres } from "../api/useGenres";
-import { useFeaturedMovies } from "../api/useFeaturedMovies";
-import { FeaturedMovie } from "../types/FeaturedMovie";
+'use client';
+import React, { useState } from 'react';
+import styles from './MovieHomePage.module.css';
+import { Hero } from '../components/Hero';
+import { ContentCarousel } from '../components/ContentCarousel';
+import { SearchBar } from '../components/SearchBar';
+import { CategoryFilter } from '../components/CategoryFilter';
+import { useMovieData } from '../api/useMovieData';
+import { Navbar } from '../components/Navbar';
+import { useGenres } from '../api/useGenres';
+import { useFeaturedMovies } from '../api/useFeaturedMovies';
+import { FeaturedMovie } from '../types/FeaturedMovie';
 
 export const MoviesPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const {
@@ -25,7 +25,7 @@ export const MoviesPage: React.FC = () => {
   const {
     genres: availableGenres,
     isLoading: genresLoading,
-    error: genresError
+    error: genresError,
   } = useGenres();
 
   // ✅ Correctly use the hook here (no redeclaration!)
@@ -33,7 +33,7 @@ export const MoviesPage: React.FC = () => {
     featuredMovies,
     personalizedMovies,
     loading: featuredLoading,
-    error: featuredError
+    error: featuredError,
   } = useFeaturedMovies();
 
   // Sort the categories alphabetically or by any other logic
@@ -73,16 +73,17 @@ export const MoviesPage: React.FC = () => {
           <p className={styles.spinner}></p>
         </>
       ) : movieError || genresError ? (
-        <p className={styles.error}>Error loading data. Please try again later.</p>
+        <p className={styles.error}>
+          Error loading data. Please try again later.
+        </p>
       ) : (
-        sortedCategories.map(([category, movies], index) => (
+        sortedCategories.map(([category, movies]) => (
           <ContentCarousel
-            key={category}
-            title={category}
-            movies={movies}
-            delayRender={index * 100}
-            onScrollEnd={() => loadMoreByCategory(category)}  // 👈 Add scroll handler
-          />
+          key={category}
+          title={category}
+          movies={movies} // ✅ Pass all movies, no slicing
+          delayRender={100}
+        />
         ))
       )}
     </main>

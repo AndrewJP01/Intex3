@@ -10,6 +10,7 @@ export type Movie = {
   rating: string;
   duration: string;
   releaseDate: number;
+  show_id?: string;
 };
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
@@ -42,7 +43,7 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         const data = await res.json();
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
-          category: item.genres?.[0] || "Uncategorized",
+          category: item.genres?.[0] || 'Uncategorized',
           show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
           description: item.description || 'No description available',
@@ -90,12 +91,10 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
     const category = movie.category;
     acc[category] = acc[category] || [];
-    const limit = visibleCounts[category] || initialCount;
-    if (acc[category].length < limit) {
-      acc[category].push(movie);
-    }
+    acc[category].push(movie); // 🙌 no limit now
     return acc;
   }, {} as Record<string, Movie[]>);
+  
 
   const loadMoreByCategory = (category: string) => {
     setVisibleCounts(prev => ({

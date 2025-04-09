@@ -16,7 +16,14 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`http://localhost:5166/api/Admin/${id}`);
+        const response = await fetch(`https://localhost:7023/api/Admin/${id}`, 
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+    
+          }
+        );
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
@@ -32,20 +39,21 @@ const MovieDetailsPage: React.FC = () => {
 
   const submitRating = async () => {
     if (!userRating || !id) return;
-  
+
     // You could hardcode a test user_id or pull it from context/localStorage/auth
     const userId = 1; // Replace with actual user logic
-  
+
     try {
-      const res = await fetch(`http://localhost:5166/api/Admin/${id}/rate`, {
+      const res = await fetch(`https://localhost:7023/api/Admin/${id}/rate`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           rating: userRating,
-          user_id: userId
+          user_id: userId,
         }),
       });
-  
+
       if (res.ok) {
         alert(`Rating submitted: ${userRating} stars!`);
       } else {
@@ -56,7 +64,6 @@ const MovieDetailsPage: React.FC = () => {
       alert(`Error submitting rating: ${(err as Error).message}`);
     }
   };
-  
 
   if (loading) {
     return (
@@ -79,14 +86,17 @@ const MovieDetailsPage: React.FC = () => {
         exit={{ opacity: 0, x: -100 }}
         transition={{ duration: 0.5 }}
       >
-        <button className={styles.backButton} onClick={() => navigate('/MoviesPage')}>
+        <button
+          className={styles.backButton}
+          onClick={() => navigate('/MoviesPage')}
+        >
           ✕
         </button>
 
         <div className={styles.heroSection}>
           <img
             className={styles.poster}
-            src={`http://localhost:5166/Movie%20Posters/${encodeURIComponent(movie.title || '')}.jpg`}
+            src={`https://localhost:7023/Movie%20Posters/${encodeURIComponent(movie.title || '')}.jpg`}
             alt={movie.title}
           />
 
@@ -101,17 +111,29 @@ const MovieDetailsPage: React.FC = () => {
             <p className={styles.description}>{movie.description}</p>
 
             <div className={styles.buttons}>
-              <button className={`${styles.button} ${styles.watch}`}>▶ Watch Now</button>
-              <button className={`${styles.button} ${styles.secondary}`}>+ My Playlist</button>
+              <button className={`${styles.button} ${styles.watch}`}>
+                ▶ Watch Now
+              </button>
+              <button className={`${styles.button} ${styles.secondary}`}>
+                + My Playlist
+              </button>
             </div>
 
-            <p><strong>Genres:</strong> {movie.genres?.join(', ') || 'N/A'}</p>
+            <p>
+              <strong>Genres:</strong> {movie.genres?.join(', ') || 'N/A'}
+            </p>
 
             <div className={styles.ratingSection}>
-              <p><strong>Average Rating:</strong> {avgRating.toFixed(1)}{' '}
-                {Array(Math.round(avgRating)).fill(0).map((_, i) => (
-                  <span key={i} style={{ color: 'gold', fontSize: '1.1rem' }}>★</span>
-                ))} ({ratingCount} {ratingCount === 1 ? 'user' : 'users'})
+              <p>
+                <strong>Average Rating:</strong> {avgRating.toFixed(1)}{' '}
+                {Array(Math.round(avgRating))
+                  .fill(0)
+                  .map((_, i) => (
+                    <span key={i} style={{ color: 'gold', fontSize: '1.1rem' }}>
+                      ★
+                    </span>
+                  ))}{' '}
+                ({ratingCount} {ratingCount === 1 ? 'user' : 'users'})
               </p>
 
               <div className={styles.stars}>
@@ -120,7 +142,10 @@ const MovieDetailsPage: React.FC = () => {
                     key={star}
                     className={styles.star}
                     style={{
-                      color: (hoveredRating ?? userRating ?? 0) >= star ? 'gold' : '#555',
+                      color:
+                        (hoveredRating ?? userRating ?? 0) >= star
+                          ? 'gold'
+                          : '#555',
                       cursor: 'pointer',
                     }}
                     onMouseEnter={() => setHoveredRating(star)}
@@ -133,7 +158,10 @@ const MovieDetailsPage: React.FC = () => {
               </div>
 
               {userRating && (
-                <button className={styles.submitRatingButton} onClick={submitRating}>
+                <button
+                  className={styles.submitRatingButton}
+                  onClick={submitRating}
+                >
                   Submit {userRating} Star Rating
                 </button>
               )}
