@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 node_modules/
 .next/
 build/
@@ -6,9 +5,6 @@ dist/
 *.log
 *.DS_Store
 Movie Posters/
-=======
-.DS_Store
-obj/
-bin/
-.vs/
->>>>>>> main
+backend/Intex2.API/Intex2.API/obj/Intex2.API.csproj.nuget.dgspec.json
+backend/Intex2.API/.vs/Intex2.API/CopilotIndices/17.13.439.2385/CodeChunks.db
+backend/Intex2.API/.vs/Intex2.API/FileContentIndex/5a7e1780-c6f7-447a-bcef-9011d4cb5beb.vsidx
