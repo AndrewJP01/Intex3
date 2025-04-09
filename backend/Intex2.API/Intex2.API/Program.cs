@@ -1,9 +1,9 @@
 ﻿using Intex2.API.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,10 +39,26 @@ var connectionString = builder.Configuration.GetConnectionString("MovieConnectio
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// ✅ Add Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+// ✅ Add Identity with strong password settings
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 12; // More secure than default (was 6)
+    options.Password.RequiredUniqueChars = 5; // Avoids repetition-based passwords
+
+    // Optional lockout settings (best practice)
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // Optional: enforce email uniqueness
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -55,18 +71,14 @@ app.UseSwaggerUI();
 //     app.UseHttpsRedirection();
 // }
 
-// ✅ Use CORS BEFORE authorization
+// ✅ Use CORS BEFORE auth
 app.UseCors("AllowAll");
-<<<<<<< HEAD
 
 app.UseStaticFiles();
 
+// ✅ Ensure Authentication and Authorization middleware
+app.UseAuthentication();
 app.UseAuthorization();
-=======
-app.UseStaticFiles();
-
-// app.UseAuthorization();
->>>>>>> main
 
 app.MapControllers();
 
@@ -76,19 +88,18 @@ try
     using (var connection = new SqlConnection(connectionString))
     {
         connection.Open();
-        Console.WriteLine("✅ Connected to SQL Server successfully!");
+        Console.WriteLine(":white_check_mark: Connected to SQL Server successfully!");
     }
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"❌ Failed to connect to SQL Server: {ex.Message}");
+    Console.WriteLine($":x: Failed to connect to SQL Server: {ex.Message}");
 }
 
+// ✅ Seed admin user and roles
 await SeedRolesAndAdminAsync(app);
 
 app.Run();
-<<<<<<< HEAD
-=======
 
 async Task SeedRolesAndAdminAsync(WebApplication app)
 {
@@ -126,4 +137,3 @@ async Task SeedRolesAndAdminAsync(WebApplication app)
         }
     }
 }
->>>>>>> main

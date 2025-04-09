@@ -1,0 +1,103 @@
+.heroCarousel {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  overflow: hidden;
+}
+
+.heroSlide {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: absolute;
+  left: 5%;
+  bottom: 20%;
+  color: white;
+  max-width: 40%;
+  z-index: 10;
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.watchButton,
+.detailsButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.detailsButton {
+  background: #444;
+}
+
+.navLeft,
+.navRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 50%;
+}
+
+.navLeft {
+  left: 1rem;
+}
+
+.navRight {
+  right: 1rem;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  z-index: 20;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #888;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  background: #007bff;
+}

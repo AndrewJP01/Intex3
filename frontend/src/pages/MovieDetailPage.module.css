@@ -1,0 +1,123 @@
+.container {
+  background-color: #0d0d0d; /* Dark background */
+  color: white;
+  min-height: 100vh;
+  padding: 40px 60px;
+  position: relative;
+}
+
+body,
+html {
+  background-color: #0d0d0d !important;
+  margin: 0;
+  padding: 0;
+}
+.poster {
+  width: 300px;
+  max-width: 90vw;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+
+.details {
+  flex: 1;
+  max-width: 700px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.tag {
+  padding: 4px 10px;
+  background: #333;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.watch {
+  background-color: #0096e6;
+  color: white;
+}
+
+.watch:hover {
+  background-color: #007bbf;
+}
+
+.secondary {
+  background-color: #333;
+  color: white;
+}
+
+.secondary:hover {
+  background-color: #444;
+}
+
+.genreList {
+  margin-top: 12px;
+  color: #bbb;
+}
+.ratingStars {
+  margin: 4px 0;
+}
+
+.stars {
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+}
+.star {
+  color: gold;
+  font-size: 1.2rem;
+  margin-right: 5px;
+  transition: color 0.2s ease;
+}
+
+.submitRatingButton {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.submitRatingButton:hover {
+  background-color: #0056b3;
+}

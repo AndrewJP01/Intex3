@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/Intex2.API.csproj": {}
+    "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj": {}
   },
   "projects": {
-    "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/Intex2.API.csproj": {
+    "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/Intex2.API.csproj",
+        "projectUniqueName": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj",
         "projectName": "Intex2.API",
-        "projectPath": "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/Intex2.API.csproj",
-        "packagesPath": "/Users/joshditto/.nuget/packages/",
-        "outputPath": "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/",
+        "projectPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\Intex2.API.csproj",
+        "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\andre\\OneDrive\\Desktop\\Intex2\\backend\\Intex2.API\\Intex2.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/joshditto/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -86,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
