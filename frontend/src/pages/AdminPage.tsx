@@ -15,6 +15,7 @@ import './AdminPage.css';
 import ManageMovieModal from '../components/ManageMovieModal';
 import DeleteMovieModal from '../components/DeleteMovieModal';
 import { Navbar } from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 type Movie = {
   show_id: string;
@@ -53,6 +54,8 @@ const AdminPage = () => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null);
+
+  const navigate = useNavigate();
 
   const [pendingFilters, setPendingFilters] = useState({
     selectedGenres: [] as string[],
@@ -169,7 +172,19 @@ const AdminPage = () => {
       method: 'GET',
       credentials: 'include',
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          window.alert('You must be logged in to view the admin page.');
+          navigate('/loginPage');
+          throw new Error('Unauthorized');
+        }
+        if (res.status === 403) {
+          window.alert('You do not have permission to access the admin page.');
+          navigate('/');
+          throw new Error('Forbidden');
+        }
+        return res.json();
+      })
       .then((data) => {
         const moviesWithImages = data.map((m: any) => ({
           show_id: m.show_id,

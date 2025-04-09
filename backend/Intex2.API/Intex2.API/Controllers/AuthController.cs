@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Intex2.API.Models;
 using Intex2.API.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Intex2.API.Controllers
 {
@@ -66,7 +67,7 @@ namespace Intex2.API.Controllers
             {
                 return Ok("Login successful");
             }
-
+            
             return Unauthorized("Invalid email or password");
         }
 
@@ -76,5 +77,13 @@ namespace Intex2.API.Controllers
             await _signInManager.SignOutAsync();
             return Ok("Logged out");
         }
+
+        [HttpGet("pingauth")]
+        public IActionResult PingAuth()
+        {
+            var username = User.Identity?.Name;
+            return Ok(new { message = $"Authenticated as {username}" });
+        }
+
     }
 }

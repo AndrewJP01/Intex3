@@ -52,7 +52,7 @@ export const useFeaturedMovies = () => {
   
   useEffect(() => {
     const fetchPersonalized = async () => {
-      const res = await fetch("http://localhost:5166/api/recommendations/topRated/1");
+      const res = await fetch("https://localhost:7023/api/recommendations/topRated/1");
       const data = await res.json();
       setPersonalizedMovies(data);
     };

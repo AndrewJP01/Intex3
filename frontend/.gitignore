@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 *.pem
 
+localhost-key.pem
+localhost.pem

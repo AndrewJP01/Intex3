@@ -91,12 +91,10 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
     const category = movie.category;
     acc[category] = acc[category] || [];
-    const limit = visibleCounts[category] || initialCount;
-    if (acc[category].length < limit) {
-      acc[category].push(movie);
-    }
+    acc[category].push(movie); // 🙌 no limit now
     return acc;
   }, {} as Record<string, Movie[]>);
+  
 
   const loadMoreByCategory = (category: string) => {
     setVisibleCounts(prev => ({
