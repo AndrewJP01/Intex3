@@ -3,6 +3,7 @@
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/appsettings.json
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.deps.json
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/publish/Intex2.API.runtimeconfig.json
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.staticwebassets.runtime.json
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.staticwebassets.endpoints.json
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.deps.json
@@ -12,6 +13,10 @@
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Azure.Core.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Azure.Identity.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Humanizer.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.AspNetCore.Cryptography.Internal.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.UI.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Build.Locator.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
@@ -32,6 +37,9 @@
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.DependencyInjection.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.DependencyModel.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Embedded.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.Identity.Core.dll
+/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.Identity.Stores.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.Logging.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.Logging.Abstractions.dll
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Microsoft.Extensions.Options.dll
@@ -173,4 +181,3 @@
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.pdb
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.genruntimeconfig.cache
 /Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/Debug/net8.0/ref/Intex2.API.dll
-/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/bin/Debug/net8.0/Intex2.API.staticwebassets.runtime.json

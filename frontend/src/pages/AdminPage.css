@@ -106,7 +106,7 @@ body, html, #root {
   
   .movie-table-header {
     display: grid;
-    grid-template-columns: 60px 1.2fr 1.5fr 1fr 1fr 1fr 0.8fr 150px;
+    grid-template-columns: 90px 1.2fr 1.5fr 1fr 1fr 1fr 0.8fr 150px;
     background-color: #f7f7f7;
     padding: 0.75rem 1rem;
     font-weight: bold;
@@ -127,7 +127,7 @@ body, html, #root {
   
   .movie-row {
     display: grid;
-    grid-template-columns: 60px 1.2fr 1.5fr 1fr 1fr 1fr 0.8fr auto;
+    grid-template-columns: 90px 1.2fr 1.5fr 1fr 1fr 1fr 0.8fr auto;
     align-items: center;
     padding: 0.75rem 1rem;
     background-color: rgba(211, 211, 211, 0.8);
@@ -448,4 +448,19 @@ body, html, #root {
     color: white;
     margin-top: 2rem;
     margin-bottom: 2rem;
+    appearance: none;
   }
+
+  .dropdown-wrapper select,
+  .dropdown-wrapper2 select {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    /* Remove only if you're customizing the arrow */
+    /* appearance: none; */
+    /* -webkit-appearance: none; */
+    /* -moz-appearance: none; */
+  }
+  
