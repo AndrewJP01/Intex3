@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
+=======
+import { useEffect, useState } from 'react';
+>>>>>>> main
 
 export type Movie = {
   title: string;
@@ -10,6 +14,10 @@ export type Movie = {
   rating: string;
   duration: string;
   releaseDate: number;
+<<<<<<< HEAD
+=======
+  show_id?: string;
+>>>>>>> main
 };
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
@@ -24,20 +32,40 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch("http://localhost:5166/api/Admin/movies");
-        if (!res.ok) throw new Error("Failed to fetch movies");
+        const res = await fetch('https://localhost:7023/api/Admin/movies', {
+          method: 'GET',
+          credentials: 'include', // ✅ sends auth cookie!
+        });
+
+        // If the response is not ok, check for a 401 error and show a popup if so.
+        if (!res.ok) {
+          if (res.status === 401) {
+            window.alert('Unauthorized. Please log in to continue.');
+          }
+          throw new Error(
+            `Failed to fetch movies (Status code: ${res.status})`
+          );
+        }
 
         const data = await res.json();
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
+<<<<<<< HEAD
           category: item.genres?.[0] || "Uncategorized",
+=======
+          category: item.genres?.[0] || 'Uncategorized',
+>>>>>>> main
           show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
           description: item.description || 'No description available',
           genre: item.genre,
           rating: item.rating,
           duration: item.duration,
+<<<<<<< HEAD
           releaseDate: item.realease_year,
+=======
+          releaseDate: item.release_year, // 👈 typo? maybe should be item.release_year
+>>>>>>> main
         }));
 
         setAllMovies(transformed);
@@ -53,7 +81,7 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
 
         setIsLoading(false);
       } catch (err: any) {
-        setError(err.message || "Unknown error");
+        setError(err.message || 'Unknown error');
         setIsLoading(false);
       }
     };
@@ -63,15 +91,19 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
 
   useEffect(() => {
     const filtered = allMovies.filter((movie) => {
-      const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = movie.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
       const matchesCategory =
-        selectedCategories.length === 0 || selectedCategories.includes(movie.category);
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(movie.category);
       return matchesSearch && matchesCategory;
     });
 
     setFilteredMovies(filtered);
   }, [searchTerm, selectedCategories, allMovies]);
 
+<<<<<<< HEAD
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
     const category = movie.category;
     acc[category] = acc[category] || [];
@@ -81,6 +113,16 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     }
     return acc;
   }, {} as Record<string, Movie[]>);
+=======
+  const groupedByCategory = filteredMovies.reduce(
+    (acc, movie) => {
+      acc[movie.category] = acc[movie.category] || [];
+      acc[movie.category].push(movie);
+      return acc;
+    },
+    {} as Record<string, Movie[]>
+  );
+>>>>>>> main
 
   const loadMoreByCategory = (category: string) => {
     setVisibleCounts(prev => ({
