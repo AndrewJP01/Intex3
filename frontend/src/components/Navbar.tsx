@@ -16,16 +16,12 @@ export const Navbar: React.FC = () => {
           </li>
           <li>
             <a href="#" className={styles.navLink} onClick={() => navigate("/MoviesPage")}>
-              Movies Page
+              Movies 
             </a>
           </li>
+          
           <li>
-            <a href="#" className={styles.navLink} onClick={() => navigate("/Details")}>
-              Details
-            </a>
-          </li>
-          <li>
-            <a href="#" className={styles.navLink} onClick={() => navigate("/PrivacyPolicy")}>
+            <a href="#" className={styles.navLink} onClick={() => navigate("/PrivacyPage")}>
               Privacy Policy
             </a>
           </li>
