@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -21,7 +22,8 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// :white_check_mark: Add CORS
+
+// ✅ Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -31,18 +33,36 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-// :white_check_mark: Add EF Core DbContext
+
+// ✅ Add EF Core DbContext
 var connectionString = builder.Configuration.GetConnectionString("MovieConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// ✅ Add Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+// ✅ Add Identity with strong password settings
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 12; // More secure than default (was 6)
+    options.Password.RequiredUniqueChars = 5; // Avoids repetition-based passwords
+
+    // Optional lockout settings (best practice)
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // Optional: enforce email uniqueness
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
-// :white_check_mark: Enable Swagger
+
+// ✅ Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -51,16 +71,18 @@ app.UseSwaggerUI();
 //     app.UseHttpsRedirection();
 // }
 
-// ✅ Use CORS BEFORE authorization
+// ✅ Use CORS BEFORE auth
 app.UseCors("AllowAll");
-app.UseStaticFiles();
 
 app.UseStaticFiles();
 
-// app.UseAuthorization();
+// ✅ Ensure Authentication and Authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
-// :white_check_mark: Optional: test SQL connection on startup
+
+// ✅ Optional: test SQL connection on startup
 try
 {
     using (var connection = new SqlConnection(connectionString))
@@ -74,6 +96,7 @@ catch (Exception ex)
     Console.WriteLine($":x: Failed to connect to SQL Server: {ex.Message}");
 }
 
+// ✅ Seed admin user and roles
 await SeedRolesAndAdminAsync(app);
 
 app.Run();
