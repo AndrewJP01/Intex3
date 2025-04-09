@@ -1,5 +1,6 @@
 // src/pages/AdminPage.tsx
 import { useState, useEffect } from 'react';
+import { NavBar } from "../components/NavBar"
 import {
   FaFilm,
   FaUser,
@@ -27,10 +28,12 @@ type Movie = {
 };
 
 const AdminPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resultsPerPage, setResultsPerPage] = useState(15);
+          
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(15);
 
   const [availableGenres, setAvailableGenres] = useState<string[]>([]);
   const [availableRatings, setAvailableRatings] = useState<string[]>([]);
@@ -83,7 +86,7 @@ const AdminPage = () => {
     setDirectorInput(pendingFilters.directorInput);
     setSortOption(pendingFilters.sortOption);
     setIsFilterModalOpen(false);
-    setVisibleCount(15);
+    setCurrentPage(1);
   };
 
   const toggleGenre = (genre: string) => {
@@ -111,7 +114,7 @@ const AdminPage = () => {
     setEndYear(null);
     setDirectorInput('');
     setSortOption('none');
-    setVisibleCount(15);
+    setCurrentPage(1);
   };
 
   const handleDelete = (id: string) => {
@@ -157,7 +160,7 @@ const AdminPage = () => {
       encodeURIComponent(title.replace(/[^\w\s]/g, '').trim());
 
     const getMovieImageUrl = (title: string) =>
-      `http://localhost:5166/posters/${normalizeTitle(title)}.jpg`;
+      `http://localhost:5166/Movie%20Posters/${normalizeTitle(title)}.jpg`;
 
     fetch('http://localhost:5166/api/admin/movies')
       .then((res) => res.json())
@@ -271,7 +274,7 @@ const AdminPage = () => {
   
       const updatedMovie = isAdd ? await res.json() : payload;
   
-      const imageUrl = `http://localhost:5166/posters/${encodeURIComponent(
+      const imageUrl = `http://localhost:5166/Movie%20Posters/${encodeURIComponent(
         updatedMovie.title.replace(/[^\w\s]/g, '').trim()
       )}.jpg`;
   
@@ -310,8 +313,16 @@ const AdminPage = () => {
     directorInput.trim() !== '' ||
     sortOption !== 'none';
 
+    const totalPages = Math.ceil(filteredMovies.length / resultsPerPage);
+    const paginatedMovies = filteredMovies.slice(
+        (currentPage - 1) * resultsPerPage,
+        currentPage * resultsPerPage
+    );
+    
+
   return (
     <>
+     <NavBar />
       <div className="admin-background">
         <div className="admin-page-wrapper">
           <header className="admin-header"><h1>Admin Dashboard</h1></header>
@@ -344,6 +355,23 @@ const AdminPage = () => {
                 &#x21bb;
               </button>
             )}
+            <div className="dropdown-wrapper">
+            <label htmlFor="resultsPerPage">Results per page:</label>
+            <select
+                id="resultsPerPage"
+                value={resultsPerPage}
+                onChange={(e) => {
+                setResultsPerPage(Number(e.target.value));
+                setCurrentPage(1); // Reset to page 1 on change
+                }}
+            >
+                {[10, 15, 20, 25, 30, 35, 40, 45, 50].map((num) => (
+                <option key={num} value={num}>
+                    {num}
+                </option>
+                ))}
+            </select>
+            </div>
           </section>
 
           <div className="movie-table-header">
@@ -362,12 +390,12 @@ const AdminPage = () => {
           ) : (
             <>
               <section className="movie-list">
-                {filteredMovies.slice(0, visibleCount).map((movie) => (
+              {paginatedMovies.map((movie) => (
                   <div key={movie.show_id} className="movie-row">
                     <img
                       src={movie.imageUrl}
                       alt={movie.title}
-                      onError={(e) => (e.currentTarget.src = 'http://localhost:5166/posters/fallback.jpg')}
+                      onError={(e) => (e.currentTarget.src = 'http://localhost:5166/Movie%20Posters/fallback.jpg')}
                     />
                     <span>{movie.title}</span>
                     <span className="icon-text"><FaFilm /> {movie.genres}</span>
@@ -382,14 +410,66 @@ const AdminPage = () => {
                   </div>
                 ))}
               </section>
-
-              {visibleCount < filteredMovies.length && (
-                <div className="load-more-wrapper">
-                  <button className="btn load-more" onClick={() => setVisibleCount(visibleCount + 15)}>
-                    Load More
-                  </button>
+              <div className="dropdown-wrapper2">
+                <label htmlFor="resultsPerPage">Results per page:</label>
+                <select
+                    id="resultsPerPage"
+                    value={resultsPerPage}
+                    onChange={(e) => {
+                    setResultsPerPage(Number(e.target.value));
+                    setCurrentPage(1); // Reset to page 1 on change
+                    }}
+                >
+                    {[10, 15, 20, 25, 30, 35, 40, 45, 50].map((num) => (
+                    <option key={num} value={num}>
+                        {num}
+                    </option>
+                    ))}
+                </select>
                 </div>
-              )}
+
+
+
+              <div className="pagination-bar">
+                {/* Show first page only if currentPage > 4 */}
+                {currentPage > 4 && (
+                    <>
+                    <button onClick={() => setCurrentPage(1)} className={currentPage === 1 ? "active-page" : ""}>1</button>
+                    <span className="dots">...</span>
+                    </>
+                )}
+
+                {/* Pages around the current page */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((pageNum) =>
+                    pageNum === currentPage ||
+                    (pageNum >= currentPage - 3 && pageNum <= currentPage + 3)
+                    )
+                    .map((pageNum) => (
+                    <button
+                        key={pageNum}
+                        className={pageNum === currentPage ? "active-page" : ""}
+                        onClick={() => setCurrentPage(pageNum)}
+                    >
+                        {pageNum}
+                    </button>
+                    ))}
+
+                {/* Show last page only if currentPage is far enough away from the end */}
+                {currentPage < totalPages - 3 && (
+                    <>
+                    <span className="dots">...</span>
+                    <button
+                        onClick={() => setCurrentPage(totalPages)}
+                        className={currentPage === totalPages ? "active-page" : ""}
+                    >
+                        {totalPages}
+                    </button>
+                    </>
+                )}
+              </div>
+
+
             </>
           )}
         </div>
@@ -465,12 +545,14 @@ const AdminPage = () => {
                   <h3>Sort By</h3>
                   <select
                     value={pendingFilters.sortOption}
-                    onChange={(e) =>
-                      setPendingFilters((prev) => ({
-                        ...prev,
-                        sortOption: e.target.value,
-                      }))
-                    }
+                    onChange={(e) => {
+                        setCurrentPage(1); 
+                        setPendingFilters((prev) => ({
+                          ...prev,
+                          sortOption: e.target.value
+                        }));
+                      }}
+                      
                   >
                     <option value="none">None</option>
                     <option value="title-asc">Title A-Z</option>
