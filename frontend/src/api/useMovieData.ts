@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-=======
-import { useEffect, useState } from 'react';
->>>>>>> main
 
 export type Movie = {
   title: string;
@@ -14,10 +10,7 @@ export type Movie = {
   rating: string;
   duration: string;
   releaseDate: number;
-<<<<<<< HEAD
-=======
   show_id?: string;
->>>>>>> main
 };
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
@@ -50,22 +43,14 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         const data = await res.json();
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
-<<<<<<< HEAD
-          category: item.genres?.[0] || "Uncategorized",
-=======
           category: item.genres?.[0] || 'Uncategorized',
->>>>>>> main
           show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
           description: item.description || 'No description available',
           genre: item.genre,
           rating: item.rating,
           duration: item.duration,
-<<<<<<< HEAD
-          releaseDate: item.realease_year,
-=======
           releaseDate: item.release_year, // 👈 typo? maybe should be item.release_year
->>>>>>> main
         }));
 
         setAllMovies(transformed);
@@ -103,7 +88,6 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     setFilteredMovies(filtered);
   }, [searchTerm, selectedCategories, allMovies]);
 
-<<<<<<< HEAD
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
     const category = movie.category;
     acc[category] = acc[category] || [];
@@ -113,16 +97,6 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     }
     return acc;
   }, {} as Record<string, Movie[]>);
-=======
-  const groupedByCategory = filteredMovies.reduce(
-    (acc, movie) => {
-      acc[movie.category] = acc[movie.category] || [];
-      acc[movie.category].push(movie);
-      return acc;
-    },
-    {} as Record<string, Movie[]>
-  );
->>>>>>> main
 
   const loadMoreByCategory = (category: string) => {
     setVisibleCounts(prev => ({
