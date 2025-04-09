@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -14,68 +15,95 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-// builder.Services.Configure<MvcOptions>(options =>
-// {
-//     options.Filters.Add(new RequireHttpsAttribute());
-// });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// :white_check_mark: Add CORS
+
+// ✅ CORS: Allow only secure frontend with credentials
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://localhost:5173") // 👈 must be https
+              .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowCredentials();
     });
 });
-// :white_check_mark: Add EF Core DbContext
+
+// ✅ EF Core DbContext
 var connectionString = builder.Configuration.GetConnectionString("MovieConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// ✅ Add Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+// ✅ Identity with strong password settings
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 12;
+    options.Password.RequiredUniqueChars = 5;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+// ✅ Cookie auth for SPA compatibility
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    options.LoginPath = "/api/auth/login";
+    options.LogoutPath = "/api/auth/logout";
+    options.SlidingExpiration = true;
+
+    // Prevent redirect to /login — return 401 for SPA
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
 
 var app = builder.Build();
-// :white_check_mark: Enable Swagger
+
+// ✅ Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// if (!app.Environment.IsDevelopment())
-// {
-//     app.UseHttpsRedirection();
-// }
-
-// ✅ Use CORS BEFORE authorization
-app.UseCors("AllowAll");
-app.UseStaticFiles();
+// ✅ CORS BEFORE auth
+app.UseCors("AllowFrontend");
 
 app.UseStaticFiles();
 
-// app.UseAuthorization();
+// ✅ Auth middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
-// :white_check_mark: Optional: test SQL connection on startup
+
+// ✅ Test SQL connection
 try
 {
-    using (var connection = new SqlConnection(connectionString))
-    {
-        connection.Open();
-        Console.WriteLine(":white_check_mark: Connected to SQL Server successfully!");
-    }
+    using var connection = new SqlConnection(connectionString);
+    connection.Open();
+    Console.WriteLine(":white_check_mark: Connected to SQL Server successfully!");
 }
 catch (Exception ex)
 {
     Console.WriteLine($":x: Failed to connect to SQL Server: {ex.Message}");
 }
 
+// ✅ Seed roles + admin user
 await SeedRolesAndAdminAsync(app);
-
 app.Run();
 
 async Task SeedRolesAndAdminAsync(WebApplication app)
@@ -84,7 +112,6 @@ async Task SeedRolesAndAdminAsync(WebApplication app)
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-    // Create roles if they don't exist
     string[] roles = { "Admin", "Customer" };
     foreach (var role in roles)
     {
@@ -92,7 +119,6 @@ async Task SeedRolesAndAdminAsync(WebApplication app)
             await roleManager.CreateAsync(new IdentityRole(role));
     }
 
-    // Create default admin user
     string adminEmail = "admin@cineniche.com";
     string adminPassword = "SecurePass123!";
 

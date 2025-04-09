@@ -11,11 +11,16 @@ namespace Intex2.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         [HttpPost("register")]
@@ -51,13 +56,25 @@ namespace Intex2.API.Controllers
                 return Unauthorized("Invalid email or password");
             }
 
-            var passwordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
-            if (!passwordValid)
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName,
+                dto.Password,
+                isPersistent: true,
+                lockoutOnFailure: true);
+
+            if (result.Succeeded)
             {
-                return Unauthorized("Invalid email or password");
+                return Ok("Login successful");
             }
 
-            return Ok("Login successful");
+            return Unauthorized("Invalid email or password");
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok("Logged out");
         }
     }
 }
