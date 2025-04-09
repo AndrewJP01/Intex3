@@ -16,8 +16,14 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://localhost:7023/api/Admin/${id}`);
-        const response = await fetch(`https://localhost:7023/api/Admin/${id}`);
+        const response = await fetch(`https://localhost:7023/api/Admin/${id}`, 
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+    
+          }
+        );
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);

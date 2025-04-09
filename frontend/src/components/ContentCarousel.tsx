@@ -124,6 +124,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
             className={styles.carouselPrev}
             onClick={handlePrevClick}
             disabled={currentIndex === 0}
+            hidden={currentIndex === 0}
           >
             &#10094;
           </button>
@@ -177,6 +178,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
             disabled={
               currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
             }
+            hidden={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
           >
             &#10095;
           </button>

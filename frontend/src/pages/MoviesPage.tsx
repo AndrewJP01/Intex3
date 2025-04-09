@@ -77,14 +77,13 @@ export const MoviesPage: React.FC = () => {
           Error loading data. Please try again later.
         </p>
       ) : (
-        sortedCategories.map(([category, movies], index) => (
+        sortedCategories.map(([category, movies]) => (
           <ContentCarousel
-            key={category}
-            title={category}
-            movies={movies}
-            delayRender={index * 100}
-            onScrollEnd={() => loadMoreByCategory(category)}  // 👈 Add scroll handler
-          />
+          key={category}
+          title={category}
+          movies={movies} // ✅ Pass all movies, no slicing
+          delayRender={100}
+        />
         ))
       )}
     </main>

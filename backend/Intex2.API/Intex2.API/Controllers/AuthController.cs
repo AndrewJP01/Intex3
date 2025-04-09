@@ -67,7 +67,7 @@ namespace Intex2.API.Controllers
             {
                 return Ok("Login successful");
             }
-            f
+            
             return Unauthorized("Invalid email or password");
         }
 
