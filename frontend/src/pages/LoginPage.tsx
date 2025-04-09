@@ -29,9 +29,7 @@ function LoginPage() {
       return;
     }
 
-    const loginUrl = rememberme
-      ? 'https://localhost:5000/login?useCookies=true'
-      : 'https://localhost:5000/login?useSessionCookies=true';
+    const loginUrl = 'https://localhost:7023/api/Auth/login';
 
     try {
       const response = await fetch(loginUrl, {
@@ -42,10 +40,19 @@ function LoginPage() {
       });
 
       const contentLength = response.headers.get('content-length');
-      const data = contentLength && parseInt(contentLength, 10) > 0 ? await response.json() : null;
+      const data =
+        contentLength && parseInt(contentLength, 10) > 0
+          ? await response.json()
+          : null;
 
-      if (!response.ok) throw new Error(data?.message || 'Invalid email or password.');
-      navigate('/competition');
+      if (!response.ok) {
+        throw new Error(data?.message || 'Invalid email or password.');
+      }
+
+      // Display success message upon successful login.
+      window.alert('Successfully logged in!');
+      // Redirect to MoviesPage instead of Competition.
+      navigate('/moviesPage');
     } catch (error: any) {
       setError(error.message || 'Error logging in.');
       console.error('Fetch attempt failed:', error);
@@ -54,52 +61,57 @@ function LoginPage() {
 
   return (
     <>
-    <Navbar />
-    <div className="container">
-      <div className="card login-card">
-        <h2 className="text-white text-center mb-4">Sign In</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              placeholder="Email"
-              value={email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              placeholder="Password"
-              value={password}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-check mb-3">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="rememberme"
-              name="rememberme"
-              checked={rememberme}
-              onChange={handleChange}
-            />
-            <label className="form-check-label text-white" htmlFor="rememberme">
-              Remember me
-            </label>
-          </div>
-          {error && <div className="error">{error}</div>}
-          <div className="d-grid mb-3">
-            <button type="submit" className="btn btn-login">
-              Sign In
-            </button>
-          </div>
-          <div className="text-center mb-3">
-            <a href="#" className="forgot-password">Forgot your password?</a>
+      <Navbar />
+      <div className="container">
+        <div className="card login-card">
+          <h2 className="text-white text-center mb-4">Sign In</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Email"
+                value={email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="Password"
+                value={password}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-check mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="rememberme"
+                name="rememberme"
+                checked={rememberme}
+                onChange={handleChange}
+              />
+              <label
+                className="form-check-label text-white"
+                htmlFor="rememberme"
+              >
+                Remember me
+              </label>
+            </div>
+            {error && <div className="error">{error}</div>}
+            <div className="d-grid mb-3">
+              <button type="submit" className="btn btn-login">
+                Sign In
+              </button>
+            </div>
+            <div className="text-center mb-3">
+              <a href="#" className="forgot-password">
+                Forgot your password?
+              </a>
             </div>
 
             <hr className="border-secondary" />
@@ -107,32 +119,29 @@ function LoginPage() {
             {error && <p className="error">{error}</p>}
 
             <div className="text-white text-center mb-3">
-            New to CineNiche?{' '}
-            <span className="signup-blue" onClick={handleRegisterClick}>
+              New to CineNiche?{' '}
+              <span className="signup-blue" onClick={handleRegisterClick}>
                 Sign up now.
-                </span>
-
+              </span>
             </div>
-
 
             <hr className="border-secondary" />
 
             <div className="d-grid mb-2">
-            <button type="button" className="btn btn-google">
+              <button type="button" className="btn btn-google">
                 <i className="fab fa-google me-2"></i> Sign in with Google
-            </button>
+              </button>
             </div>
 
             <div className="d-grid">
-            <button type="button" className="btn btn-facebook">
+              <button type="button" className="btn btn-facebook">
                 <i className="fab fa-facebook-f me-2"></i> Sign in with Facebook
-            </button>
+              </button>
             </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
     </>
-
   );
 }
 

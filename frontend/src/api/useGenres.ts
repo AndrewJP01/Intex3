@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export function useGenres() {
   const [genres, setGenres] = useState<string[]>([]);
@@ -8,8 +8,20 @@ export function useGenres() {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const res = await fetch("http://localhost:5166/api/Admin/genres");
-        if (!res.ok) throw new Error("Failed to fetch genres");
+        const res = await fetch('https://localhost:7023/api/Admin/genres', {
+          method: 'GET',
+          credentials: 'include', // ✅ Sends auth cookie
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            window.alert('Unauthorized. Please log in to continue.');
+          }
+          throw new Error(`Failed to fetch genres (Status: ${res.status})`);
+        }
 
         const rawData: { genre: string }[] = await res.json();
 
@@ -17,15 +29,15 @@ export function useGenres() {
           new Set(
             rawData
               .map((g) => g.genre?.trim())
-              .filter((g): g is string => typeof g === "string" && g !== "")
+              .filter((g): g is string => typeof g === 'string' && g !== '')
           )
         ).sort();
 
-        console.log("✅ Fetched Genres:", cleaned);
+        console.log('✅ Fetched Genres:', cleaned);
         setGenres(cleaned);
         setIsLoading(false);
       } catch (err: any) {
-        setError(err.message || "Unknown error");
+        setError(err.message || 'Unknown error');
         setIsLoading(false);
       }
     };

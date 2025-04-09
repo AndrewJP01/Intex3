@@ -14,7 +14,7 @@ import {
 import './AdminPage.css';
 import ManageMovieModal from '../components/ManageMovieModal';
 import DeleteMovieModal from '../components/DeleteMovieModal';
-import { Navbar }from '../components/Navbar';
+import { Navbar } from '../components/Navbar';
 
 type Movie = {
   show_id: string;
@@ -30,7 +30,7 @@ type Movie = {
 const AdminPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage, setResultsPerPage] = useState(15);
-          
+
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -53,7 +53,6 @@ const AdminPage = () => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null);
-
 
   const [pendingFilters, setPendingFilters] = useState({
     selectedGenres: [] as string[],
@@ -132,21 +131,25 @@ const AdminPage = () => {
       setModalMode('edit');
       setIsManageModalOpen(true);
     }
-  };  
-  
-
+  };
 
   const confirmDelete = async () => {
     if (!movieToDelete) return;
-  
+
     try {
-      const res = await fetch(`http://localhost:5166/api/admin/movies/${movieToDelete.show_id}`, {
-        method: 'DELETE',
-      });
-  
+      const res = await fetch(
+        `https://localhost:7023/api/admin/movies/${movieToDelete.show_id}`,
+        {
+          method: 'DELETE',
+          credentials: 'include',
+        }
+      );
+
       if (!res.ok) throw new Error('Delete failed');
-  
-      setMovies((prev) => prev.filter((m) => m.show_id !== movieToDelete.show_id));
+
+      setMovies((prev) =>
+        prev.filter((m) => m.show_id !== movieToDelete.show_id)
+      );
       setIsDeleteModalOpen(false);
       setMovieToDelete(null);
     } catch (err) {
@@ -160,23 +163,26 @@ const AdminPage = () => {
       encodeURIComponent(title.replace(/[^\w\s]/g, '').trim());
 
     const getMovieImageUrl = (title: string) =>
-      `http://localhost:5166/Movie%20Posters/${normalizeTitle(title)}.jpg`;
+      `https://localhost:7023/Movie%20Posters/${normalizeTitle(title)}.jpg`;
 
-    fetch('http://localhost:5166/api/admin/movies')
+    fetch('https://localhost:7023/api/admin/movies', {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then((res) => res.json())
       .then((data) => {
         const moviesWithImages = data.map((m: any) => ({
-            show_id: m.show_id,
-            title: m.title,
-            genres: Array.isArray(m.genres) ? m.genres.join(', ') : 'Unknown',
-            type: m.type || 'Unknown',
-            rating: m.rating || 'Unrated',
-            director: m.director || 'Unknown',
-            release_year: m.release_year,
-            imageUrl: getMovieImageUrl(m.title),
-            description: m.description || '',
-            duration: m.duration || '',
-          }));
+          show_id: m.show_id,
+          title: m.title,
+          genres: Array.isArray(m.genres) ? m.genres.join(', ') : 'Unknown',
+          type: m.type || 'Unknown',
+          rating: m.rating || 'Unrated',
+          director: m.director || 'Unknown',
+          release_year: m.release_year,
+          imageUrl: getMovieImageUrl(m.title),
+          description: m.description || '',
+          duration: m.duration || '',
+        }));
 
         setMovies(moviesWithImages);
         setLoading(false);
@@ -186,7 +192,8 @@ const AdminPage = () => {
         const directorSet = new Set<string>();
 
         data.forEach((m: any) => {
-          if (Array.isArray(m.genres)) m.genres.forEach((g: any) => genreSet.add(g));
+          if (Array.isArray(m.genres))
+            m.genres.forEach((g: any) => genreSet.add(g));
           if (m.rating) ratingSet.add(m.rating);
           if (m.director) directorSet.add(m.director);
         });
@@ -208,7 +215,8 @@ const AdminPage = () => {
         movie.title.toLowerCase().includes(searchQuery.toLowerCase());
 
       const genreMatch =
-        selectedGenres.length === 0 || selectedGenres.some((g) => movie.genres.includes(g));
+        selectedGenres.length === 0 ||
+        selectedGenres.some((g) => movie.genres.includes(g));
       const ratingMatch =
         selectedRatings.length === 0 || selectedRatings.includes(movie.rating);
       const yearMatch =
@@ -218,16 +226,30 @@ const AdminPage = () => {
         directorInput.trim() === '' ||
         movie.director.toLowerCase().includes(directorInput.toLowerCase());
 
-      return titleMatch && genreMatch && ratingMatch && yearMatch && directorMatch;
+      return (
+        titleMatch && genreMatch && ratingMatch && yearMatch && directorMatch
+      );
     });
 
     switch (sortOption) {
-      case 'title-asc': filtered.sort((a, b) => a.title.localeCompare(b.title)); break;
-      case 'title-desc': filtered.sort((a, b) => b.title.localeCompare(a.title)); break;
-      case 'year-asc': filtered.sort((a, b) => a.release_year - b.release_year); break;
-      case 'year-desc': filtered.sort((a, b) => b.release_year - a.release_year); break;
-      case 'genre-asc': filtered.sort((a, b) => a.genres.localeCompare(b.genres)); break;
-      case 'genre-desc': filtered.sort((a, b) => b.genres.localeCompare(a.genres)); break;
+      case 'title-asc':
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'title-desc':
+        filtered.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case 'year-asc':
+        filtered.sort((a, b) => a.release_year - b.release_year);
+        break;
+      case 'year-desc':
+        filtered.sort((a, b) => b.release_year - a.release_year);
+        break;
+      case 'genre-asc':
+        filtered.sort((a, b) => a.genres.localeCompare(b.genres));
+        break;
+      case 'genre-desc':
+        filtered.sort((a, b) => b.genres.localeCompare(a.genres));
+        break;
     }
 
     return filtered;
@@ -235,13 +257,13 @@ const AdminPage = () => {
 
   const handleSaveMovie = async (movieData: any) => {
     const isAdd = modalMode === 'add';
-  
+
     const endpoint = isAdd
-      ? 'http://localhost:5166/api/admin/movies'
-      : `http://localhost:5166/api/admin/movies/${selectedMovie?.show_id}`;
-  
+      ? 'https://localhost:7023/api/admin/movies'
+      : `https://localhost:7023/api/admin/movies/${selectedMovie?.show_id}`;
+
     const method = isAdd ? 'POST' : 'PUT';
-  
+
     const payload = {
       show_id: selectedMovie?.show_id || crypto.randomUUID(),
       title: movieData.title,
@@ -255,29 +277,30 @@ const AdminPage = () => {
       type: movieData.type,
       release_year: parseInt(movieData.year),
     };
-  
+
     try {
       const res = await fetch(endpoint, {
         method,
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       });
-  
+
       if (!res.ok) {
         const errorText = await res.text();
         console.error('Failed to save:', errorText);
         alert(`Failed to ${isAdd ? 'add' : 'edit'} movie.\n${errorText}`);
         return;
       }
-  
+
       const updatedMovie = isAdd ? await res.json() : payload;
-  
-      const imageUrl = `http://localhost:5166/Movie%20Posters/${encodeURIComponent(
+
+      const imageUrl = `https://localhost:7023/Movie%20Posters/${encodeURIComponent(
         updatedMovie.title.replace(/[^\w\s]/g, '').trim()
       )}.jpg`;
-  
+
       const movieWithImage = {
         ...updatedMovie,
         genres: updatedMovie.genres.join(', '),
@@ -285,15 +308,17 @@ const AdminPage = () => {
         description: updatedMovie.description,
         duration: updatedMovie.duration,
       };
-  
+
       if (isAdd) {
         setMovies((prev) => [movieWithImage, ...prev]);
       } else {
         setMovies((prev) =>
-          prev.map((m) => (m.show_id === selectedMovie?.show_id ? movieWithImage : m))
+          prev.map((m) =>
+            m.show_id === selectedMovie?.show_id ? movieWithImage : m
+          )
         );
       }
-  
+
       setIsManageModalOpen(false);
       setSelectedMovie(null);
     } catch (err) {
@@ -301,8 +326,6 @@ const AdminPage = () => {
       alert(`Something went wrong while saving.`);
     }
   };
-  
-  
 
   const filteredMovies = getFilteredMovies();
   const filtersAreActive =
@@ -313,19 +336,20 @@ const AdminPage = () => {
     directorInput.trim() !== '' ||
     sortOption !== 'none';
 
-    const totalPages = Math.ceil(filteredMovies.length / resultsPerPage);
-    const paginatedMovies = filteredMovies.slice(
-        (currentPage - 1) * resultsPerPage,
-        currentPage * resultsPerPage
-    );
-    
+  const totalPages = Math.ceil(filteredMovies.length / resultsPerPage);
+  const paginatedMovies = filteredMovies.slice(
+    (currentPage - 1) * resultsPerPage,
+    currentPage * resultsPerPage
+  );
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <div className="admin-background">
         <div className="admin-page-wrapper">
-          <header className="admin-header"><h1>Admin Dashboard</h1></header>
+          <header className="admin-header">
+            <h1>Admin Dashboard</h1>
+          </header>
 
           <section className="admin-controls">
             <button
@@ -347,30 +371,37 @@ const AdminPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <button className={`btn ${filtersAreActive ? 'active-filter' : ''}`} onClick={openFilterModal}>
+            <button
+              className={`btn ${filtersAreActive ? 'active-filter' : ''}`}
+              onClick={openFilterModal}
+            >
               Filter Movies
             </button>
             {filtersAreActive && (
-              <button className="btn reset-btn" onClick={resetFilters} title="Reset Filters">
+              <button
+                className="btn reset-btn"
+                onClick={resetFilters}
+                title="Reset Filters"
+              >
                 &#x21bb;
               </button>
             )}
             <div className="dropdown-wrapper">
-            <label htmlFor="resultsPerPage">Results per page:</label>
-            <select
+              <label htmlFor="resultsPerPage">Results per page:</label>
+              <select
                 id="resultsPerPage"
                 value={resultsPerPage}
                 onChange={(e) => {
-                setResultsPerPage(Number(e.target.value));
-                setCurrentPage(1); // Reset to page 1 on change
+                  setResultsPerPage(Number(e.target.value));
+                  setCurrentPage(1); // Reset to page 1 on change
                 }}
-            >
+              >
                 {[10, 15, 20, 25, 30, 35, 40, 45, 50].map((num) => (
-                <option key={num} value={num}>
+                  <option key={num} value={num}>
                     {num}
-                </option>
+                  </option>
                 ))}
-            </select>
+              </select>
             </div>
           </section>
 
@@ -390,22 +421,45 @@ const AdminPage = () => {
           ) : (
             <>
               <section className="movie-list">
-              {paginatedMovies.map((movie) => (
+                {paginatedMovies.map((movie) => (
                   <div key={movie.show_id} className="movie-row">
                     <img
                       src={movie.imageUrl}
                       alt={movie.title}
-                      onError={(e) => (e.currentTarget.src = 'http://localhost:5166/Movie%20Posters/fallback.jpg')}
+                      onError={(e) =>
+                        (e.currentTarget.src =
+                          'https://localhost:7023/Movie%20Posters/fallback.jpg')
+                      }
                     />
                     <span>{movie.title}</span>
-                    <span className="icon-text"><FaFilm /> {movie.genres}</span>
-                    <span className="icon-text"><FaVideo /> {movie.type}</span>
-                    <span className="icon-text"><FaTag /> {movie.rating}</span>
-                    <span className="icon-text"><FaUser /> {movie.director}</span>
-                    <span className="icon-text"><FaCalendarAlt /> {movie.release_year}</span>
+                    <span className="icon-text">
+                      <FaFilm /> {movie.genres}
+                    </span>
+                    <span className="icon-text">
+                      <FaVideo /> {movie.type}
+                    </span>
+                    <span className="icon-text">
+                      <FaTag /> {movie.rating}
+                    </span>
+                    <span className="icon-text">
+                      <FaUser /> {movie.director}
+                    </span>
+                    <span className="icon-text">
+                      <FaCalendarAlt /> {movie.release_year}
+                    </span>
                     <span className="actions">
-                      <button className="btn edit" onClick={() => handleEdit(movie.show_id)}><FaEdit /> Edit</button>
-                      <button className="btn delete" onClick={() => handleDelete(movie.show_id)}><FaTrash /> Delete</button>
+                      <button
+                        className="btn edit"
+                        onClick={() => handleEdit(movie.show_id)}
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        className="btn delete"
+                        onClick={() => handleDelete(movie.show_id)}
+                      >
+                        <FaTrash /> Delete
+                      </button>
                     </span>
                   </div>
                 ))}
@@ -413,63 +467,67 @@ const AdminPage = () => {
               <div className="dropdown-wrapper2">
                 <label htmlFor="resultsPerPage">Results per page:</label>
                 <select
-                    id="resultsPerPage"
-                    value={resultsPerPage}
-                    onChange={(e) => {
+                  id="resultsPerPage"
+                  value={resultsPerPage}
+                  onChange={(e) => {
                     setResultsPerPage(Number(e.target.value));
                     setCurrentPage(1); // Reset to page 1 on change
-                    }}
+                  }}
                 >
-                    {[10, 15, 20, 25, 30, 35, 40, 45, 50].map((num) => (
+                  {[10, 15, 20, 25, 30, 35, 40, 45, 50].map((num) => (
                     <option key={num} value={num}>
-                        {num}
+                      {num}
                     </option>
-                    ))}
+                  ))}
                 </select>
-                </div>
-
-
+              </div>
 
               <div className="pagination-bar">
                 {/* Show first page only if currentPage > 4 */}
                 {currentPage > 4 && (
-                    <>
-                    <button onClick={() => setCurrentPage(1)} className={currentPage === 1 ? "active-page" : ""}>1</button>
+                  <>
+                    <button
+                      onClick={() => setCurrentPage(1)}
+                      className={currentPage === 1 ? 'active-page' : ''}
+                    >
+                      1
+                    </button>
                     <span className="dots">...</span>
-                    </>
+                  </>
                 )}
 
                 {/* Pages around the current page */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter((pageNum) =>
-                    pageNum === currentPage ||
-                    (pageNum >= currentPage - 3 && pageNum <= currentPage + 3)
-                    )
-                    .map((pageNum) => (
+                  .filter(
+                    (pageNum) =>
+                      pageNum === currentPage ||
+                      (pageNum >= currentPage - 3 && pageNum <= currentPage + 3)
+                  )
+                  .map((pageNum) => (
                     <button
-                        key={pageNum}
-                        className={pageNum === currentPage ? "active-page" : ""}
-                        onClick={() => setCurrentPage(pageNum)}
+                      key={pageNum}
+                      className={pageNum === currentPage ? 'active-page' : ''}
+                      onClick={() => setCurrentPage(pageNum)}
                     >
-                        {pageNum}
+                      {pageNum}
                     </button>
-                    ))}
+                  ))}
 
                 {/* Show last page only if currentPage is far enough away from the end */}
                 {currentPage < totalPages - 3 && (
-                    <>
+                  <>
                     <span className="dots">...</span>
                     <button
-                        onClick={() => setCurrentPage(totalPages)}
-                        className={currentPage === totalPages ? "active-page" : ""}
+                      onClick={() => setCurrentPage(totalPages)}
+                      className={
+                        currentPage === totalPages ? 'active-page' : ''
+                      }
                     >
-                        {totalPages}
+                      {totalPages}
                     </button>
-                    </>
+                  </>
                 )}
               </div>
-
-
             </>
           )}
         </div>
@@ -484,46 +542,54 @@ const AdminPage = () => {
               <div className="filter-bubbles">
                 {availableGenres.map((genre) => (
                   <button
-                  key={genre}
-                  className={`bubble ${pendingFilters.selectedGenres.includes(genre) ? 'active' : ''}`}
-                  onClick={() => toggleGenre(genre)}
-                >
-                  {genre}
-                </button>
-                
+                    key={genre}
+                    className={`bubble ${pendingFilters.selectedGenres.includes(genre) ? 'active' : ''}`}
+                    onClick={() => toggleGenre(genre)}
+                  >
+                    {genre}
+                  </button>
                 ))}
               </div>
-  
+
               <h3>Ratings</h3>
               <div className="filter-bubbles">
                 {availableRatings.map((rating) => (
                   <button
-                  key={rating}
-                  className={`bubble ${pendingFilters.selectedRatings.includes(rating) ? 'active' : ''}`}
-                  onClick={() => toggleRating(rating)}
-                >
-                  {rating}
-                </button>
-                
+                    key={rating}
+                    className={`bubble ${pendingFilters.selectedRatings.includes(rating) ? 'active' : ''}`}
+                    onClick={() => toggleRating(rating)}
+                  >
+                    {rating}
+                  </button>
                 ))}
               </div>
-  
+
               <h3>Release Year</h3>
               <div className="year-inputs">
                 <input
                   type="number"
                   placeholder="Start Year"
                   value={pendingFilters.startYear || ''}
-                  onChange={(e) => setPendingFilters((prev) => ({ ...prev, startYear: Number(e.target.value) }))}
+                  onChange={(e) =>
+                    setPendingFilters((prev) => ({
+                      ...prev,
+                      startYear: Number(e.target.value),
+                    }))
+                  }
                 />
                 <input
                   type="number"
                   placeholder="End Year"
                   value={pendingFilters.endYear || ''}
-                  onChange={(e) => setPendingFilters((prev) => ({ ...prev, endYear: Number(e.target.value) }))}
+                  onChange={(e) =>
+                    setPendingFilters((prev) => ({
+                      ...prev,
+                      endYear: Number(e.target.value),
+                    }))
+                  }
                 />
               </div>
-  
+
               <div className="director-sort-row">
                 <div className="input-group">
                   <h3>Director</h3>
@@ -540,19 +606,18 @@ const AdminPage = () => {
                     list="director-suggestions"
                   />
                 </div>
-  
+
                 <div className="input-group">
                   <h3>Sort By</h3>
                   <select
                     value={pendingFilters.sortOption}
                     onChange={(e) => {
-                        setCurrentPage(1); 
-                        setPendingFilters((prev) => ({
-                          ...prev,
-                          sortOption: e.target.value
-                        }));
-                      }}
-                      
+                      setCurrentPage(1);
+                      setPendingFilters((prev) => ({
+                        ...prev,
+                        sortOption: e.target.value,
+                      }));
+                    }}
                   >
                     <option value="none">None</option>
                     <option value="title-asc">Title A-Z</option>
@@ -564,21 +629,27 @@ const AdminPage = () => {
                   </select>
                 </div>
               </div>
-  
+
               <datalist id="director-suggestions">
                 {availableDirectors
                   .filter((d) =>
-                    d.toLowerCase().includes(pendingFilters.directorInput.toLowerCase())
+                    d
+                      .toLowerCase()
+                      .includes(pendingFilters.directorInput.toLowerCase())
                   )
                   .map((d) => (
                     <option key={d} value={d} />
                   ))}
               </datalist>
             </div>
-  
+
             <div className="apply-button-wrapper">
-              <button className="apply-btn" onClick={applyFilters}>Apply Filters</button>
-              <button className="btn close" onClick={closeFilterModal}>Close</button>
+              <button className="apply-btn" onClick={applyFilters}>
+                Apply Filters
+              </button>
+              <button className="btn close" onClick={closeFilterModal}>
+                Close
+              </button>
             </div>
           </div>
         </div>
@@ -596,16 +667,16 @@ const AdminPage = () => {
         />
       )}
 
-        {isDeleteModalOpen && movieToDelete && (
+      {isDeleteModalOpen && movieToDelete && (
         <DeleteMovieModal
-            title={movieToDelete.title}
-            onCancel={() => {
+          title={movieToDelete.title}
+          onCancel={() => {
             setIsDeleteModalOpen(false);
             setMovieToDelete(null);
-            }}
-            onConfirm={confirmDelete}
+          }}
+          onConfirm={confirmDelete}
         />
-        )}
+      )}
     </>
   );
 };
