@@ -198,7 +198,33 @@ button:focus-visible {
     justify-content: space-between;
     transition: opacity 0.3s ease;
   }
+
+  .titleOverlay {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
   
+  .carouselPrev,
+.carouselNext {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.carouselPrev.hidden,
+.carouselNext.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
   .topIcons {
     display: flex;

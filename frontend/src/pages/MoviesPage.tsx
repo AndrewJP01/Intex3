@@ -1,37 +1,39 @@
-"use client";
-import React, { useState } from "react";
-import styles from "./MovieHomePage.module.css";
-import { Hero } from "../components/Hero";
-import { ContentCarousel } from "../components/ContentCarousel";
-import { SearchBar } from "../components/SearchBar";
-import { CategoryFilter } from "../components/CategoryFilter";
-import { useMovieData } from "../api/useMovieData";
-import { Navbar } from "../components/Navbar";
-import { useGenres } from "../api/useGenres";
-import { useFeaturedMovies } from "../api/useFeaturedMovies";
-import { FeaturedMovie } from "../types/FeaturedMovie";
+'use client';
+import React, { useState } from 'react';
+import styles from './MovieHomePage.module.css';
+import { Hero } from '../components/Hero';
+import { ContentCarousel } from '../components/ContentCarousel';
+import { SearchBar } from '../components/SearchBar';
+import { CategoryFilter } from '../components/CategoryFilter';
+import { useMovieData } from '../api/useMovieData';
+import { Navbar } from '../components/Navbar';
+import { useGenres } from '../api/useGenres';
+import { useFeaturedMovies } from '../api/useFeaturedMovies';
+import { FeaturedMovie } from '../types/FeaturedMovie';
 
 export const MoviesPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const {
     groupedByCategory,
     isLoading: moviesLoading,
-    error: movieError
+    error: movieError,
+    loadMoreByCategory  // 👈 ADD THIS
   } = useMovieData(searchTerm, selectedCategories);
 
   const {
     genres: availableGenres,
     isLoading: genresLoading,
-    error: genresError
+    error: genresError,
   } = useGenres();
 
   // ✅ Correctly use the hook here (no redeclaration!)
   const {
     featuredMovies,
+    personalizedMovies,
     loading: featuredLoading,
-    error: featuredError
+    error: featuredError,
   } = useFeaturedMovies();
 
   // Sort the categories alphabetically or by any other logic
@@ -47,6 +49,7 @@ export const MoviesPage: React.FC = () => {
         <Hero featuredMovies={featuredMovies} />
       )}
 
+
       <SearchBar searchTerm={searchTerm} onChange={setSearchTerm} />
 
       <CategoryFilter
@@ -55,21 +58,32 @@ export const MoviesPage: React.FC = () => {
         availableGenres={availableGenres}
       />
 
+      {personalizedMovies.length > 0 && (
+                <ContentCarousel
+                  title="Since you liked..."
+                  movies={personalizedMovies}
+                  delayRender={0}
+                />
+              )}
+
+
       {moviesLoading || genresLoading ? (
         <>
           <p className={styles.loading}>Loading...</p>
           <p className={styles.spinner}></p>
         </>
       ) : movieError || genresError ? (
-        <p className={styles.error}>Error loading data. Please try again later.</p>
+        <p className={styles.error}>
+          Error loading data. Please try again later.
+        </p>
       ) : (
-        sortedCategories.map(([category, movies], index) => (
+        sortedCategories.map(([category, movies]) => (
           <ContentCarousel
-            key={category}
-            title={category}
-            movies={movies}
-            delayRender={index * 100} // pass delay based on order
-          />
+          key={category}
+          title={category}
+          movies={movies} // ✅ Pass all movies, no slicing
+          delayRender={100}
+        />
         ))
       )}
     </main>

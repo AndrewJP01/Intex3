@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Intex2.API.Models;
 using Intex2.API.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Intex2.API.Controllers
 {
@@ -11,11 +12,16 @@ namespace Intex2.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         [HttpPost("register")]
@@ -51,13 +57,33 @@ namespace Intex2.API.Controllers
                 return Unauthorized("Invalid email or password");
             }
 
-            var passwordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
-            if (!passwordValid)
-            {
-                return Unauthorized("Invalid email or password");
-            }
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName,
+                dto.Password,
+                isPersistent: true,
+                lockoutOnFailure: true);
 
-            return Ok("Login successful");
+            if (result.Succeeded)
+            {
+                return Ok("Login successful");
+            }
+            
+            return Unauthorized("Invalid email or password");
         }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok("Logged out");
+        }
+
+        [HttpGet("pingauth")]
+        public IActionResult PingAuth()
+        {
+            var username = User.Identity?.Name;
+            return Ok(new { message = $"Authenticated as {username}" });
+        }
+
     }
 }

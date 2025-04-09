@@ -1,97 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Intex2.API.Data;
 using Intex2.API.Models;
 
-
 namespace Intex2.API.Controllers
 {
+    [Authorize] // ✅ All routes require authentication by default
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
     {
         private readonly AppDbContext _context;
+
         public AdminController(AppDbContext context)
         {
             _context = context;
         }
 
-[HttpGet("{id}")]
-public async Task<IActionResult> GetMovie(string id)
-{
-    var movie = await _context.Movies
-        .Where(m => m.show_id == id)
-        .Select(m => new
+        // ✅ Logged-in user
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMovie(string id)
         {
-            m.show_id,
-            title = m.title ?? "No Title Provided",
-            director = m.director ?? "Unknown",
-            cast = m.cast ?? "Not listed",
-            country = m.country ?? "Unknown",
-            m.release_year,
-            rating = m.rating ?? "NR",
-            duration = m.duration ?? "Unknown",
-            description = m.description ?? "No description available.",
-            Genres = m.genres.Select(g => g.genre ?? "Uncategorized"),
-            Ratings = new double[] 
-            {
-                m.ratings.Any() ? Math.Round(m.ratings.Average(r => r.rating), 2) : 0,
-                m.ratings.Count()
-            }
-        })
-        .FirstOrDefaultAsync();
+            var movie = await _context.Movies
+                .Where(m => m.show_id == id)
+                .Select(m => new
+                {
+                    m.show_id,
+                    title = m.title ?? "No Title Provided",
+                    director = m.director ?? "Unknown",
+                    cast = m.cast ?? "Not listed",
+                    country = m.country ?? "Unknown",
+                    m.release_year,
+                    rating = m.rating ?? "NR",
+                    duration = m.duration ?? "Unknown",
+                    description = m.description ?? "No description available.",
+                    Genres = m.genres.Select(g => g.genre ?? "Uncategorized"),
+                    Ratings = new double[]
+                    {
+                        m.ratings.Any() ? Math.Round(m.ratings.Average(r => r.rating), 2) : 0,
+                        m.ratings.Count()
+                    }
+                })
+                .FirstOrDefaultAsync();
 
-    if (movie == null)
-    {
-        return NotFound();
-    }
+            if (movie == null)
+                return NotFound();
 
-    return Ok(movie);
-}
+            return Ok(movie);
+        }
 
-[HttpGet("top-rated")]
-public async Task<IActionResult> GetTopRatedMovies()
-{
-    var topMovies = await _context.Movies
-        .Include(m => m.ratings)
-        .Include(m => m.genres)
-        .Where(m => m.ratings != null && m.ratings.Any())
-        .OrderByDescending(m => m.ratings.Count)
-        .Take(15)
-        .Select(m => new
+        // ✅ Logged-in user
+        [HttpGet("top-rated")]
+        public async Task<IActionResult> GetTopRatedMovies()
         {
-            m.show_id,
-            m.title,
-            m.description,
-            genre = m.genres.Select(g => g.genre).FirstOrDefault() ?? "Uncategorized",
-            rating = m.rating,
-            duration = m.duration,
-            releaseDate = m.release_year,
-            imageUrl = $"http://localhost:5166/Movie%20Posters/{Uri.EscapeDataString(m.title ?? "")}.jpg",
-            ratingsCount = m.ratings.Count,
-            averageRating = m.ratings.Average(r => (double)r.rating)
-        })
-        .ToListAsync();
+            var topMovies = await _context.Movies
+                .Include(m => m.ratings)
+                .Include(m => m.genres)
+                .Where(m => m.ratings != null && m.ratings.Any())
+                .OrderByDescending(m => m.ratings.Count)
+                .Take(15)
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.description,
+                    genre = m.genres.Select(g => g.genre).FirstOrDefault() ?? "Uncategorized",
+                    rating = m.rating,
+                    duration = m.duration,
+                    releaseDate = m.release_year,
+                    imageUrl = $"http://localhost:5166/Movie%20Posters/{Uri.EscapeDataString(m.title ?? "")}.jpg",
+                    ratingsCount = m.ratings.Count,
+                    averageRating = m.ratings.Average(r => (double)r.rating)
+                })
+                .ToListAsync();
 
-    return Ok(topMovies);
-}
+            return Ok(topMovies);
+        }
 
-
-
+        // ✅ Logged-in user
         [HttpPost("{id}/rate")]
         public async Task<IActionResult> RateMovie(string id, [FromBody] RatingDto ratingDto)
         {
             if (ratingDto.rating < 1 || ratingDto.rating > 5)
-            {
                 return BadRequest("Rating must be between 1 and 5.");
-            }
 
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.show_id == id);
 
             if (movie == null)
-            {
                 return NotFound();
-            }
 
             var newRating = new MovieRating
             {
@@ -106,15 +103,14 @@ public async Task<IActionResult> GetTopRatedMovies()
             return Ok();
         }
 
-            public class RatingDto
-            {
-                public int user_id { get; set; }
-                public int rating { get; set; }
-            }
+        public class RatingDto
+        {
+            public int user_id { get; set; }
+            public int rating { get; set; }
+        }
 
-
-
-   [HttpGet("movies")]
+        // ✅ Logged-in user
+        [HttpGet("movies")]
         public async Task<IActionResult> GetMovies()
         {
             var movies = await _context.Movies
@@ -134,14 +130,13 @@ public async Task<IActionResult> GetTopRatedMovies()
                     genres = m.genres
                         .Select(g => string.IsNullOrWhiteSpace(g.genre) ? "No Genres Added" : g.genre)
                         .ToList()
-
                 })
                 .ToListAsync();
             return Ok(movies);
         }
 
-
-        // Example: DELETE a movie
+        // 🔒 Admin only
+        [Authorize(Roles = "Admin")]
         [HttpDelete("movies/{id}")]
         public IActionResult DeleteMovie(string id)
         {
@@ -152,16 +147,21 @@ public async Task<IActionResult> GetTopRatedMovies()
             return NoContent();
         }
 
+        // 🔒 Admin only
+        [Authorize]
         [HttpGet("genres")]
         public IActionResult GetAllGenres() => Ok(_context.MovieGenres.ToList());
 
+        // 🔒 Admin only
+        [Authorize(Roles = "Admin")]
         [HttpGet("users")]
         public IActionResult GetAllUsers() => Ok(_context.MovieUsers.ToList());
 
+        
         [HttpGet("ratings")]
         public IActionResult GetAllRatings() => Ok(_context.MovieRatings.ToList());
 
-        // ✅ UPDATED PUT method
+        [Authorize(Roles = "Admin")]
         [HttpPut("movies/{show_id}")]
         public IActionResult UpdateMovie(string show_id, [FromBody] MovieUpdateDto dto)
         {
@@ -185,7 +185,6 @@ public async Task<IActionResult> GetTopRatedMovies()
             existingMovie.duration = dto.duration;
             existingMovie.description = dto.description;
 
-            // ✅ FIXED: Remove tracked genres and re-add new ones
             var existingGenres = _context.MovieGenres
                 .Where(g => g.show_id == show_id)
                 .ToList();
@@ -199,7 +198,6 @@ public async Task<IActionResult> GetTopRatedMovies()
             });
 
             _context.MovieGenres.AddRange(newGenres);
-
             _context.SaveChanges();
 
             var result = new
@@ -216,10 +214,12 @@ public async Task<IActionResult> GetTopRatedMovies()
                 description = existingMovie.description,
                 genres = newGenres.Select(g => g.genre).ToList()
             };
+
             return Ok(result);
         }
 
-
+        // 🔒 Admin only
+        [Authorize(Roles = "Admin")]
         [HttpPost("movies")]
         public IActionResult AddMovie([FromBody] MovieCreateDto dto)
         {
@@ -229,6 +229,7 @@ public async Task<IActionResult> GetTopRatedMovies()
                 return BadRequest("At least one genre is required.");
             if (_context.Movies.Any(m => m.show_id == dto.show_id))
                 return Conflict("Movie already exists.");
+
             var newMovie = new Movie
             {
                 show_id = dto.show_id,
@@ -247,10 +248,12 @@ public async Task<IActionResult> GetTopRatedMovies()
                     genre = g
                 }).ToList()
             };
+
             _context.Movies.Add(newMovie);
             _context.SaveChanges();
 
-            var result = new {
+            var result = new
+            {
                 show_id = newMovie.show_id,
                 title = newMovie.title,
                 type = newMovie.type,
@@ -265,7 +268,6 @@ public async Task<IActionResult> GetTopRatedMovies()
             };
 
             return CreatedAtAction(nameof(GetMovies), new { id = newMovie.show_id }, result);
-
         }
     }
 }
