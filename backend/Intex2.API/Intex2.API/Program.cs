@@ -2,6 +2,8 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
