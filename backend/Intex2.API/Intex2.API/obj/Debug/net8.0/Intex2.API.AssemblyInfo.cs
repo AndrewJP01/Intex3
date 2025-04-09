@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Intex2.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db55e1ce7add3905bf2eb4a5d573bf9a8211970f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ec4e4485b1b98e0503e9a7493bd7429f83004ce")]
 [assembly: System.Reflection.AssemblyProductAttribute("Intex2.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Intex2.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

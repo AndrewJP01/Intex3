@@ -171,6 +171,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
               src={selectedMovie.imageUrl}
               alt={selectedMovie.title}
               className={styles.popupImage}
+              loading="lazy"
             />
             <div className={styles.popupDetails}>
               <h3>{selectedMovie.title}</h3>
