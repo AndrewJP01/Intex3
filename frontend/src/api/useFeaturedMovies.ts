@@ -13,13 +13,9 @@ export type FeaturedMovie = {
 export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
   const [loading, setLoading] = useState(true);
-<<<<<<< HEAD
   const [error, setError] = useState("");
   const [personalizedMovies, setPersonalizedMovies] = useState([]);
 
-=======
-  const [error, setError] = useState('');
->>>>>>> main
 
   useEffect(() => {
     const fetchFeatured = async () => {
