@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,7 +57,7 @@ app.UseStaticFiles();
 
 app.UseStaticFiles();
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 // :white_check_mark: Optional: test SQL connection on startup
