@@ -1,11 +1,7 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
     "C:\\Users\\colto\\onedrive\\desktop\\holder\\intext2\\intex2\\backend\\Intex2.api\\Intex2.api\\Intex2.API.csproj": {}
-=======
-    "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/Intex2.API.csproj": {}
->>>>>>> main
   },
   "projects": {
     "C:\\Users\\colto\\onedrive\\desktop\\holder\\intext2\\intex2\\backend\\Intex2.api\\Intex2.api\\Intex2.API.csproj": {
@@ -13,37 +9,24 @@
       "restore": {
         "projectUniqueName": "C:\\Users\\colto\\onedrive\\desktop\\holder\\intext2\\intex2\\backend\\Intex2.api\\Intex2.api\\Intex2.API.csproj",
         "projectName": "Intex2.API",
-<<<<<<< HEAD
         "projectPath": "C:\\Users\\colto\\onedrive\\desktop\\holder\\intext2\\intex2\\backend\\Intex2.api\\Intex2.api\\Intex2.API.csproj",
         "packagesPath": "C:\\Users\\colto\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\colto\\onedrive\\desktop\\holder\\intext2\\intex2\\backend\\Intex2.api\\Intex2.api\\obj\\",
-=======
-        "projectPath": "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/Intex2.API.csproj",
-        "packagesPath": "/Users/joshditto/.nuget/packages/",
-        "outputPath": "/Users/joshditto/Desktop/INTEX II/Intex2/backend/Intex2.API/Intex2.API/obj/",
->>>>>>> main
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-<<<<<<< HEAD
           "C:\\Users\\colto\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-=======
-          "/Users/joshditto/.nuget/NuGet/NuGet.Config"
->>>>>>> main
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-<<<<<<< HEAD
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-=======
->>>>>>> main
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -110,11 +93,7 @@
               "privateAssets": "all"
             }
           },
-<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
-=======
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
->>>>>>> main
         }
       }
     }

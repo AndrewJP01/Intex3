@@ -2,6 +2,9 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Intex2.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -52,11 +55,9 @@ app.UseSwaggerUI();
 app.UseCors("AllowAll");
 app.UseStaticFiles();
 
-=========
 app.UseStaticFiles();
 
->>>>>>>>> Temporary merge branch 2
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 // :white_check_mark: Optional: test SQL connection on startup
