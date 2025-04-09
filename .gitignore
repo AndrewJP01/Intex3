@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 node_modules/
 .next/
 build/
@@ -5,3 +6,9 @@ dist/
 *.log
 *.DS_Store
 Movie Posters/
+=======
+.DS_Store
+obj/
+bin/
+.vs/
+>>>>>>> main

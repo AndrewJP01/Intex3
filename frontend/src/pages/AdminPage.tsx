@@ -1,6 +1,5 @@
 // src/pages/AdminPage.tsx
 import { useState, useEffect } from 'react';
-import { NavBar } from "../components/NavBar"
 import {
   FaFilm,
   FaUser,
@@ -322,7 +321,7 @@ const AdminPage = () => {
 
   return (
     <>
-     <NavBar />
+    {/* <NavBar /> */}
       <div className="admin-background">
         <div className="admin-page-wrapper">
           <header className="admin-header"><h1>Admin Dashboard</h1></header>

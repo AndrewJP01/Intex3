@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Intex2.API.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Intex2.API.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -14,6 +15,7 @@ namespace Intex2.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             // Movies
             modelBuilder.Entity<Movie>(entity =>
             {
