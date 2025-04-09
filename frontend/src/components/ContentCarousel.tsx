@@ -19,6 +19,7 @@ type ContentCarouselProps = {
   title: string;
   movies: Movie[];
   delayRender?: number;
+  onScrollEnd?: () => void;
 };
 
 export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies, delayRender }) => {
@@ -30,7 +31,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const imageCache = useRef<Map<string, boolean>>(new Map());
-  const moviesPerPage = 7;
+  const moviesPerPage = 6;
 
   const getMovieImageUrl = (movieTitle: string) => {
     return `http://localhost:5166/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
@@ -116,7 +117,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
         <div className={styles.spinnerRow}></div>
       ) : (
         <div className={styles.carouselContainer}>
-          <button className={styles.carouselPrev} onClick={handlePrevClick} disabled={currentIndex === 0}>
+          <button className={styles.carouselPrev} onClick={handlePrevClick} hidden={currentIndex === 0} disabled={currentIndex === 0}>
             &#10094;
           </button>
 
@@ -132,31 +133,28 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
                   onClick={() => setSelectedMovie(movie)}
                 >
                   <div className={styles.cardWrapper}>
-                    <img src={movie.imageUrl} alt={movie.title} className={styles.movieImage}style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "fill",
-                            borderRadius: "10px"
-                          }} />
-                  </div>
-
-                  {hoveredMovie?.title === movie.title && !selectedMovie && (
-                    <div className={styles.hoverPopup}>
-                      <div className={styles.hoverPopupContent}>
-                        <h4 className={styles.hoverTitle}>{movie.title}</h4>
-                        <p className={styles.meta}>
-                          {movie.genre || "Genre"} • {movie.rating || "Rating"} • {movie.duration || "Length"}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <img
+                  src={movie.imageUrl}
+                  alt={movie.title}
+                  className={styles.movieImage}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "fill",
+                    borderRadius: "10px",
+                  }}
+                />
+                {hoveredMovie?.title === movie.title && !selectedMovie && (
+                  <div className={styles.titleOverlay}>{movie.title}</div>
+                )}
+              </div>
+            </div>
               ))}
           </div>
 
           <button
             className={styles.carouselNext}
-            onClick={handleNextClick}
+            onClick={handleNextClick} hidden={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
             disabled={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
           >
             &#10095;
@@ -190,6 +188,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({ title, movies,
           </div>
         </div>
       )}
+      
     </section>
   );
 };

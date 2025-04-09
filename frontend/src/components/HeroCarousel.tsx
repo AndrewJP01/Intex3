@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import styles from "./HeroCarousel.module.css";
 import { FeaturedMovie } from "../types/FeaturedMovie";
 
-
 type Props = {
   movies: FeaturedMovie[];
   onMovieClick?: (id: string | number | undefined) => void;
-
 };
 
 const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
-  // Filter out movies with missing or bad images
   const filteredMovies = movies.filter(
     (movie) =>
       movie.imageUrl &&
@@ -20,7 +17,6 @@ const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
 
   const [index, setIndex] = useState(0);
 
-  // Auto-slide every 8 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % filteredMovies.length);
@@ -38,36 +34,41 @@ const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
     setIndex((prev) => (prev - 1 + filteredMovies.length) % filteredMovies.length);
   };
 
+  const currentMovie = filteredMovies[index];
+
   return (
     <div className={styles.heroCarousel}>
-      <div
-        className={styles.heroSlide}
-        style={{ backgroundImage: `url(${filteredMovies[index].imageUrl})` }}
-      >
-        <button className={styles.navLeft} onClick={() => setIndex((index - 1 + movies.length) % movies.length)}>
-        &#10094;
-        </button>
+      <div className={styles.heroSlide}>
         <div className={styles.overlay}>
-          <h1 className={styles.title}>{filteredMovies[index].title}</h1>
-          <p className={styles.description}>{filteredMovies[index].description}</p>
+          <h1 className={styles.title}>{currentMovie.title}</h1>
+          <p className={styles.description}>{currentMovie.description}</p>
           <div className={styles.buttons}>
-          <button
-                className={styles.watchButton}
-                onClick={() => onMovieClick?.(filteredMovies[index].show_id)}
+            <button
+              className={styles.watchButton}
+              onClick={() => onMovieClick?.(currentMovie.show_id)}
             >
-                ▶ Watch Now
+              ▶ Watch Now
             </button>
             <button
-                    className={styles.detailsButton}
-                    onClick={() => onMovieClick?.(filteredMovies[index].show_id)}
-                >
-                    Details
-                </button>
-            </div>
+              className={styles.detailsButton}
+              onClick={() => onMovieClick?.(currentMovie.show_id)}
+            >
+              Details
+            </button>
+          </div>
         </div>
-        <button className={styles.navRight} onClick={() => setIndex((index + 1) % movies.length)}>
-                &#10095;
-                </button>
+
+        <div
+          className={styles.imageContainer}
+          style={{ backgroundImage: `url(${currentMovie.imageUrl})` }}
+        />
+
+        <button className={styles.navLeft} onClick={goToPrev}>
+          &#10094;
+        </button>
+        <button className={styles.navRight} onClick={goToNext}>
+          &#10095;
+        </button>
       </div>
 
       <div className={styles.dots}>

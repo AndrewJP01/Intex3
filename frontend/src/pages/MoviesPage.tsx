@@ -18,7 +18,8 @@ export const MoviesPage: React.FC = () => {
   const {
     groupedByCategory,
     isLoading: moviesLoading,
-    error: movieError
+    error: movieError,
+    loadMoreByCategory  // 👈 ADD THIS
   } = useMovieData(searchTerm, selectedCategories);
 
   const {
@@ -30,6 +31,7 @@ export const MoviesPage: React.FC = () => {
   // ✅ Correctly use the hook here (no redeclaration!)
   const {
     featuredMovies,
+    personalizedMovies,
     loading: featuredLoading,
     error: featuredError
   } = useFeaturedMovies();
@@ -47,6 +49,7 @@ export const MoviesPage: React.FC = () => {
         <Hero featuredMovies={featuredMovies} />
       )}
 
+
       <SearchBar searchTerm={searchTerm} onChange={setSearchTerm} />
 
       <CategoryFilter
@@ -54,6 +57,15 @@ export const MoviesPage: React.FC = () => {
         setSelectedCategories={setSelectedCategories}
         availableGenres={availableGenres}
       />
+
+      {personalizedMovies.length > 0 && (
+                <ContentCarousel
+                  title="Since you liked..."
+                  movies={personalizedMovies}
+                  delayRender={0}
+                />
+              )}
+
 
       {moviesLoading || genresLoading ? (
         <>
@@ -68,7 +80,8 @@ export const MoviesPage: React.FC = () => {
             key={category}
             title={category}
             movies={movies}
-            delayRender={index * 100} // pass delay based on order
+            delayRender={index * 100}
+            onScrollEnd={() => loadMoreByCategory(category)}  // 👈 Add scroll handler
           />
         ))
       )}

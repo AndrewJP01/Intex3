@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 
-
-
 export type Movie = {
   title: string;
   category: string;
   imageUrl?: string;
   id?: string | number;
-  description?: string ; // Adjust based on actual data possibility
+  description?: string;
   genre: string;
-  rating: string
-  duration: string
-  releaseDate: number; 
+  rating: string;
+  duration: string;
+  releaseDate: number;
 };
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const initialCount = 6;
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -30,17 +31,26 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
           category: item.genres?.[0] || "Uncategorized",
-          show_id: item.show_id.toString(),  // Make sure id is a string if required by your type
+          show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
           description: item.description || 'No description available',
           genre: item.genre,
           rating: item.rating,
           duration: item.duration,
-          releaseDate: item.realease_year
+          releaseDate: item.realease_year,
         }));
 
         setAllMovies(transformed);
         setFilteredMovies(transformed);
+
+        // Initialize visible counts per genre
+        const defaultCounts: Record<string, number> = {};
+        transformed.forEach(movie => {
+          const cat = movie.category;
+          defaultCounts[cat] = initialCount;
+        });
+        setVisibleCounts(defaultCounts);
+
         setIsLoading(false);
       } catch (err: any) {
         setError(err.message || "Unknown error");
@@ -63,10 +73,26 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   }, [searchTerm, selectedCategories, allMovies]);
 
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
-    acc[movie.category] = acc[movie.category] || [];
-    acc[movie.category].push(movie);
+    const category = movie.category;
+    acc[category] = acc[category] || [];
+    const limit = visibleCounts[category] || initialCount;
+    if (acc[category].length < limit) {
+      acc[category].push(movie);
+    }
     return acc;
   }, {} as Record<string, Movie[]>);
 
-  return { groupedByCategory, isLoading, error };
+  const loadMoreByCategory = (category: string) => {
+    setVisibleCounts(prev => ({
+      ...prev,
+      [category]: (prev[category] || initialCount) + 6
+    }));
+  };
+
+  return {
+    groupedByCategory,
+    isLoading,
+    error,
+    loadMoreByCategory
+  };
 }

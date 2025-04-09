@@ -1,6 +1,8 @@
 // src/api/useFeaturedMovies.ts
 import { useEffect, useState } from "react";
 
+
+
 export type FeaturedMovie = {
     show_id: string;
   title: string;
@@ -12,6 +14,8 @@ export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [personalizedMovies, setPersonalizedMovies] = useState([]);
+
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -30,5 +34,16 @@ export const useFeaturedMovies = () => {
     fetchFeatured();
   }, []);
 
-  return { featuredMovies, loading, error };
+  
+  useEffect(() => {
+    const fetchPersonalized = async () => {
+      const res = await fetch("http://localhost:5166/api/recommendations/topRated/1");
+      const data = await res.json();
+      setPersonalizedMovies(data);
+    };
+  
+    fetchPersonalized();
+  }, []);
+
+  return { featuredMovies, personalizedMovies, loading, error };
 };

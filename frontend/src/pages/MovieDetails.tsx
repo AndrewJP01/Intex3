@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './MovieDetailPage.module.css';
+import RecommendationsSection from '../components/RecommendationsSection';
 
 const MovieDetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -57,8 +58,13 @@ const MovieDetailsPage: React.FC = () => {
   };
   
 
-  if (loading) return <div className={styles.loading}>Loading...</div>;
-  if (error) return <div className={styles.error}>Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className={styles.fullscreenCenter}>
+        <div className={styles.spinner}></div>
+      </div>
+    );
+  }  if (error) return <div className={styles.error}>Error: {error}</div>;
   if (!movie) return null;
 
   const avgRating = movie.ratings?.[0] || 0;
@@ -132,6 +138,11 @@ const MovieDetailsPage: React.FC = () => {
                 </button>
               )}
             </div>
+                {movie.show_id && (
+              <div className={styles.recommendationSection}>
+                <RecommendationsSection showId={movie.show_id} title={movie.title} />
+              </div>
+            )}
           </div>
         </div>
       </motion.div>

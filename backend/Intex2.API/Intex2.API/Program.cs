@@ -5,6 +5,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Intex2.API.Models;
+using Intex2.API.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -41,6 +43,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+// THis adds the Recommendation model for requirement one based on shows and shows similar to that show
+builder.Services.AddSingleton<RecommendationService>(provider =>
+{
+    var env = provider.GetRequiredService<IWebHostEnvironment>();
+    return new RecommendationService(env);
+});
 var app = builder.Build();
 // :white_check_mark: Enable Swagger
 app.UseSwagger();
