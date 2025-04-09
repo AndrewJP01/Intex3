@@ -14,6 +14,7 @@ namespace Intex2.API.Models
         public string? rating { get; set; }
         public string? duration { get; set; }
         public string? description { get; set; }
+
         public ICollection<MovieGenre> genres { get; set; }
         public ICollection<MovieRating>? ratings { get; set; }
     }

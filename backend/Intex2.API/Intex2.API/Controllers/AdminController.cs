@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Intex2.API.Data;
 using Intex2.API.Models;
 
+
 namespace Intex2.API.Controllers
 {
     [ApiController]
@@ -117,20 +118,23 @@ public async Task<IActionResult> GetTopRatedMovies()
         public async Task<IActionResult> GetMovies()
         {
             var movies = await _context.Movies
-                .Include(m => m.genres) // ✅ Include genre data
+                .Include(m => m.genres)
                 .Select(m => new
                 {
-                    m.show_id,
-                    m.title,
-                    m.type,
-                    m.director,
-                    m.cast,
-                    m.country,
-                    m.release_year,
-                    m.rating,
-                    m.duration,
-                    m.description,
-                    genres = m.genres.Select(g => g.genre).ToList() // ✅ extract genre names
+                    show_id = m.show_id,
+                    title = m.title ?? "",
+                    type = m.type ?? "",
+                    director = m.director ?? "",
+                    cast = m.cast ?? "",
+                    country = m.country ?? "",
+                    release_year = m.release_year,
+                    rating = m.rating ?? "Unrated",
+                    duration = m.duration ?? "",
+                    description = m.description ?? "",
+                    genres = m.genres
+                        .Select(g => string.IsNullOrWhiteSpace(g.genre) ? "No Genres Added" : g.genre)
+                        .ToList()
+
                 })
                 .ToListAsync();
             return Ok(movies);
@@ -147,41 +151,75 @@ public async Task<IActionResult> GetTopRatedMovies()
             _context.SaveChanges();
             return NoContent();
         }
-        // GET: /api/admin/genres
+
         [HttpGet("genres")]
-        public IActionResult GetAllGenres()
-        {
-            var genres = _context.MovieGenres.ToList();
-            return Ok(genres);
-        }
-        // GET: /api/admin/users
+        public IActionResult GetAllGenres() => Ok(_context.MovieGenres.ToList());
+
         [HttpGet("users")]
-        public IActionResult GetAllUsers()
-        {
-            var users = _context.MovieUsers.ToList();
-            return Ok(users);
-        }
-        // GET: /api/admin/ratings
+        public IActionResult GetAllUsers() => Ok(_context.MovieUsers.ToList());
+
         [HttpGet("ratings")]
-        public IActionResult GetAllRatings()
-        {
-            var ratings = _context.MovieRatings.ToList();
-            return Ok(ratings);
-        }
-        // PUT: /api/admin/movies/{show_id}
+        public IActionResult GetAllRatings() => Ok(_context.MovieRatings.ToList());
+
+        // ✅ UPDATED PUT method
         [HttpPut("movies/{show_id}")]
-        public IActionResult UpdateMovie(string show_id, [FromBody] Movie updatedMovie)
+        public IActionResult UpdateMovie(string show_id, [FromBody] MovieUpdateDto dto)
         {
-            if (show_id != updatedMovie.show_id)
+            if (show_id != dto.show_id)
                 return BadRequest("ID in URL does not match ID in body");
-            var existingMovie = _context.Movies.Find(show_id);
+
+            var existingMovie = _context.Movies
+                .Include(m => m.genres)
+                .FirstOrDefault(m => m.show_id == show_id);
+
             if (existingMovie == null)
                 return NotFound();
-            _context.Entry(existingMovie).CurrentValues.SetValues(updatedMovie);
+
+            existingMovie.title = dto.title;
+            existingMovie.type = dto.type;
+            existingMovie.director = dto.director;
+            existingMovie.cast = dto.cast;
+            existingMovie.country = dto.country;
+            existingMovie.release_year = dto.release_year;
+            existingMovie.rating = dto.rating;
+            existingMovie.duration = dto.duration;
+            existingMovie.description = dto.description;
+
+            // ✅ FIXED: Remove tracked genres and re-add new ones
+            var existingGenres = _context.MovieGenres
+                .Where(g => g.show_id == show_id)
+                .ToList();
+
+            _context.MovieGenres.RemoveRange(existingGenres);
+
+            var newGenres = dto.genres.Select(g => new MovieGenre
+            {
+                show_id = dto.show_id,
+                genre = g
+            });
+
+            _context.MovieGenres.AddRange(newGenres);
+
             _context.SaveChanges();
-            return NoContent();
+
+            var result = new
+            {
+                show_id = existingMovie.show_id,
+                title = existingMovie.title,
+                type = existingMovie.type,
+                director = existingMovie.director,
+                cast = existingMovie.cast,
+                country = existingMovie.country,
+                release_year = existingMovie.release_year,
+                rating = existingMovie.rating,
+                duration = existingMovie.duration,
+                description = existingMovie.description,
+                genres = newGenres.Select(g => g.genre).ToList()
+            };
+            return Ok(result);
         }
-        // POST: /api/admin/movies
+
+
         [HttpPost("movies")]
         public IActionResult AddMovie([FromBody] MovieCreateDto dto)
         {
@@ -211,8 +249,23 @@ public async Task<IActionResult> GetTopRatedMovies()
             };
             _context.Movies.Add(newMovie);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetMovies), new { id = newMovie.show_id }, newMovie);
+
+            var result = new {
+                show_id = newMovie.show_id,
+                title = newMovie.title,
+                type = newMovie.type,
+                director = newMovie.director,
+                cast = newMovie.cast,
+                country = newMovie.country,
+                release_year = newMovie.release_year,
+                rating = newMovie.rating,
+                duration = newMovie.duration,
+                description = newMovie.description,
+                genres = newMovie.genres.Select(g => g.genre).ToList()
+            };
+
+            return CreatedAtAction(nameof(GetMovies), new { id = newMovie.show_id }, result);
+
         }
-        // More admin routes here...
     }
 }

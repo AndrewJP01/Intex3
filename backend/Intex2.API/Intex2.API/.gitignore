@@ -1,3 +1,4 @@
 wwwroot/Movie Posters/
 obj/
 bin/
+.DS_Store

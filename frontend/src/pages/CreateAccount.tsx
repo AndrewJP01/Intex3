@@ -7,10 +7,45 @@ const CreateAccount = () => {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const email = queryParams.get('email') || '';
+  const [fullName, setFullName] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
   const [step, setStep] = useState(1);
 
   const handleNext = () => setStep(2);
   const handleBack = () => navigate('/');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const [firstName, lastName] = fullName.trim().split(' ');
+
+    const data = {
+      email,
+      password,
+      firstName,
+      lastName,
+      phoneNumber: phone
+    };
+
+    try {
+      const response = await fetch('http://localhost:5166/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        alert('✅ Account created successfully!');
+        navigate('/'); // or wherever you want to send them
+      } else {
+        const error = await response.json();
+        alert('❌ Failed to register: ' + JSON.stringify(error));
+      }
+    } catch (error) {
+      alert('❌ Network error: ' + error);
+    }
+  };
 
   return (
     <div
@@ -54,7 +89,7 @@ const CreateAccount = () => {
               </div>
             </div>
             <h1 className="text-3xl font-bold mb-6 text-center">Create your account</h1>
-            <form className="space-y-4 w-full max-w-md">
+            <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
               <div>
                 <label className="block text-sm font-medium mb-1">Email</label>
                 <div className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-white">
@@ -63,15 +98,36 @@ const CreateAccount = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" htmlFor="name">Full Name</label>
-                <input id="name" type="text" placeholder="Jane Doe" className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="Jane Doe"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" htmlFor="password">Password</label>
-                <input id="password" type="password" placeholder="••••••••" className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" htmlFor="phone">Phone Number</label>
-                <input id="phone" type="tel" placeholder="(555) 555-5555" className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder="(555) 555-5555"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
               <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold py-3 rounded-md text-lg">
                 Sign Up
