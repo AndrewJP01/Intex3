@@ -160,13 +160,103 @@ button:focus-visible {
     transform: translateY(-2px);
   }
 
-  
   .movieImage {
-    width: 100%; /* Ensures the image takes the full width of the container */
-    height: 250px; /* Set a fixed height */
-    object-fit: cover; /* Ensures the image covers the area without distorting aspect ratio */
+    width: 100%;
+    height: 100%;
+    object-fit: fill;     /* 🧠 This makes sure it fills & crops if needed */
+    display: block;
+    border-radius: 10px;
   }
   
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3), transparent);
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  
+  .cardOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2), transparent);
+    color: white;
+    opacity: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: opacity 0.3s ease;
+  }
+  
+
+  .topIcons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .playButton {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .playButton:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .cardContainer:hover .cardOverlay {
+    opacity: 1;
+  }
+  .cardContainer:hover .overlay {
+    opacity: 1;
+  }
+  
+  
+
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cardTitle {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .cardIcons {
+    display: flex;
+    gap: 8px;
+  }
+  
+
+
+.cardDescription {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  line-height: 1.3;
+}
+
+.cardMeta {
+  font-size: 0.8rem;
+  color: #ccc;
+}
   /* More Info Button */
   .moreInfoButton {
     background-color: rgba(109, 109, 110, 0.7);
@@ -241,31 +331,29 @@ button:focus-visible {
     overflow-x: hidden;
 
   }
-  
-  .carouselItem:hover .movieImage {
-    transform: scale(1.1); /* Makes the image grow larger than the item */
+  .movieText {
+    color: white;
   }
+  
+  /* .carouselItem:hover .movieImage {
+    transform: scale(1.1); /* Makes the image grow larger than the item */
+  
+
 
   .movieTitle {
-    display:none;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.7); 
-    color: white;
-    text-align: center;
-    padding: 10px;
-    transform: translateY(100%);  
-    transition: transform 0.3s ease; 
-    opacity: 0;
+    font-size: 1rem;
+    font-weight: bold;
   }
-
   .carouselItem:hover .movieTitle {
     display: block;
     transform: translateY(0); 
     opacity: 1;  
   }
+
+  .carouselItem:hover .hoverPopup {
+    opacity: 1;
+  }
+  
 
   .carouselTitle {
     color: #fff;
@@ -276,41 +364,57 @@ button:focus-visible {
   
   .carouselContainer {
     display: flex;
-    align-items: center; /* This centers items vertically and can help manage varying heights */
-    overflow-x: auto;  /* Allows horizontal scrolling */
-    gap: 16px;  /* Adjust the gap between items */
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .carouselTrack {
+    display: flex;
+    gap: 50px; /* or try 16px, 32px, whatever feels good */
+    overflow-x: auto;
+    padding-bottom: 20px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin-left: 20px;
+    margin-right: 20px
+  }
+
+  .selected .movieImage {
+    border: 3px solid #0096e6;
+    box-shadow: 0 0 10px #0096e6;
+    border-radius: 12px;
   }
   
-  .carouselTrack {
-    gap: 36px;
-    padding-bottom: 20px;
+  
+  .cardWrapper {
+    width: 160px;
+    height: 240px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #111; /* fallback bg */
+    position: relative;
+    flex-shrink: 0;
     display: flex;
-    align-items: center; /* This centers items vertically and can help manage varying heights */
     justify-content: center;
-    padding: 20px 0; 
-    overflow-x: auto; /* Allows horizontal scroll */
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on touch devices */
-    transition: opacity 10s ease-in-out; /* Smooth opacity transition */
+    align-items: center;
   }
-
-
-
   .carouselTrack::-webkit-scrollbar {
     display: none;
   }
   .carouselItem {
-    width: 180px; /* Adjust based on your design needs */
-    height: 300px; /* Adjust based on your design needs */
-    overflow: hidden; /* Keeps everything neat */
-    margin-bottom: 20px;
-    padding: 5px; 
+    position: relative;
+    margin-right: 24px;
+    flex: 0 0 auto;
+    cursor: pointer; /* ✅ this shows the pointer finger */
   }
-  
-
   .carouselItem:hover {
     transform: scale(1.1); /* Scales up the item */
     box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Adds shadow for depth */
   }
+  .carouselItem:last-child {
+    margin-right: 0;
+  }
+  
 
   .carouselItem:hover .movieTitle {
     background-color: rgba(0,0,0,0.7); /* Darkens the background of the title */
@@ -323,6 +427,34 @@ button:focus-visible {
     max-width: 100%; /* Ensures the image scales within the carousel item */
     height: auto; /* Keeps the image aspect ratio */
 }
+.backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.spinnerRow {
+  border: 4px solid rgba(255, 255, 255, 0.2); /* Light grey border */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
 
 
   .spinner {
@@ -389,6 +521,52 @@ button:focus-visible {
   opacity: 1;
 }
 
+.cardContainer {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+.cardPopup {
+  position: absolute;
+  top: -120px;
+  left: -100px;
+  width: 360px;
+  aspect-ratio: 16 / 9;
+  background-color: #111;
+  border-radius: 12px;
+  border-color: #0096e6;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  display: none;
+  padding: 16px;
+  z-index: 999;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.cardContainer:hover {
+  z-index: 10;
+}
+
+.cardWrapper:hover .cardPopup {
+  display: flex;
+  opacity: 1;
+  transform: scale(1.05);
+}
+.cardContainer:hover .cardPopup {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+}
+
+
+
+
 .movieTitle {
   font-weight: bold;  
 }
@@ -398,6 +576,16 @@ button:focus-visible {
   opacity: 0.7;  
 }
 
+.description {
+  font-size: 0.9rem;
+  margin-top: 8px;
+  line-height: 1.3;
+}
+.meta {
+  font-size: 0.75rem;
+  color: #ccc;
+  margin-top: 12px;
+}
   .carouselNextButton {
     position: absolute;
     top: 50%;
@@ -434,6 +622,24 @@ button:focus-visible {
     }
   }
   
+
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 6px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
   @media (max-width: 640px) {
     .header {
       padding-left: 16px;
@@ -463,5 +669,177 @@ button:focus-visible {
     .carouselTrack {
       gap: 16px;
     }
+  }
+  .centerPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 90vw;
+    background-color: #111;
+    
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    color: white;
+    pointer-events: auto;
+  }
+  
+  .popupContent {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .popupImage {
+    width: 200px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .popupDetails {
+    flex: 1;
+  }
+  
+  .popupDetails h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .popupDetails p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+  .playButton {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+  .hoverPopup {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: white;
+    z-index: 999;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    opacity: 1;
+    pointer-events: none;
+  }
+  
+  .hoverTitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+
+  .hoverPopupContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hoverPopupImage {
+    width: 100%;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+  
+  .hoverPopupDetails {
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
+  .meta {
+    font-size: 0.75rem;
+    color: #bbb;
+  }
+
+  .detailsDrawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh; /* Prevents overscroll */
+    width: 60vw;
+    max-width: 1000px;
+    background-color: #111;
+    color: white;
+    z-index: 1000;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide scroll from drawer itself */
+    padding: 0;
+    border-left: 1px solid #444;
+  }
+  
+  
+  
+  .backButton {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .drawerContent {
+    flex: 1;
+    overflow-y: auto; /* Makes only the inner content scroll */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .drawerPoster {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    max-height: 50vh; /* Keeps the image from overflowing vertically */
+    object-fit: fill;
+    border-radius: 8px;
+  }
+  
+  .drawerDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .watchButton {
+    background-color: #0d6efd;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .secondaryButton {
+    background-color: #444;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
   }
   
