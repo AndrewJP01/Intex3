@@ -34,6 +34,11 @@ export const MoviesPage: React.FC = () => {
     error: featuredError
   } = useFeaturedMovies();
 
+  // Sort the categories alphabetically or by any other logic
+  const sortedCategories = Object.entries(groupedByCategory).sort((a, b) => {
+    return a[0].localeCompare(b[0]); // sorts categories alphabetically, you can change this logic if needed
+  });
+
   return (
     <main className={styles.mainContainer}>
       <Navbar />
@@ -58,7 +63,7 @@ export const MoviesPage: React.FC = () => {
       ) : movieError || genresError ? (
         <p className={styles.error}>Error loading data. Please try again later.</p>
       ) : (
-        Object.entries(groupedByCategory).map(([category, movies], index) => (
+        sortedCategories.map(([category, movies], index) => (
           <ContentCarousel
             key={category}
             title={category}

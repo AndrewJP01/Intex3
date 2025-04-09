@@ -54,10 +54,8 @@ app.UseSwaggerUI();
 app.UseCors("AllowAll");
 app.UseStaticFiles();
 
-=========
 app.UseStaticFiles();
 
->>>>>>>>> Temporary merge branch 2
 app.UseAuthorization();
 
 app.MapControllers();
