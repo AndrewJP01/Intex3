@@ -14,6 +14,7 @@ import {
 import './AdminPage.css';
 import ManageMovieModal from '../components/ManageMovieModal';
 import DeleteMovieModal from '../components/DeleteMovieModal';
+import { Navbar }from '../components/Navbar';
 
 type Movie = {
   show_id: string;
@@ -321,7 +322,7 @@ const AdminPage = () => {
 
   return (
     <>
-    {/* <NavBar /> */}
+    <Navbar />
       <div className="admin-background">
         <div className="admin-page-wrapper">
           <header className="admin-header"><h1>Admin Dashboard</h1></header>

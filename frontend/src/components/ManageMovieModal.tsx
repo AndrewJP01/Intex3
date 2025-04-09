@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import './ManageMovieModal.css';
-import { FaTimes } from 'react-icons/fa';
 
 type Props = {
   mode: 'add' | 'edit';
@@ -125,7 +124,6 @@ const ManageMovieModal = ({
     <div className="modal-backdrop">
       <div className="modal">
         <h2>{mode === 'add' ? 'Add New Movie' : 'Edit Movie'}</h2>
-        <button className="btn close" onClick={onClose}><FaTimes /></button>
 
         <div className="input-group">
           <label>Title</label>
