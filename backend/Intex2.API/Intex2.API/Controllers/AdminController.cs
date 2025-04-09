@@ -2,12 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Intex2.API.Data;
 using Intex2.API.Models;
-<<<<<<< HEAD
-=======
-using Intex2.API.Data;
-using Intex2.API.Models;
-using Microsoft.EntityFrameworkCore;
->>>>>>> main
 
 
 namespace Intex2.API.Controllers
@@ -27,7 +21,6 @@ namespace Intex2.API.Controllers
         public async Task<IActionResult> GetMovies()
         {
             var movies = await _context.Movies
-<<<<<<< HEAD
                 .Include(m => m.genres)
                 .Select(m => new
                 {
@@ -45,22 +38,6 @@ namespace Intex2.API.Controllers
                         .Select(g => string.IsNullOrWhiteSpace(g.genre) ? "No Genres Added" : g.genre)
                         .ToList()
 
-=======
-                .Include(m => m.genres) // ✅ Include genre data
-                .Select(m => new
-                {
-                    m.show_id,
-                    m.title,
-                    m.type,
-                    m.director,
-                    m.cast,
-                    m.country,
-                    m.release_year,
-                    m.rating,
-                    m.duration,
-                    m.description,
-                    genres = m.genres.Select(g => g.genre).ToList() // ✅ extract genre names
->>>>>>> main
                 })
                 .ToListAsync();
 
@@ -68,10 +45,7 @@ namespace Intex2.API.Controllers
         }
 
 
-<<<<<<< HEAD
-=======
         // Example: DELETE a movie
->>>>>>> main
         [HttpDelete("movies/{id}")]
         public IActionResult DeleteMovie(string id)
         {

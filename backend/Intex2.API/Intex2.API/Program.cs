@@ -57,16 +57,9 @@ app.UseSwaggerUI();
 
 // ✅ Use CORS BEFORE authorization
 app.UseCors("AllowAll");
-<<<<<<< HEAD
-
-app.UseStaticFiles();
-
-app.UseAuthorization();
-=======
 app.UseStaticFiles();
 
 // app.UseAuthorization();
->>>>>>> main
 
 app.MapControllers();
 
@@ -87,8 +80,6 @@ catch (Exception ex)
 await SeedRolesAndAdminAsync(app);
 
 app.Run();
-<<<<<<< HEAD
-=======
 
 async Task SeedRolesAndAdminAsync(WebApplication app)
 {
@@ -126,4 +117,3 @@ async Task SeedRolesAndAdminAsync(WebApplication app)
         }
     }
 }
->>>>>>> main
