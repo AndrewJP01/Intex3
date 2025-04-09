@@ -16,7 +16,7 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`http://localhost:5166/api/Admin/${id}`);
+        const response = await fetch(`https://localhost:7023/api/Admin/${id}`);
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
@@ -37,7 +37,7 @@ const MovieDetailsPage: React.FC = () => {
     const userId = 1; // Replace with actual user logic
   
     try {
-      const res = await fetch(`http://localhost:5166/api/Admin/${id}/rate`, {
+      const res = await fetch(`https://localhost:5166/api/Admin/${id}/rate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
