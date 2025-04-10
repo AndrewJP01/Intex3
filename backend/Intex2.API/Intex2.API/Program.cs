@@ -120,41 +120,4 @@ catch (Exception ex)
     Console.WriteLine($":x: Failed to connect to SQL Server: {ex.Message}");
 }
 
-// ✅ Seed roles + admin user
-await SeedRolesAndAdminAsync(app);
 app.Run();
-
-async Task SeedRolesAndAdminAsync(WebApplication app)
-{
-    using var scope = app.Services.CreateScope();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-    string[] roles = { "Admin", "Customer" };
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
-    }
-
-    string adminEmail = "admin@cineniche.com";
-    string adminPassword = "SecurePass123!";
-
-    if (await userManager.FindByEmailAsync(adminEmail) == null)
-    {
-        var admin = new ApplicationUser
-        {
-            UserName = adminEmail,
-            Email = adminEmail,
-            first_name = "Admin",
-            last_name = "User",
-            EmailConfirmed = true
-        };
-
-        var result = await userManager.CreateAsync(admin, adminPassword);
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(admin, "Admin");
-        }
-    }
-}
