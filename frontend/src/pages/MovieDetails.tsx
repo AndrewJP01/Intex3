@@ -27,6 +27,7 @@ const MovieDetailsPage: React.FC = () => {
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
+        window.scrollTo(0, 0); // <-- This scrolls to top
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch movie. ' + (err as Error).message);
@@ -135,7 +136,7 @@ const MovieDetailsPage: React.FC = () => {
                   ))}{' '}
                 ({ratingCount} {ratingCount === 1 ? 'user' : 'users'})
               </p>
-
+              <div>Want to Submit a Rating highlight the number of stars you want to give</div>
               <div className={styles.stars}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span

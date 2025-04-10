@@ -19,7 +19,7 @@ export const MoviesPage: React.FC = () => {
     groupedByCategory,
     isLoading: moviesLoading,
     error: movieError,
-    loadMoreByCategory  // 👈 ADD THIS
+    loadMoreByGenre  // 👈 ADD THIS
   } = useMovieData(searchTerm, selectedCategories);
 
   const {
@@ -70,20 +70,22 @@ export const MoviesPage: React.FC = () => {
       {moviesLoading || genresLoading ? (
         <>
           <p className={styles.loading}>Loading...</p>
+          <div className={styles.spinnerContainer}>
+
           <p className={styles.spinner}></p>
+          </div>
         </>
       ) : movieError || genresError ? (
         <p className={styles.error}>
           Error loading data. Please try again later.
         </p>
       ) : (
-        sortedCategories.map(([category, movies]) => (
+        sortedCategories.map(([genre, movies]) => (
           <ContentCarousel
-          key={category}
-          title={category}
-          movies={movies} // ✅ Pass all movies, no slicing
-          delayRender={100}
-        />
+            key={genre}
+            title={genre}
+            movies={movies}
+          />
         ))
       )}
     </main>

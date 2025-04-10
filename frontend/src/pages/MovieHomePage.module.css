@@ -366,10 +366,17 @@ button:focus-visible {
   
 
 
-  .movieTitle {
-    font-size: 1rem;
-    font-weight: bold;
-  }
+    .movieTitle {
+      max-width: 140px;  /* match card width */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;  /* optional: smaller font */
+      text-align: center;
+      margin-top: 8px;  /* space from image */
+      color: white;
+    }
+    
   .carouselItem:hover .movieTitle {
     display: block;
     transform: translateY(0); 
@@ -389,20 +396,22 @@ button:focus-visible {
   }
   
   .carouselContainer {
+    overflow-x: auto;
     display: flex;
     align-items: center;
-    overflow-x: auto;
-    white-space: nowrap;
   }
   .carouselTrack {
     display: flex;
-    gap: 50px; /* or try 16px, 32px, whatever feels good */
+    gap: 32px; /* play with this */
     overflow-x: auto;
-    padding-bottom: 20px;
+    padding: 20px;
     flex-wrap: nowrap;
     white-space: nowrap;
-    margin-left: 20px;
-    margin-right: 20px
+    align-items: center;
+    /* Remove these */
+    margin-left: 0;
+    margin-right: 0;
+    justify-content: flex-start;  /* Important */
   }
 
   .selected .movieImage {
@@ -427,6 +436,11 @@ button:focus-visible {
   .carouselTrack::-webkit-scrollbar {
     display: none;
   }
+
+  .carouselItem:hover .hoverOverlay {
+    opacity: 1;
+  }
+  
   .carouselItem {
     position: relative;
     margin-right: 24px;
@@ -470,6 +484,14 @@ button:focus-visible {
 
 .backButton:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* or 100vh if full screen */
+  width: 100%;
 }
 
 .spinnerRow {
@@ -752,6 +774,21 @@ button:focus-visible {
     cursor: pointer;
     margin-top: 12px;
   }
+
+  .hoverOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6); /* dark transparent overlay */
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: center;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
   .hoverPopup {
     position: absolute;
     bottom: 110%;
@@ -768,11 +805,11 @@ button:focus-visible {
     pointer-events: none;
   }
   
-  .hoverTitle {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
+.hoverTitle {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
   
 
   .hoverPopupContent {

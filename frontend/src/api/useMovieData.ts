@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 
 export type Movie = {
   title: string;
-  category: string;
+  genre: string;  // Single source of truth
   imageUrl?: string;
   id?: string | number;
   description?: string;
-  genre: string;
   rating: string;
   duration: string;
   releaseDate: number;
   show_id?: string;
 };
+
 
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
@@ -43,23 +43,28 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         const data = await res.json();
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
-          category: item.genres?.[0] || 'Uncategorized',
+          genre: Array.isArray(item.genres)
+          ? item.genres
+              .map((g: any) => typeof g === 'string' ? g : g.genre)
+              .filter((g: string) => g && g.trim() !== '')
+              .join(', ')
+          : '',
+
           show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
           description: item.description || 'No description available',
-          genre: item.genre,
-          rating: item.rating,
-          duration: item.duration,
-          releaseDate: item.release_year, // 👈 typo? maybe should be item.release_year
+          rating: item.rating || 'NR',
+          duration: item.duration || 'Length TBD',
+          releaseDate: item.release_year,
         }));
-
+        console.log('ANother Genres', transformed);
         setAllMovies(transformed);
         setFilteredMovies(transformed);
 
         // Initialize visible counts per genre
         const defaultCounts: Record<string, number> = {};
         transformed.forEach(movie => {
-          const cat = movie.category;
+          const cat = movie.genre;
           defaultCounts[cat] = initialCount;
         });
         setVisibleCounts(defaultCounts);
@@ -79,34 +84,40 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
       const matchesSearch = movie.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-      const matchesCategory =
+        const matchesGenre =
         selectedCategories.length === 0 ||
-        selectedCategories.includes(movie.category);
-      return matchesSearch && matchesCategory;
+        selectedCategories.some((genre) => movie.genre.includes(genre)); // <---- THIS LINE IS THE FIX
+    
+      return matchesSearch && matchesGenre;
     });
+    
 
     setFilteredMovies(filtered);
   }, [searchTerm, selectedCategories, allMovies]);
 
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
-    const category = movie.category;
+    const category = movie.genre;  // <-- Change this line
     acc[category] = acc[category] || [];
-    acc[category].push(movie); // 🙌 no limit now
+    acc[category].push(movie);
     return acc;
   }, {} as Record<string, Movie[]>);
   
+  
+  
 
-  const loadMoreByCategory = (category: string) => {
+  const loadMoreByGenre = (genre: string) => {
     setVisibleCounts(prev => ({
       ...prev,
-      [category]: (prev[category] || initialCount) + 6
+      [genre]: (prev[genre] || initialCount) + 6
     }));
   };
+  
 
   return {
     groupedByCategory,
     isLoading,
     error,
-    loadMoreByCategory
+    loadMoreByGenre
   };
+  
 }

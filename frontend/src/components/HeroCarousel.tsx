@@ -16,6 +16,27 @@ const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
   );
 
   const [index, setIndex] = useState(0);
+  const [bgImage, setBgImage] = useState<string>("");
+
+  const FallbackImage = "/fallback.jpg"; // Must be in /public
+
+  useEffect(() => {
+    if (filteredMovies.length === 0) return;
+  
+    const imageToLoad = filteredMovies[index]?.imageUrl || FallbackImage;
+  
+    const img = new Image();
+    img.src = imageToLoad;
+  
+    img.onload = () => {
+      setBgImage(imageToLoad || FallbackImage);
+    };
+  
+    img.onerror = () => {
+      console.log("Failed to load image → Using fallback");
+      setBgImage(FallbackImage);
+    };
+  }, [index, filteredMovies]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,6 +47,8 @@ const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
 
   if (filteredMovies.length === 0) return null;
 
+  const currentMovie = filteredMovies[index];
+
   const goToNext = () => {
     setIndex((prev) => (prev + 1) % filteredMovies.length);
   };
@@ -33,8 +56,6 @@ const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
   const goToPrev = () => {
     setIndex((prev) => (prev - 1 + filteredMovies.length) % filteredMovies.length);
   };
-
-  const currentMovie = filteredMovies[index];
 
   return (
     <div className={styles.heroCarousel}>
@@ -60,7 +81,9 @@ const HeroCarousel: React.FC<Props> = ({ movies, onMovieClick }) => {
 
         <div
           className={styles.imageContainer}
-          style={{ backgroundImage: `url(${currentMovie.imageUrl})` }}
+          style={{
+            backgroundImage: `url(${bgImage})`,
+          }}
         />
 
         <button className={styles.navLeft} onClick={goToPrev}>

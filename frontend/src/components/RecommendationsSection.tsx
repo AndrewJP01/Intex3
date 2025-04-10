@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ContentCarousel } from "../components/ContentCarousel";
 
-type Movie = {
-    title: string;
-    category: string;
-    imageUrl?: string;
-    id?: string | number;
-    description?: string;
-    genre?: string;
-    rating?: string;
-    duration?: string;
-    show_id?: string;
-    releaseDate?: number;
+
+export type Movie = {
+  title: string;
+  genre: string;  // Single source of truth
+  imageUrl?: string;
+  id?: string | number;
+  description?: string;
+  rating: string;
+  duration: string;
+  releaseDate: number;
+  show_id?: string;
 };
 
 interface Props {
