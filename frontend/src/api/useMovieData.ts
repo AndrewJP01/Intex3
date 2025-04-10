@@ -35,17 +35,19 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
           }
         );
 
-        // If the response is not ok, check for a 401 error and show a popup if so.
         if (!res.ok) {
           if (res.status === 401) {
             window.alert('Unauthorized. Please log in to continue.');
           }
+
+          const errorText = await res.text();
           throw new Error(
-            `Failed to fetch movies (Status code: ${res.status})`
+            `Failed to fetch movies (Status: ${res.status}) - ${errorText}`
           );
         }
 
         const data = await res.json();
+
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
           category: item.genres?.[0] || 'Uncategorized',
@@ -55,13 +57,12 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
           genre: item.genre,
           rating: item.rating,
           duration: item.duration,
-          releaseDate: item.release_year, // 👈 typo? maybe should be item.release_year
+          releaseDate: item.release_year,
         }));
 
         setAllMovies(transformed);
         setFilteredMovies(transformed);
 
-        // Initialize visible counts per genre
         const defaultCounts: Record<string, number> = {};
         transformed.forEach((movie) => {
           const cat = movie.category;
@@ -97,7 +98,7 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     (acc, movie) => {
       const category = movie.category;
       acc[category] = acc[category] || [];
-      acc[category].push(movie); // 🙌 no limit now
+      acc[category].push(movie);
       return acc;
     },
     {} as Record<string, Movie[]>

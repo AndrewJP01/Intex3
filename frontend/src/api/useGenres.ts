@@ -23,7 +23,11 @@ export function useGenres() {
           if (res.status === 401) {
             window.alert('Unauthorized. Please log in to continue.');
           }
-          throw new Error(`Failed to fetch genres (Status: ${res.status})`);
+
+          const errorText = await res.text();
+          throw new Error(
+            `Failed to fetch genres (Status: ${res.status}) - ${errorText}`
+          );
         }
 
         const rawData: { genre: string }[] = await res.json();
@@ -32,11 +36,10 @@ export function useGenres() {
           new Set(
             rawData
               .map((g) => g.genre?.trim())
-              .filter((g): g is string => typeof g === 'string' && g !== '')
+              .filter((g): g is string => typeof g === 'string' && g.length > 0)
           )
         ).sort();
 
-        console.log('✅ Fetched Genres:', cleaned);
         setGenres(cleaned);
         setIsLoading(false);
       } catch (err: any) {

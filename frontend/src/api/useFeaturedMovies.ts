@@ -1,4 +1,3 @@
-// src/api/useFeaturedMovies.ts
 import { useEffect, useState } from 'react';
 
 export type FeaturedMovie = {
@@ -10,9 +9,11 @@ export type FeaturedMovie = {
 
 export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
+  const [personalizedMovies, setPersonalizedMovies] = useState<FeaturedMovie[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [personalizedMovies, setPersonalizedMovies] = useState([]);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -21,7 +22,7 @@ export const useFeaturedMovies = () => {
           `${import.meta.env.VITE_API_URL}/api/Admin/top-rated`,
           {
             method: 'GET',
-            credentials: 'include', // ✅ include auth cookie
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -32,37 +33,59 @@ export const useFeaturedMovies = () => {
           if (res.status === 401) {
             window.alert('Unauthorized. Please log in to see featured movies.');
           }
+          const text = await res.text();
           throw new Error(
-            `Failed to fetch featured movies (Status: ${res.status})`
+            `Featured fetch failed (Status: ${res.status}) - ${text}`
           );
         }
 
         const data = await res.json();
         setFeaturedMovies(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
+      } catch (err: any) {
+        setError(
+          err.message || 'Unknown error while fetching featured movies.'
+        );
       }
     };
 
-    fetchFeatured();
-  }, []);
-
-  useEffect(() => {
     const fetchPersonalized = async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/recommendations/topRated/1`,
-        {
-          credentials: 'include', // optional if you use cookie/session auth
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/recommendations/topRated/1`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(
+            `Personalized fetch failed (Status: ${res.status}) - ${text}`
+          );
         }
-      );
-      const data = await res.json();
-      setPersonalizedMovies(data);
+
+        const data = await res.json();
+        setPersonalizedMovies(data);
+      } catch (err: any) {
+        setError(
+          err.message || 'Unknown error while fetching personalized movies.'
+        );
+      }
     };
 
-    fetchPersonalized();
+    Promise.all([fetchFeatured(), fetchPersonalized()]).finally(() =>
+      setLoading(false)
+    );
   }, []);
 
-  return { featuredMovies, personalizedMovies, loading, error };
+  return {
+    featuredMovies,
+    personalizedMovies,
+    loading,
+    error,
+  };
 };

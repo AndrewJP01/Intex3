@@ -32,8 +32,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-            "https://localhost:5173",
-            "http://localhost:5173"
+            "https://lemon-glacier-042775c1e.6.azurestaticapps.net/"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
@@ -93,8 +92,8 @@ builder.Services.AddSingleton<RecommendationService>(provider =>
 var app = builder.Build();
 
 // ✅ Middleware setup
-app.UseHttpsRedirection();           // Required for Secure cookies
-app.UseCors("AllowFrontend");        // Must come before auth
+app.UseHttpsRedirection();              // Must come first for secure cookies
+app.UseCors("AllowFrontend");          // 🔥 CORS right after HTTPS
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
