@@ -17,7 +17,6 @@ const CreateAccount = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const [firstName, lastName] = fullName.trim().split(' ');
 
     const data = {
@@ -25,19 +24,44 @@ const CreateAccount = () => {
       password,
       firstName,
       lastName,
-      phoneNumber: phone
+      phoneNumber: phone,
     };
 
     try {
-      const response = await fetch('http://localhost:5166/api/auth/register', {
+      const response = await fetch('https://localhost:7023/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
-        alert('✅ Account created successfully!');
-        navigate('/'); // or wherever you want to send them
+        // Auto-login
+        const loginRes = await fetch('https://localhost:7023/api/auth/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (loginRes.ok) {
+          // ⏳ Confirm session is valid
+          const ping = await fetch('https://localhost:7023/api/auth/pingauth', {
+            credentials: 'include',
+          });
+
+          if (ping.ok) {
+            alert('✅ Account created and logged in!');
+            navigate('/moviesPage');
+          } else {
+            alert(
+              '⚠️ Login succeeded, but session not ready. Try logging in manually.'
+            );
+            navigate('/loginPage');
+          }
+        } else {
+          alert('✅ Registered, but login failed. Please log in manually.');
+          navigate('/loginPage');
+        }
       } else {
         const error = await response.json();
         alert('❌ Failed to register: ' + JSON.stringify(error));
@@ -48,9 +72,7 @@ const CreateAccount = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-black text-white px-4 font-sans"
-    >
+    <div className="min-h-screen flex items-center justify-center bg-black text-white px-4 font-sans">
       <header className="w-full py-6 flex justify-start items-center fixed top-0 left-0 px-8">
         <div className="text-3xl font-extrabold text-blue-700">CINENICHE</div>
       </header>
@@ -58,12 +80,28 @@ const CreateAccount = () => {
         {step === 1 ? (
           <div className="text-center space-y-6">
             <div className="flex flex-col items-center mb-6 space-y-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-28 w-28 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A8.966 8.966 0 0112 15c2.144 0 4.1.755 5.879 2.004M15 10a3 3 0 11-6 0 3 3 0 016 0zM12 2a10 10 0 100 20 10 10 0 000-20z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-28 w-28 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5.121 17.804A8.966 8.966 0 0112 15c2.144 0 4.1.755 5.879 2.004M15 10a3 3 0 11-6 0 3 3 0 016 0zM12 2a10 10 0 100 20 10 10 0 000-20z"
+                />
               </svg>
             </div>
-            <h1 className="text-4xl font-extrabold uppercase text-center mb-6">Finish setting up your account</h1>
-            <p className="text-lg">You started signing up with <span className="font-semibold">{email}</span></p>
+            <h1 className="text-4xl font-extrabold uppercase text-center mb-6">
+              Finish setting up your account
+            </h1>
+            <p className="text-lg">
+              You started signing up with{' '}
+              <span className="font-semibold">{email}</span>
+            </p>
             <div className="flex justify-between mt-6">
               <button
                 onClick={handleBack}
@@ -83,12 +121,25 @@ const CreateAccount = () => {
           <>
             <div className="flex justify-center mb-4">
               <div className="flex items-center justify-center w-24 h-24 rounded-full border-4 border-white mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-12 w-12 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </div>
             </div>
-            <h1 className="text-3xl font-bold mb-6 text-center">Create your account</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">
+              Create your account
+            </h1>
             <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
               <div>
                 <label className="block text-sm font-medium mb-1">Email</label>
@@ -97,7 +148,12 @@ const CreateAccount = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="name">Full Name</label>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="name"
+                >
+                  Full Name
+                </label>
                 <input
                   id="name"
                   type="text"
@@ -108,7 +164,12 @@ const CreateAccount = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="password">Password</label>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
                 <input
                   id="password"
                   type="password"
@@ -119,7 +180,12 @@ const CreateAccount = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="phone">Phone Number</label>
+                <label
+                  className="block text-sm font-medium mb-1"
+                  htmlFor="phone"
+                >
+                  Phone Number
+                </label>
                 <input
                   id="phone"
                   type="tel"
@@ -129,7 +195,10 @@ const CreateAccount = () => {
                   className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold py-3 rounded-md text-lg">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold py-3 rounded-md text-lg"
+              >
                 Sign Up
               </button>
             </form>

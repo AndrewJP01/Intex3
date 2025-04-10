@@ -1,8 +1,10 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Intex2.API.Models;
 using Intex2.API.Dtos;
-using Microsoft.AspNetCore.Authorization;
+using Intex2.API.Data;
 
 namespace Intex2.API.Controllers
 {
@@ -13,27 +15,48 @@ namespace Intex2.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AppDbContext _context;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            AppDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
+            // ✅ Safely get next MLUserId from AspNetUsers
+            int nextMLUserId = 1;
+            try
+            {
+                var maxId = await _context.Users
+                    .Where(u => u.MLUserId != null)
+                    .MaxAsync(u => (int?)u.MLUserId);
+
+                nextMLUserId = (maxId ?? 0) + 1;
+            }
+            catch
+            {
+                nextMLUserId = 1;
+            }
+
+            Console.WriteLine($"➡️ Assigning MLUserId: {nextMLUserId}");
+
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
                 Email = dto.Email,
                 first_name = dto.FirstName,
                 last_name = dto.LastName,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                MLUserId = nextMLUserId
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -47,6 +70,8 @@ namespace Intex2.API.Controllers
 
             return Ok("User registered successfully");
         }
+
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
@@ -65,9 +90,17 @@ namespace Intex2.API.Controllers
 
             if (result.Succeeded)
             {
-                return Ok("Login successful");
+                var roles = await _userManager.GetRolesAsync(user);
+
+                return Ok(new
+                {
+                    message = "Login successful",
+                    username = user.UserName,
+                    email = user.Email,
+                    roles = roles
+                });
             }
-            
+
             return Unauthorized("Invalid email or password");
         }
 
@@ -79,11 +112,34 @@ namespace Intex2.API.Controllers
         }
 
         [HttpGet("pingauth")]
-        public IActionResult PingAuth()
+        [Authorize]
+        public async Task<IActionResult> PingAuth()
         {
-            var username = User.Identity?.Name;
-            return Ok(new { message = $"Authenticated as {username}" });
+            var user = await _userManager.GetUserAsync(User);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                userId = user.Id,
+                mlUserId = user.MLUserId,
+                username = user.UserName,
+                roles
+            });
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                username = user.UserName,
+                email = user.Email,
+                roles = roles
+            });
+        }
     }
 }

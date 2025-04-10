@@ -6,5 +6,7 @@ namespace Intex2.API.Models
     {
         public string first_name { get; set; }
         public string last_name { get; set; }
+
+        public int? MLUserId { get; set; } 
     }
 }

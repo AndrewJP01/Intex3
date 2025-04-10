@@ -13,6 +13,7 @@ namespace Intex2.API.Data
         public DbSet<MovieUser> MovieUsers { get; set; }
         public DbSet<MovieRating> MovieRatings { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
