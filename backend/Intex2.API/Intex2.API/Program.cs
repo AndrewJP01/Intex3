@@ -31,12 +31,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins(
-            "https://lemon-glacier-042775c1e.6.azurestaticapps.net/"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
+        policy.WithOrigins("https://lemon-glacier-042775c1e.6.azurestaticapps.net")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -69,7 +67,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SameSite = SameSiteMode.None; // ✅ Must be None for cross-origin
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/api/auth/login";
     options.LogoutPath = "/api/auth/logout";
@@ -92,8 +90,8 @@ builder.Services.AddSingleton<RecommendationService>(provider =>
 var app = builder.Build();
 
 // ✅ Middleware setup
-app.UseHttpsRedirection();              // Must come first for secure cookies
-app.UseCors("AllowFrontend");          // 🔥 CORS right after HTTPS
+app.UseHttpsRedirection();           // Must come first for secure cookies
+app.UseCors("AllowFrontend");        // CORS right after HTTPS
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
