@@ -1,39 +1,118 @@
-"use client";
-import React from "react";
-import styles from "../pages/MovieHomePage.module.css";
-import { useNavigate } from "react-router-dom";
+'use client';
+import React from 'react';
+import styles from '../pages/MovieHomePage.module.css';
+import { useNavigate } from 'react-router-dom';
+
 export const Navbar: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('userRole') !== null;
+  const userRole = localStorage.getItem('userRole');
+  const username = localStorage.getItem('username');
+
+  const handleLogout = async () => {
+    await fetch('https://localhost:7023/api/Auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('username');
+    window.location.href = '/';
+  };
+
   return (
     <header className={styles.header}>
-      <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/379d81dd31974d32b82392e75f008dd4ae5d5b6d" alt="Site Logo" className={styles.logo} />
-      <nav className={styles.navigation}>
-        <ul className={styles.navList}>
-          <li>
-            <a href="#" className={styles.navLink} onClick={() => navigate("/")}>
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="#" className={styles.navLink} onClick={() => navigate("/MoviesPage")}>
-              Movies 
-            </a>
-          </li>
-          
-          <li>
-            <a href="#" className={styles.navLink} onClick={() => navigate("/PrivacyPage")}>
-              Privacy Policy
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div className={styles.userProfile} onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
-            <img
-                src="/profile.png"
-                alt="User Profile"
-                className={styles.profileIcon}
-            />
-            </div>
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/379d81dd31974d32b82392e75f008dd4ae5d5b6d"
+        alt="Site Logo"
+        className={styles.logo}
+      />
+
+      {isLoggedIn ? (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {userRole === 'Admin' && (
+            <>
+              <button
+                onClick={() => navigate('/adminPage')}
+                style={{
+                  padding: '6px 10px',
+                  backgroundColor: '#ff9800',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '0.8rem',
+                }}
+              >
+                Admin View
+              </button>
+              <button
+                onClick={() => navigate('/moviesPage')}
+                style={{
+                  padding: '6px 10px',
+                  backgroundColor: '#2196f3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '0.8rem',
+                }}
+              >
+                User View
+              </button>
+            </>
+          )}
+          <span
+            style={{
+              color: '#fff',
+              fontFamily: 'sans-serif',
+              fontSize: '0.9rem',
+            }}
+          >
+            Welcome, {username}
+          </span>
+          <button
+            onClick={handleLogout}
+            style={{
+              padding: '6px 12px',
+              backgroundColor: '#f44336',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '0.85rem',
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <div
+          onClick={() => navigate('/loginPage')}
+          style={{
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: '#fff',
+            fontFamily: 'sans-serif',
+            fontSize: '0.85rem',
+          }}
+        >
+          <img
+            src="/profile.png"
+            alt="User Profile"
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              marginBottom: '4px',
+            }}
+          />
+          <span style={{ fontWeight: '500' }}>Sign In</span>
+        </div>
+      )}
     </header>
   );
 };

@@ -24,6 +24,7 @@ function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
+
     if (!email || !password) {
       setError('Please fill in all fields.');
       return;
@@ -39,19 +40,18 @@ function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      const contentLength = response.headers.get('content-length');
-      const data =
-        contentLength && parseInt(contentLength, 10) > 0
-          ? await response.json()
-          : null;
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data?.message || 'Invalid email or password.');
       }
 
-      // Display success message upon successful login.
+      // ✅ Only run this if response is OK
+      const userRole = data.roles?.includes('Admin') ? 'Admin' : 'Customer';
+      localStorage.setItem('userRole', userRole);
+      localStorage.setItem('username', data.username);
+
       window.alert('Successfully logged in!');
-      // Redirect to MoviesPage instead of Competition.
       navigate('/moviesPage');
     } catch (error: any) {
       setError(error.message || 'Error logging in.');

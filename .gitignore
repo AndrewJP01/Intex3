@@ -19,3 +19,7 @@ backend/Intex2.API/.vs/ProjectEvaluation/intex2.api.metadata.v9.bin
 backend/Intex2.API/.vs/Intex2.API/v17/fileList.bin
 backend/Intex2.API/.vs/Intex2.API/v17/DocumentLayout.json
 backend/Intex2.API/.vs/Intex2.API/v17/DocumentLayout.backup.json
+backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.AssemblyInfo.cs
+backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.AssemblyInfoInputs.cache
+backend/Intex2.API/Intex2.API/obj/Debug/net8.0/Intex2.API.GeneratedMSBuildEditorConfig.editorconfig
+**/obj/
