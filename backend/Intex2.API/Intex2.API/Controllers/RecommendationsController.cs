@@ -32,16 +32,16 @@ public class RecommendationsController : ControllerBase
                 return NotFound("No recommendations found.");
 
             var recommendedMovies = await _context.Movies
-                .Where(m => recommendedIds.Contains(m.show_id!))
+                .Where(m => m.show_id != null && recommendedIds.Contains(m.show_id))
                 .Include(m => m.genres)
                 .Include(m => m.ratings)
                 .ToListAsync();
 
             return Ok(recommendedMovies);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Error getting recommendations: {ex.Message}");
+            return BadRequest("An error occurred while getting recommendations.");
         }
     }
 
@@ -58,53 +58,54 @@ public class RecommendationsController : ControllerBase
                 .Take(3)
                 .ToListAsync();
 
-            var result = new List<object>();
+            if (!topRated.Any())
+                return NotFound("No top-rated movies found for this user.");
 
-            foreach (var showId in topRated)
+            var result = await Task.WhenAll(topRated.Select(async showId =>
             {
                 var baseMovie = await _context.Movies
                     .Where(m => m.show_id == showId)
                     .Select(m => m.title)
                     .FirstOrDefaultAsync();
 
-                var recs = _recommendationService.GetRecommendations(showId, 18);
+                var recs = _recommendationService.GetRecommendations(showId);
 
                 var recMovies = await _context.Movies
-                    .Where(m => recs.Contains(m.show_id!))
+                    .Where(m => m.show_id != null && recs.Contains(m.show_id))
                     .Include(m => m.genres)
                     .Include(m => m.ratings)
                     .ToListAsync();
 
-                result.Add(new
+                return new
                 {
                     category = $"Since you liked {baseMovie}",
                     movies = recMovies
-                });
-            }
+                };
+            }));
 
             return Ok(result);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Error getting since-you-liked recommendations: {ex.Message}");
+            return BadRequest("An error occurred while getting since-you-liked recommendations.");
         }
     }
 
     [HttpGet("category/{userId}/{category}")]
-    public IActionResult GetRecommendationsByCategory(int userId, string category)
+    public async Task<IActionResult> GetRecommendationsByCategory(int userId, string category)
     {
         try
         {
-            var recs = _recommendationService.GetRecommendationsByCategory(userId, category);
+            var recs = await Task.FromResult(_recommendationService.GetRecommendationsByCategory(userId, category));
 
             if (recs == null || !recs.Any())
                 return NotFound("No recommendations found for this category.");
 
             return Ok(recs);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Error loading recommendations: {ex.Message}");
+            return BadRequest("An error occurred while loading recommendations.");
         }
     }
 }
