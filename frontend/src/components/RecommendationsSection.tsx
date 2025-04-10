@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { ContentCarousel } from "../components/ContentCarousel";
+import React, { useEffect, useState } from 'react';
+import { ContentCarousel } from '../components/ContentCarousel';
 
 type Movie = {
-    title: string;
-    category: string;
-    imageUrl?: string;
-    id?: string | number;
-    description?: string;
-    genre?: string;
-    rating?: string;
-    duration?: string;
-    show_id?: string;
-    releaseDate?: number;
+  title: string;
+  category: string;
+  imageUrl?: string;
+  id?: string | number;
+  description?: string;
+  genre?: string;
+  rating?: string;
+  duration?: string;
+  show_id?: string;
+  releaseDate?: number;
 };
 
 interface Props {
@@ -25,13 +25,15 @@ const RecommendationsSection: React.FC<Props> = ({ showId, title }) => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const res = await fetch(`https://localhost:7023/api/recommendations/${showId}`);
-        if (!res.ok) throw new Error("Failed to fetch recommendations");
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/recommendations/${showId}`
+        );
+        if (!res.ok) throw new Error('Failed to fetch recommendations');
 
         const data = await res.json();
         setRecommendedMovies(data);
       } catch (err) {
-        console.error("Error fetching recommendations:", err);
+        console.error('Error fetching recommendations:', err);
       }
     };
 

@@ -39,7 +39,7 @@ function LoginPage() {
       return;
     }
 
-    const loginUrl = 'https://localhost:7023/api/Auth/login';
+    const loginUrl = `${import.meta.env.VITE_API_URL}/api/Auth/login`;
 
     try {
       const response = await fetch(loginUrl, {

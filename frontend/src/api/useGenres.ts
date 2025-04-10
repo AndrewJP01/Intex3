@@ -8,13 +8,16 @@ export function useGenres() {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const res = await fetch('https://localhost:7023/api/Admin/genres', {
-          method: 'GET',
-          credentials: 'include', // ✅ Sends auth cookie
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/Admin/genres`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
         if (!res.ok) {
           if (res.status === 401) {

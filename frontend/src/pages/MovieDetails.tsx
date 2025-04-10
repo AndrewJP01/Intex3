@@ -16,11 +16,15 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://localhost:7023/api/Admin/${id}`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/Admin/${id}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
@@ -40,15 +44,18 @@ const MovieDetailsPage: React.FC = () => {
     const userId = 1; // Replace with actual user logic
 
     try {
-      const res = await fetch(`https://localhost:7023/api/Admin/${id}/rate`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rating: userRating,
-          user_id: userId,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/Admin/${id}/rate`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rating: userRating,
+            user_id: userId,
+          }),
+        }
+      );
 
       if (res.ok) {
         alert(`Rating submitted: ${userRating} stars!`);

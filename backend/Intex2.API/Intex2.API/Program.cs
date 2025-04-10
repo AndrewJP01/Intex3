@@ -9,7 +9,7 @@ using Intex2.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Enable config from appsettings + secrets + env vars
+// Enable config from appsettings + secrets + env vars
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -26,15 +26,18 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ✅ CORS: Allow only secure frontend with credentials
+// ✅ CORS: Allow frontend for cookies
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://localhost:5173") // 👈 must be https
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.WithOrigins(
+            "https://localhost:5173",
+            "http://localhost:5173"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -43,7 +46,7 @@ var connectionString = builder.Configuration.GetConnectionString("MovieConnectio
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// ✅ Identity with strong password settings
+// ✅ Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -62,7 +65,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// ✅ Cookie auth for SPA compatibility
+// ✅ Cookie auth
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
@@ -73,7 +76,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/api/auth/logout";
     options.SlidingExpiration = true;
 
-    // Prevent redirect to /login — return 401 for SPA
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = 401;
@@ -90,20 +92,24 @@ builder.Services.AddSingleton<RecommendationService>(provider =>
 
 var app = builder.Build();
 
-// ✅ Swagger
-app.UseSwagger();
-app.UseSwaggerUI();
-
-// ✅ CORS BEFORE auth
-app.UseCors("AllowFrontend");
-
+// ✅ Middleware setup
+app.UseHttpsRedirection();           // Required for Secure cookies
+app.UseCors("AllowFrontend");        // Must come before auth
 app.UseStaticFiles();
-
-// ✅ Auth middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.MapControllers();
+
+// ✅ Optional: Log origin for debug
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($">>> Request from Origin: {context.Request.Headers["Origin"]}");
+    await next.Invoke();
+});
 
 // ✅ Test SQL connection
 try

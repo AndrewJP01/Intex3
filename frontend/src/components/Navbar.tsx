@@ -10,14 +10,28 @@ export const Navbar: React.FC = () => {
   const username = localStorage.getItem('username');
 
   const handleLogout = async () => {
-    await fetch('https://localhost:7023/api/Auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    });
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/Auth/logout`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        }
+      );
 
+      if (!res.ok) {
+        console.warn('Logout failed on backend');
+      }
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+
+    // Clear local auth state
     localStorage.removeItem('userRole');
     localStorage.removeItem('username');
-    window.location.href = '/';
+
+    // Redirect user cleanly
+    navigate('/');
   };
 
   return (

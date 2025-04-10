@@ -141,7 +141,7 @@ const AdminPage = () => {
 
     try {
       const res = await fetch(
-        `https://localhost:7023/api/admin/movies/${movieToDelete.show_id}`,
+        `${import.meta.env.VITE_API_URL}/api/admin/movies/${movieToDelete.show_id}`,
         {
           method: 'DELETE',
           credentials: 'include',
@@ -169,7 +169,7 @@ const AdminPage = () => {
       return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${showId.trim()}.jpg`;
     };
 
-    fetch('https://localhost:7023/api/admin/movies', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/movies`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -275,8 +275,8 @@ const AdminPage = () => {
     const isAdd = modalMode === 'add';
 
     const endpoint = isAdd
-      ? 'https://localhost:7023/api/admin/movies'
-      : `https://localhost:7023/api/admin/movies/${selectedMovie?.show_id}`;
+      ? `${import.meta.env.VITE_API_URL}/api/admin/movies`
+      : `${import.meta.env.VITE_API_URL}/api/admin/movies/${selectedMovie?.show_id}`;
 
     const method = isAdd ? 'POST' : 'PUT';
 

@@ -19,9 +19,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const refreshUser = async () => {
     try {
-      const res = await fetch('https://localhost:7023/api/Auth/pingauth', {
-        credentials: 'include',
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/Auth/pingauth`,
+        {
+          credentials: 'include',
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();

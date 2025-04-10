@@ -1,8 +1,6 @@
 // src/api/useFeaturedMovies.ts
 import { useEffect, useState } from 'react';
 
-
-
 export type FeaturedMovie = {
   show_id: string;
   title: string;
@@ -13,20 +11,22 @@ export type FeaturedMovie = {
 export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [personalizedMovies, setPersonalizedMovies] = useState([]);
-
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await fetch('https://localhost:7023/api/Admin/top-rated', {
-          method: 'GET',
-          credentials: 'include', // ✅ include auth cookie
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/Admin/top-rated`,
+          {
+            method: 'GET',
+            credentials: 'include', // ✅ include auth cookie
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
         if (!res.ok) {
           if (res.status === 401) {
@@ -49,14 +49,18 @@ export const useFeaturedMovies = () => {
     fetchFeatured();
   }, []);
 
-  
   useEffect(() => {
     const fetchPersonalized = async () => {
-      const res = await fetch("https://localhost:7023/api/recommendations/topRated/1");
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/recommendations/topRated/1`,
+        {
+          credentials: 'include', // optional if you use cookie/session auth
+        }
+      );
       const data = await res.json();
       setPersonalizedMovies(data);
     };
-  
+
     fetchPersonalized();
   }, []);
 

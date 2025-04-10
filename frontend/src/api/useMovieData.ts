@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export type Movie = {
   title: string;
@@ -16,7 +16,9 @@ export type Movie = {
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
-  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({});
+  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>(
+    {}
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,10 +27,13 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch('https://localhost:7023/api/Admin/movies', {
-          method: 'GET',
-          credentials: 'include', // ✅ sends auth cookie!
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/Admin/movies`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
 
         // If the response is not ok, check for a 401 error and show a popup if so.
         if (!res.ok) {
@@ -58,7 +63,7 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
 
         // Initialize visible counts per genre
         const defaultCounts: Record<string, number> = {};
-        transformed.forEach(movie => {
+        transformed.forEach((movie) => {
           const cat = movie.category;
           defaultCounts[cat] = initialCount;
         });
@@ -88,18 +93,20 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     setFilteredMovies(filtered);
   }, [searchTerm, selectedCategories, allMovies]);
 
-  const groupedByCategory = filteredMovies.reduce((acc, movie) => {
-    const category = movie.category;
-    acc[category] = acc[category] || [];
-    acc[category].push(movie); // 🙌 no limit now
-    return acc;
-  }, {} as Record<string, Movie[]>);
-  
+  const groupedByCategory = filteredMovies.reduce(
+    (acc, movie) => {
+      const category = movie.category;
+      acc[category] = acc[category] || [];
+      acc[category].push(movie); // 🙌 no limit now
+      return acc;
+    },
+    {} as Record<string, Movie[]>
+  );
 
   const loadMoreByCategory = (category: string) => {
-    setVisibleCounts(prev => ({
+    setVisibleCounts((prev) => ({
       ...prev,
-      [category]: (prev[category] || initialCount) + 6
+      [category]: (prev[category] || initialCount) + 6,
     }));
   };
 
@@ -107,6 +114,6 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
     groupedByCategory,
     isLoading,
     error,
-    loadMoreByCategory
+    loadMoreByCategory,
   };
 }
