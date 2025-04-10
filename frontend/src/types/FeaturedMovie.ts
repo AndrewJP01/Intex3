@@ -1,13 +1,12 @@
-// src/types/FeaturedMovie.ts
-
 export type FeaturedMovie = {
   title: string;
-  category?: string;
+  genre: string;  // Single source of truth
   imageUrl?: string;
-  show_id?: string | number;
+  id?: string | number;
   description?: string;
-  genre?: string;
-  rating?: string;
-  duration?: string;
-  releaseDate?: number;
-};          
+  rating: string;
+  duration: string;
+  releaseDate: number;
+  show_id?: string;
+  category?: string;  // <-- ADD THIS LINE
+};

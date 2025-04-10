@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { RawMovie } from '../types/RawMovie';
 
 export type Movie = {
   title: string;
@@ -93,11 +94,12 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   }, [searchTerm, selectedCategories, allMovies]);
 
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
-    const category = movie.genre;  // <-- Change this line
+    const category = movie.genre;
     acc[category] = acc[category] || [];
     acc[category].push(movie);
     return acc;
   }, {} as Record<string, Movie[]>);
+  
   
   
   
