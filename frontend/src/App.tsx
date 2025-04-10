@@ -9,6 +9,7 @@ import PrivacyPage from './pages/PrivacyPage';
 import MovieDetails from './pages/MovieDetails';
 import CookieConsent from './components/CookieConsent';
 import ProtectedRoute from './components/ProtectedRoute';
+import TestContextDisplay from './pages/TestContextDisplay';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/usercontexttest" element={<TestContextDisplay />} />
         <Route path="/create-account/:email" element={<CreateAccount />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/PrivacyPage" element={<PrivacyPage />} />

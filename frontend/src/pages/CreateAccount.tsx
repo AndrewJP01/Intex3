@@ -17,7 +17,6 @@ const CreateAccount = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const [firstName, lastName] = fullName.trim().split(' ');
 
     const data = {
@@ -36,8 +35,33 @@ const CreateAccount = () => {
       });
 
       if (response.ok) {
-        alert('✅ Account created successfully!');
-        navigate('/'); // or wherever you want to send them
+        // Auto-login
+        const loginRes = await fetch('https://localhost:7023/api/auth/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (loginRes.ok) {
+          // ⏳ Confirm session is valid
+          const ping = await fetch('https://localhost:7023/api/auth/pingauth', {
+            credentials: 'include',
+          });
+
+          if (ping.ok) {
+            alert('✅ Account created and logged in!');
+            navigate('/moviesPage');
+          } else {
+            alert(
+              '⚠️ Login succeeded, but session not ready. Try logging in manually.'
+            );
+            navigate('/loginPage');
+          }
+        } else {
+          alert('✅ Registered, but login failed. Please log in manually.');
+          navigate('/loginPage');
+        }
       } else {
         const error = await response.json();
         alert('❌ Failed to register: ' + JSON.stringify(error));
