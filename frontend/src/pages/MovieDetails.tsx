@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './MovieDetailPage.module.css';
 import RecommendationsSection from '../components/RecommendationsSection';
+import { useUser } from '../context/UserContext';
 
 const MovieDetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -12,6 +13,8 @@ const MovieDetailsPage: React.FC = () => {
   const [error, setError] = useState('');
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [userRating, setUserRating] = useState<number | null>(null);
+  const { userId } = useUser();
+
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -42,7 +45,6 @@ const MovieDetailsPage: React.FC = () => {
     if (!userRating || !id) return;
 
     // You could hardcode a test user_id or pull it from context/localStorage/auth
-    const userId = 1; // Replace with actual user logic
 
     try {
       const res = await fetch(`https://localhost:7023/api/Admin/${id}/rate`, {

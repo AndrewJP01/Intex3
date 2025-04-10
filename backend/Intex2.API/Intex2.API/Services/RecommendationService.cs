@@ -47,14 +47,15 @@ namespace Intex2.API.Services
             return map;
         }
 
-        public List<string> GetRecommendations(string showId, int count = 5)
-        {
-            if (_recommendationMap.TryGetValue(showId, out var recs))
+            public List<string> GetRecommendations(string showId)
             {
-                return recs.Take(count).ToList();
+                if (_recommendationMap.TryGetValue(showId, out var recs))
+                {
+                    return recs.ToList();  // return all recommendations available
+                }
+
+                return new List<string>(); // No recommendations found
             }
 
-            return new List<string>(); // No recommendations found
-        }
     }
 }

@@ -743,12 +743,12 @@ button:focus-visible {
     align-items: flex-start;
   }
   
-  .popupImage {
-    width: 200px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-  }
+.popupImage {
+  width: 180px;        /* or whatever your movie card width is */
+  height: 270px;       /* match the card height */
+  object-fit: cover;   /* keeps image proportional without distortion */
+  border-radius: 10px; /* optional - keeps it clean */
+}
   
   .popupDetails {
     flex: 1;

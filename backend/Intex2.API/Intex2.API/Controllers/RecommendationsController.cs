@@ -67,7 +67,7 @@ public class RecommendationsController : ControllerBase
             var recommendedShowIds = new HashSet<string>();
             foreach (var showId in topRated)
             {
-                var recs = _recommendationService.GetRecommendations(showId, 5);
+                var recs = _recommendationService.GetRecommendations(showId);
                 foreach (var r in recs)
                     recommendedShowIds.Add(r);
             }

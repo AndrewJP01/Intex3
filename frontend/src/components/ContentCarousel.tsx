@@ -200,12 +200,16 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
       {selectedMovie && (
         <div className={styles.centerPopup} ref={popupRef}>
           <div className={styles.popupContent}>
-            <img
-              src={selectedMovie.imageUrl}
-              alt={selectedMovie.title}
-              className={styles.popupImage}
-              loading="lazy"
-            />
+          <img
+            src={selectedMovie.imageUrl}
+            alt={selectedMovie.title}
+            className={styles.popupImage}
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/fallback.jpg';
+            }}
+          />
+
             <div className={styles.popupDetails}>
               <h3>{selectedMovie.title}</h3>
               <p>{selectedMovie.description}</p>
