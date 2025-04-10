@@ -40,8 +40,8 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const imageCache = useRef<Map<string, boolean>>(new Map());
   const moviesPerPage = 6;
 
-  const getMovieImageUrl = (movieTitle: string) => {
-    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
+  const getMovieImageUrl = (show_Id: string) => {
+    return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${show_Id}.jpg`;
   };
 
   const checkImage = async (url: string) => {
@@ -66,8 +66,10 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
       const filtered: Movie[] = [];
 
       for (const movie of movies) {
-        const url = movie.imageUrl || getMovieImageUrl(movie.title);
-        
+        const url =
+          movie.imageUrl ||
+          (movie.show_id ? getMovieImageUrl(movie.show_id) : '');
+        const valid = await checkImage(url);
         filtered.push({
           ...movie,
           imageUrl: url, // Let onError handle fallback dynamically
@@ -190,7 +192,9 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
             disabled={
               currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
             }
-            hidden={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
+            hidden={
+              currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
+            }
           >
             &#10095;
           </button>
@@ -245,7 +249,6 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
           </div>
         </div>
       )}
-      
     </section>
   );
 };
