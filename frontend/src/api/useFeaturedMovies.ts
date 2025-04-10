@@ -1,108 +1,100 @@
+// src/api/useFeaturedMovies.ts
 import { useEffect, useState } from 'react';
-import { RawMovie } from '../types/RawMovie';
-import { FeaturedMovie } from '../types/FeaturedMovie';
-import { toMovie } from './mappers';
 
-export type MovieGroup = {
-  category: string;
-  movies: FeaturedMovie[];
+
+
+export type FeaturedMovie = {
+  title: string;
+  genre: string;  // Single source of truth
+  imageUrl?: string;
+  id?: string | number;
+  description?: string;
+  rating: string;
+  duration: string;
+  releaseDate: number;
+  show_id?: string;
 };
 
+
 export const useFeaturedMovies = () => {
-  const userId = 11; // TEMP: Hardcoded until auth is integrated
-
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
-  const [rewatchFavorites, setRewatchFavorites] = useState<MovieGroup | null>(null);
-  const [topPicks, setTopPicks] = useState<MovieGroup | null>(null);
-  const [sinceYouLiked, setSinceYouLiked] = useState<MovieGroup[]>([]);
-  const [genreRecommendations, setGenreRecommendations] = useState<MovieGroup[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>("");
-
-  const fetchAndTransform = async (
-    url: string,
-    category?: string
-  ): Promise<FeaturedMovie[]> => {
-    const res = await fetch(url, {
-      method: 'GET',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!res.ok) throw new Error(`Failed to fetch (Status: ${res.status})`);
-
-    const data = await res.json();
-    return data.map((m: RawMovie) => toMovie(m, category));
-  };
+  const [error, setError] = useState("");
+  const [personalizedMovies, setPersonalizedMovies] = useState<FeaturedMovie[]>([]); // Typed!
 
   useEffect(() => {
-    const fetchAll = async () => {
+    const fetchFeatured = async () => {
       try {
-        const featured = await fetchAndTransform('https://localhost:7023/api/Admin/top-rated');
-        setFeaturedMovies(featured);
+        const res = await fetch('https://localhost:7023/api/Admin/top-rated', {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
 
-        const rewatch = await fetchAndTransform(
-          `https://localhost:7023/api/recommendations/category/${userId}/rewatch_favorite`,
-          'Rewatch'
-        );
-        setRewatchFavorites({ category: 'Rewatch Favorites', movies: rewatch });
-
-        const topPicks = await fetchAndTransform(
-          `https://localhost:7023/api/recommendations/category/${userId}/top_picks`,
-          'Top Picks'
-        );
-        setTopPicks({ category: 'Top Picks for You', movies: topPicks });
-
-        const sinceYouLikedRes = await fetch(
-          `https://localhost:7023/api/recommendations/topRated/${userId}`
-        );
-        const sinceYouLikedData = await sinceYouLikedRes.json();
-
-        setSinceYouLiked(
-          sinceYouLikedData.map((group: any) => ({
-            category: group.category,
-            movies: group.movies.map((m: RawMovie) => toMovie(m, group.category)),
-          }))
-        );
-
-        const genreRes = await fetch(
-          `https://localhost:7023/api/recommendations/category/${userId}/genre_recommendation`
-        );
-        const genreData = await genreRes.json();
-
-        const genreGroups: Record<string, RawMovie[]> = {};
-        for (const m of genreData) {
-          const genre = m.genre || 'Other';
-          if (!genreGroups[genre]) genreGroups[genre] = [];
-          genreGroups[genre].push(m);
+        if (!res.ok) {
+          if (res.status === 401) {
+            window.alert('Unauthorized. Please log in to see featured movies.');
+          }
+          throw new Error(`Failed to fetch featured movies (Status: ${res.status})`);
         }
 
-        const genreEntries = Object.entries(genreGroups)
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 10)
-          .map(([genre, movies]) => ({
-            category: `${genre} Recommendations For You`,
-            movies: movies.map((m) => toMovie(m, genre)),
-          }));
+        const data = await res.json();
 
-        setGenreRecommendations(genreEntries);
+        const transformed = data.map((item: any) => ({
+          title: item.title,
+          genre: Array.isArray(item.genres)
+          ? item.genres
+              .map((g: any) => typeof g === 'string' ? g : g.genre)
+              .filter((g: string) => g && g.trim() !== '')
+              .join(', ')
+          : '',
+
+          show_id: item.show_id.toString(),
+          imageUrl: item.imageUrl || undefined,
+          description: item.description || 'No description available',
+          rating: item.rating || 'NR',
+          duration: item.duration || 'Length TBD',
+          releaseDate: item.release_year,
+        }));
+
+        setFeaturedMovies(transformed);
       } catch (err) {
-        setError((err as Error).message || 'Unknown error occurred');
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAll();
+    fetchFeatured();
   }, []);
 
-  return {
-    featuredMovies,
-    rewatchFavorites,
-    topPicks,
-    sinceYouLiked,
-    genreRecommendations,
-    loading,
-    error,
-  };
+  useEffect(() => {
+    const fetchPersonalized = async () => {
+      const res = await fetch("https://localhost:7023/api/recommendations/topRated/1");
+      const data = await res.json();
+
+      const transformed = data.map((item: any) => ({
+        title: item.title,
+        genre: Array.isArray(item.genres)
+        ? item.genres
+            .map((g: any) => typeof g === 'string' ? g : g.genre)
+            .filter((g: string) => g && g.trim() !== '')
+            .join(', ')
+        : '',
+
+        show_id: item.show_id.toString(),
+        imageUrl: item.imageUrl || undefined,
+        description: item.description || 'No description available',
+        rating: item.rating || 'NR',
+        duration: item.duration || 'Length TBD',
+        releaseDate: item.release_year,
+      }));
+
+      setPersonalizedMovies(transformed);
+    };
+
+    fetchPersonalized();
+  }, []);
+
+  return { featuredMovies, personalizedMovies, loading, error };
 };

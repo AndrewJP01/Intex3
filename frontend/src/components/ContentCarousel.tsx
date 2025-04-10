@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from '../pages/MovieHomePage.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FeaturedMovie } from '../types/FeaturedMovie';
+import { buildImageUrl } from '../api/mappers';
 
 
 export type Movie = {
@@ -65,22 +66,10 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   useEffect(() => {
     const loadValidMovies = async () => {
       setLoading(true);
-      const filtered: FeaturedMovie[] = [];
-
-      for (const movie of movies) {
-        const url = getMovieImageUrl(movie.title); // Always rebuild image URL like Admin Page
-        const valid = await checkImage(url);
-        filtered.push({
-          ...movie,
-          imageUrl: url, // Let onError handle fallback dynamically
-          genre: movie.genre,
-          rating: movie.rating,
-          releaseDate: movie.releaseDate,
-          duration: movie.duration,
-        });
-      }
-      
-
+      const filtered = movies.map((movie) => ({
+        ...movie,
+        imageUrl: buildImageUrl(movie.title),
+      }));
       setValidMovies(filtered);
       setLoading(false);
     };
@@ -231,7 +220,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
 
               <button
                 className={styles.playButton}
-                onClick={() => handleMovieClick(selectedMovie?.show_id)}
+                onClick={() => handleMovieClick(selectedMovie.show_id)}
               >
                 ▶
               </button>

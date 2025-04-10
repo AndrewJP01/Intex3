@@ -1,19 +1,22 @@
 import { RawMovie } from '../types/RawMovie';
-import { Movie } from '../types/Movie';
+import { FeaturedMovie } from '../types/FeaturedMovie';
 
-export const buildImageUrl = (title: string): string => {
+export const buildImageUrl = (title: string | undefined): string => {
+  if (!title || title.toLowerCase().includes("null") || title.trim() === "") {
+    return '/fallback.jpg'; // Use fallback if title sucks
+  }
   return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(title)}.jpg`;
 };
 
-
-export const toMovie = (raw: RawMovie, category?: string): Movie => ({
-  show_id: raw.show_id,
-  title: raw.title,
+export const toMovie = (raw: any, category?: string): FeaturedMovie => ({
+  title: raw.title || 'Untitled',
+  genre: raw.genre || category || 'Uncategorized',
+  show_id: raw.show_id?.toString(),
+  imageUrl: raw.imageUrl && !raw.imageUrl.toLowerCase().includes("null")
+    ? raw.imageUrl
+    : '/fallback.jpg',
   description: raw.description || 'No description available',
-  imageUrl: buildImageUrl(raw.title),
-  genre: raw.category || '',
   rating: raw.rating || 'NR',
   duration: raw.duration || 'Length TBD',
-  releaseDate: raw.release_year,
-  category,
+  releaseDate: raw.releaseDate || raw.release_year || 0,
 });

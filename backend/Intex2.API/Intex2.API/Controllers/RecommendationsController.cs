@@ -32,64 +32,82 @@ public class RecommendationsController : ControllerBase
                 return NotFound("No recommendations found.");
 
             var recommendedMovies = await _context.Movies
-                .Where(m => m.show_id != null && recommendedIds.Contains(m.show_id))
-                .Include(m => m.genres)
-                .Include(m => m.ratings)
+                .Where(m => recommendedIds.Contains(m.show_id!))
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.description,
+                    m.release_year,
+                    m.duration,
+                    m.rating,
+                    imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                })
                 .ToListAsync();
 
             return Ok(recommendedMovies);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return BadRequest("An error occurred while getting recommendations.");
+            return BadRequest($"Error getting recommendations: {ex.Message}");
         }
     }
 
-    [HttpGet("topRated/{userId}")]
-    public async Task<IActionResult> GetTopRatedRecommendations(int userId)
-    {
-        try
-        {
-            var topRated = await _context.MovieRatings
-                .Where(r => r.user_id == userId && r.rating == 5)
-                .OrderByDescending(r => r.rating)
-                .Select(r => r.show_id)
-                .Distinct()
-                .Take(3)
-                .ToListAsync();
-
-            if (!topRated.Any())
-                return NotFound("No top-rated movies found for this user.");
-
-            var result = await Task.WhenAll(topRated.Select(async showId =>
+            [HttpGet("topRated/{userId}")]
+            public async Task<IActionResult> GetTopRatedRecommendations(int userId)
             {
-                var baseMovie = await _context.Movies
-                    .Where(m => m.show_id == showId)
-                    .Select(m => m.title)
-                    .FirstOrDefaultAsync();
-
-                var recs = _recommendationService.GetRecommendations(showId);
-
-                var recMovies = await _context.Movies
-                    .Where(m => m.show_id != null && recs.Contains(m.show_id))
-                    .Include(m => m.genres)
-                    .Include(m => m.ratings)
-                    .ToListAsync();
-
-                return new
+                try
                 {
-                    category = $"Since you liked {baseMovie}",
-                    movies = recMovies
-                };
-            }));
+                    var topRatedShowIds = await _context.MovieRatings
+                        .Where(r => r.user_id == userId)
+                        .OrderByDescending(r => r.rating)
+                        .Select(r => r.show_id)
+                        .Take(3)
+                        .ToListAsync();
 
-            return Ok(result);
-        }
-        catch (Exception)
-        {
-            return BadRequest("An error occurred while getting since-you-liked recommendations.");
-        }
-    }
+                    if (!topRatedShowIds.Any())
+                        return NotFound("User has no rated movies.");
+
+                    var finalResult = new List<object>();
+
+                    foreach (var showId in topRatedShowIds)
+                    {
+                        var movieTitle = await _context.Movies
+                            .Where(m => m.show_id == showId)
+                            .Select(m => m.title)
+                            .FirstOrDefaultAsync() ?? $"Movie {showId}";
+
+                        var recs = _recommendationService.GetRecommendations(showId);
+
+                        var recommendedMovies = await _context.Movies
+                            .Where(m => recs.Contains(m.show_id!))
+                            .Select(m => new
+                            {
+                                m.show_id,
+                                m.title,
+                                m.description,
+                                m.release_year,
+                                m.duration,
+                                m.rating,
+                                imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                            })
+                            .ToListAsync();
+
+                        finalResult.Add(new
+                        {
+                            category = $"Because You Liked {movieTitle}",
+                            movies = recommendedMovies
+                        });
+                    }
+
+                    return Ok(finalResult);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest($"Error fetching personalized recommendations: {ex.Message}");
+                }
+            }
+
 
     [HttpGet("category/{userId}/{category}")]
     public async Task<IActionResult> GetRecommendationsByCategory(int userId, string category)
@@ -101,11 +119,27 @@ public class RecommendationsController : ControllerBase
             if (recs == null || !recs.Any())
                 return NotFound("No recommendations found for this category.");
 
-            return Ok(recs);
+            var movieIds = recs.Select(r => r.ShowId).ToList();
+
+            var movies = await _context.Movies
+                .Where(m => movieIds.Contains(m.show_id!))
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.description,
+                    m.release_year,
+                    m.duration,
+                    m.rating,
+                    imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                })
+                .ToListAsync();
+
+            return Ok(movies);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return BadRequest("An error occurred while loading recommendations.");
+            return BadRequest($"Error loading recommendations: {ex.Message}");
         }
     }
 }

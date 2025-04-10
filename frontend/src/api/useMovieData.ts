@@ -94,12 +94,15 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   }, [searchTerm, selectedCategories, allMovies]);
 
   const groupedByCategory = filteredMovies.reduce((acc, movie) => {
-    const category = movie.genre;
-    acc[category] = acc[category] || [];
-    acc[category].push(movie);
+    const categories = movie.genre.split(',').map((c) => c.trim());  // Split on comma
+  
+    categories.forEach((category) => {
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(movie);
+    });
+  
     return acc;
   }, {} as Record<string, Movie[]>);
-  
   
   
   

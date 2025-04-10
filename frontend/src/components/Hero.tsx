@@ -12,15 +12,21 @@ type HeroProps = {
 export const Hero: React.FC<HeroProps> = ({ featuredMovies }) => {
   const navigate = useNavigate();
 
-  const handleMovieClick = (movieId: string | number | undefined) => {
-    if (movieId) {
-      navigate(`/${movieId}`);
-    }
+  const validMovies = featuredMovies.filter(
+    (m) => m.imageUrl && !m.imageUrl.toLowerCase().includes("null")
+  );
+
+  console.log("Hero Featured Movies:", validMovies); // Debug
+
+  if (validMovies.length === 0) return null;
+
+  const handleMovieClick = (id?: string | number) => {
+    if (id) navigate(`/${id}`);
   };
 
   return (
     <section className={styles.heroSection}>
-      <HeroCarousel movies={featuredMovies} onMovieClick={handleMovieClick} />
+      <HeroCarousel movies={validMovies} onMovieClick={handleMovieClick} />
     </section>
   );
 };
