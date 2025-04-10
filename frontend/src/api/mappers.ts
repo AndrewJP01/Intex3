@@ -1,6 +1,10 @@
 import { RawMovie } from '../types/RawMovie';
 import { Movie } from '../types/Movie';
-import { buildImageUrl } from '../utils/buildImageUrl'; // (if extracted)
+
+export const buildImageUrl = (title: string): string => {
+  return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(title)}.jpg`;
+};
+
 
 export const toMovie = (raw: RawMovie, category?: string): Movie => ({
   show_id: raw.show_id,
