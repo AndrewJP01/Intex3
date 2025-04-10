@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface UserContextType {
-  userId: number | null; // 👈 changed from string to number
-  setUserId: (id: number | null) => void;
+  userId: number | null;
+  refreshUser: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType>({
   userId: null,
-  setUserId: () => {},
+  refreshUser: async () => {},
 });
 
 export const useUser = () => useContext(UserContext);
@@ -15,29 +15,32 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [userId, setUserId] = useState<number | null>(null); // 👈 also updated to number
+  const [userId, setUserId] = useState<number | null>(null);
+
+  const refreshUser = async () => {
+    try {
+      const res = await fetch('https://localhost:7023/api/Auth/pingauth', {
+        credentials: 'include',
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUserId(data.mlUserId);
+      } else {
+        setUserId(null); // 👈 Reset if not authorized
+      }
+    } catch (err) {
+      console.error('Failed to refresh user ID', err);
+      setUserId(null);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const res = await fetch('https://localhost:7023/api/Auth/pingauth', {
-          credentials: 'include',
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setUserId(data.mlUserId); // 👈 grab ML user ID, not the auth GUID
-        }
-      } catch (err) {
-        console.error('Failed to fetch ML user ID', err);
-      }
-    };
-
-    fetchUserId();
+    refreshUser();
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, setUserId }}>
+    <UserContext.Provider value={{ userId, refreshUser }}>
       {children}
     </UserContext.Provider>
   );
