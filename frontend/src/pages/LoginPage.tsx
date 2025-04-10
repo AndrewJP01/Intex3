@@ -1,16 +1,25 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Identity.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar } from '../components/Navbar';
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const prefillEmail = queryParams.get('email') || '';
+
+  const [email, setEmail] = useState(prefillEmail);
   const [password, setPassword] = useState('');
   const [rememberme, setRememberme] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If redirected later and URL updates
+    setEmail(prefillEmail);
+  }, [prefillEmail]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -19,7 +28,7 @@ function LoginPage() {
     else if (name === 'password') setPassword(value);
   };
 
-  const handleRegisterClick = () => navigate('/register');
+  const handleRegisterClick = () => navigate('/create-Account');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +55,6 @@ function LoginPage() {
         throw new Error(data?.message || 'Invalid email or password.');
       }
 
-      // ✅ Only run this if response is OK
       const userRole = data.roles?.includes('Admin') ? 'Admin' : 'Customer';
       localStorage.setItem('userRole', userRole);
       localStorage.setItem('username', data.username);
@@ -126,18 +134,6 @@ function LoginPage() {
             </div>
 
             <hr className="border-secondary" />
-
-            <div className="d-grid mb-2">
-              <button type="button" className="btn btn-google">
-                <i className="fab fa-google me-2"></i> Sign in with Google
-              </button>
-            </div>
-
-            <div className="d-grid">
-              <button type="button" className="btn btn-facebook">
-                <i className="fab fa-facebook-f me-2"></i> Sign in with Facebook
-              </button>
-            </div>
           </form>
         </div>
       </div>
