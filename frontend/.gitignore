@@ -26,3 +26,6 @@ dist-ssr
 
 localhost-key.pem
 localhost.pem
+
+backend/**/obj/
+.vs/

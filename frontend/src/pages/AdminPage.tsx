@@ -313,7 +313,7 @@ const AdminPage = () => {
       const updatedMovie = isAdd ? await res.json() : payload;
 
       const imageUrl = `https://localhost:7023/Movie%20Posters/${encodeURIComponent(
-        updatedMovie.title.replace(/[^\w\s]/g, '').trim()
+        updatedMovie.title.replace(/[^\w\s-]/g, '').trim()
       )}.jpg`;
 
       const movieWithImage = {

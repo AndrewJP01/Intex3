@@ -1,7 +1,13 @@
+// src/types/FeaturedMovie.ts
+
 export type FeaturedMovie = {
-    show_id: string;
-    title: string;
-    description?: string;
-    imageUrl: string;
-  };
-  
+  title: string;
+  category?: string;
+  imageUrl?: string;
+  show_id?: string | number;
+  description?: string;
+  genre?: string;
+  rating?: string;
+  duration?: string;
+  releaseDate?: number;
+};          

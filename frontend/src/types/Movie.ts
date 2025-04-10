@@ -43,5 +43,7 @@ export interface Movie {
     "TV Dramas": number;
     "Talk Shows TV Comedies": number;
     Thrillers: number;
+    category: string;
+    [key: string]: any;
   }
   

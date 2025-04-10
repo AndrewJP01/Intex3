@@ -2,3 +2,5 @@ wwwroot/Movie Posters/
 obj/
 bin/
 .DS_Store
+backend/**/obj/
+.vs/

@@ -1,23 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../pages/MovieHomePage.module.css';
 import { useNavigate } from 'react-router-dom';
-
-type Movie = {
-  title: string;
-  category: string;
-  imageUrl?: string;
-  id?: string | number;
-  description?: string;
-  genre?: string;
-  rating?: string;
-  duration?: string;
-  show_id?: string;
-  releaseDate?: number;
-};
+import { FeaturedMovie } from '../types/FeaturedMovie';
 
 type ContentCarouselProps = {
   title: string;
-  movies: Movie[];
+  movies: FeaturedMovie[];
   delayRender?: number;
   onScrollEnd?: () => void;
 };
@@ -28,17 +16,18 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   delayRender,
 }) => {
   const navigate = useNavigate();
-  const [validMovies, setValidMovies] = useState<Movie[]>([]);
+  const [validMovies, setValidMovies] = useState<FeaturedMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredMovie, setHoveredMovie] = useState<Movie | null>(null);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [hoveredMovie, setHoveredMovie] = useState<FeaturedMovie | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<FeaturedMovie | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const imageCache = useRef<Map<string, boolean>>(new Map());
   const moviesPerPage = 6;
 
-  const getMovieImageUrl = (movieTitle: string) => {
-    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
+  const getMovieImageUrl = (title: string): string => {
+    const cleaned = title.replace(/[^\w\s-]/g, '').trim(); // Match AdminPage logic
+    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(cleaned)}.jpg`;
   };
 
   const checkImage = async (url: string) => {
@@ -60,10 +49,10 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   useEffect(() => {
     const loadValidMovies = async () => {
       setLoading(true);
-      const filtered: Movie[] = [];
+      const filtered: FeaturedMovie[] = [];
 
       for (const movie of movies) {
-        const url = movie.imageUrl || getMovieImageUrl(movie.title);
+        const url = getMovieImageUrl(movie.title); // Always rebuild image URL like Admin Page
         const valid = await checkImage(url);
         filtered.push({
           ...movie,
@@ -102,6 +91,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const handleMovieClick = (id: string | number | undefined) => {
     if (id) navigate(`/${id}`);
   };
+  
 
   const handleNextClick = () => {
     const max = Math.ceil(validMovies.length / moviesPerPage) - 1;
@@ -162,8 +152,8 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
                       <div className={styles.hoverPopupContent}>
                         <h4 className={styles.hoverTitle}>{movie.title}</h4>
                         <p className={styles.meta}>
-                          {movie.genre || 'Genre'} • {movie.rating || 'Rating'}{' '}
-                          • {movie.duration || 'Length'}
+                          {movie.genre || 'Genre'} • {movie.rating || 'Rating'} •{' '}
+                          {movie.duration || 'Length'}
                         </p>
                       </div>
                     </div>
@@ -178,7 +168,9 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
             disabled={
               currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
             }
-            hidden={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
+            hidden={
+              currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
+            }
           >
             &#10095;
           </button>
@@ -199,19 +191,19 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
               <p>{selectedMovie.description}</p>
               <p>
                 {selectedMovie.releaseDate || 'TBD'} <br />
-                {selectedMovie.genre || 'Genre'} •{' '}
+                {selectedMovie.genre} •{' '}
                 {selectedMovie.rating || 'Rating'} •{' '}
                 {selectedMovie.duration || 'Length'}
               </p>
               <button
                 className={styles.playButton}
-                onClick={() => handleMovieClick(selectedMovie.show_id)}
+                onClick={() => handleMovieClick(selectedMovie?.show_id)}
               >
                 ▶
               </button>
               <button
                 className={styles.moreInfoButton}
-                onClick={() => handleMovieClick(selectedMovie.show_id)}
+                onClick={() => handleMovieClick(selectedMovie?.show_id)}
               >
                 More Info
               </button>
@@ -225,7 +217,6 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
           </div>
         </div>
       )}
-      
     </section>
   );
 };
