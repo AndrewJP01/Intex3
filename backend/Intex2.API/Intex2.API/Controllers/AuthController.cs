@@ -65,9 +65,17 @@ namespace Intex2.API.Controllers
 
             if (result.Succeeded)
             {
-                return Ok("Login successful");
+                var roles = await _userManager.GetRolesAsync(user);
+
+                return Ok(new
+                {
+                    message = "Login successful",
+                    username = user.UserName,
+                    email = user.Email,
+                    roles = roles
+                });
             }
-            
+
             return Unauthorized("Invalid email or password");
         }
 
@@ -85,5 +93,19 @@ namespace Intex2.API.Controllers
             return Ok(new { message = $"Authenticated as {username}" });
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                username = user.UserName,
+                email = user.Email,
+                roles = roles
+            });
+        }
     }
 }

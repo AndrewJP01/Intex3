@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Intex2.API.Models;
 using Intex2.API.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+// ✅ Enable config from appsettings + secrets + env vars
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -75,12 +81,13 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
-// THis adds the Recommendation model for requirement one based on shows and shows similar to that show
+// ✅ ML Recommendation Service
 builder.Services.AddSingleton<RecommendationService>(provider =>
 {
     var env = provider.GetRequiredService<IWebHostEnvironment>();
     return new RecommendationService(env);
 });
+
 var app = builder.Build();
 
 // ✅ Swagger

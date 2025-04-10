@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import {Navbar} from '../components/Navbar';
+import React, { useState, useEffect } from 'react';
+import { Navbar } from '../components/Navbar';
 import HeroBanner from '../components/HeroBanner';
 import TrendingCarousel from '../components/TrendingCarousel';
 import FeatureGrid from '../components/FeatureGrid';
@@ -11,6 +11,14 @@ const HomePage: React.FC = () => {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
+  // ✅ Auto-redirect if user is already logged in
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    if (role) {
+      navigate('/moviesPage');
+    }
+  }, []);
+
   const handleGetStarted = () => {
     if (email.trim()) {
       navigate(`/create-account?email=${encodeURIComponent(email)}`);
@@ -20,7 +28,11 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Navbar />
-      <HeroBanner email={email} setEmail={setEmail} onGetStarted={handleGetStarted} />
+      <HeroBanner
+        email={email}
+        setEmail={setEmail}
+        onGetStarted={handleGetStarted}
+      />
       <TrendingCarousel />
       <FeatureGrid />
       <FAQAccordion />
