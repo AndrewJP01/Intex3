@@ -46,7 +46,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ email, setEmail }) => {
           />
           <button
             onClick={handleGetStarted}
-            className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-md font-medium"
+            className="bg-[#00b0ff] hover:bg-[#0091d5] transition text-white px-6 py-3 rounded-md font-medium"
           >
             Get Started
           </button>

@@ -19,14 +19,11 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://localhost:7023/api/Admin/${id}`, 
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-    
-          }
-        );
+        const response = await fetch(`https://localhost:7023/api/Admin/${id}`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
@@ -74,11 +71,16 @@ const MovieDetailsPage: React.FC = () => {
         <div className={styles.spinner}></div>
       </div>
     );
-  }  if (error) return <div className={styles.error}>Error: {error}</div>;
+  }
+  if (error) return <div className={styles.error}>Error: {error}</div>;
   if (!movie) return null;
 
   const avgRating = movie.ratings?.[0] || 0;
   const ratingCount = movie.ratings?.[1] || 0;
+
+  const posterUrl = movie.show_id
+    ? `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${movie.show_id.trim()}.jpg`
+    : '/fallback.jpg';
 
   return (
     <AnimatePresence>
@@ -99,8 +101,11 @@ const MovieDetailsPage: React.FC = () => {
         <div className={styles.heroSection}>
           <img
             className={styles.poster}
-            src={`https://localhost:7023/Movie%20Posters/${encodeURIComponent(movie.title || '')}.jpg`}
+            src={posterUrl}
             alt={movie.title}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/fallback.jpg';
+            }}
           />
 
           <div className={styles.details}>
@@ -169,9 +174,12 @@ const MovieDetailsPage: React.FC = () => {
                 </button>
               )}
             </div>
-                {movie.show_id && (
+            {movie.show_id && (
               <div className={styles.recommendationSection}>
-                <RecommendationsSection showId={movie.show_id} title={movie.title} />
+                <RecommendationsSection
+                  showId={movie.show_id}
+                  title={movie.title}
+                />
               </div>
             )}
           </div>

@@ -165,8 +165,9 @@ const AdminPage = () => {
     const normalizeTitle = (title: string) =>
       encodeURIComponent(title.replace(/[^\w\s]/g, '').trim());
 
-    const getMovieImageUrl = (title: string) =>
-      `https://localhost:7023/Movie%20Posters/${normalizeTitle(title)}.jpg`;
+    const getMovieImageUrl = (showId: string) => {
+      return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${showId.trim()}.jpg`;
+    };
 
     fetch('https://localhost:7023/api/admin/movies', {
       method: 'GET',
@@ -194,7 +195,7 @@ const AdminPage = () => {
           rating: m.rating || 'Unrated',
           director: m.director || 'Unknown',
           release_year: m.release_year,
-          imageUrl: getMovieImageUrl(m.title),
+          imageUrl: getMovieImageUrl(m.show_id),
           description: m.description || '',
           duration: m.duration || '',
         }));
@@ -312,9 +313,7 @@ const AdminPage = () => {
 
       const updatedMovie = isAdd ? await res.json() : payload;
 
-      const imageUrl = `https://localhost:7023/Movie%20Posters/${encodeURIComponent(
-        updatedMovie.title.replace(/[^\w\s-]/g, '').trim()
-      )}.jpg`;
+      const imageUrl = `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${updatedMovie.show_id.trim()}.jpg`;
 
       const movieWithImage = {
         ...updatedMovie,
@@ -443,7 +442,7 @@ const AdminPage = () => {
                       alt={movie.title}
                       onError={(e) =>
                         (e.currentTarget.src =
-                          'https://localhost:7023/Movie%20Posters/fallback.jpg')
+                          'https://posterstorage13.blob.core.windows.net/posters/renamed_posters/fallback.jpg')
                       }
                     />
                     <span>{movie.title}</span>

@@ -42,9 +42,8 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const imageCache = useRef<Map<string, boolean>>(new Map());
   const moviesPerPage = 6;
 
-  const getMovieImageUrl = (title: string): string => {
-    const cleaned = title.replace(/[^\w\s-]/g, '').trim(); // Match AdminPage logic
-    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(cleaned)}.jpg`;
+  const getMovieImageUrl = (show_Id: string) => {
+    return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${show_Id}.jpg`;
   };
 
   const checkImage = async (url: string) => {

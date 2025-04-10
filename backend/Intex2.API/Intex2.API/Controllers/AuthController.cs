@@ -82,14 +82,14 @@ namespace Intex2.API.Controllers
                 return Unauthorized("Invalid email or password");
             }
 
-            var result = await _signInManager.PasswordSignInAsync(
-                user.UserName,
-                dto.Password,
-                isPersistent: true,
-                lockoutOnFailure: true);
+            var result = await _signInManager.CheckPasswordSignInAsync(
+                user, dto.Password, lockoutOnFailure: true);
 
             if (result.Succeeded)
             {
+                // Explicitly sign in and issue auth cookie
+                await _signInManager.SignInAsync(user, isPersistent: true);
+
                 var roles = await _userManager.GetRolesAsync(user);
 
                 return Ok(new
@@ -104,6 +104,7 @@ namespace Intex2.API.Controllers
             return Unauthorized("Invalid email or password");
         }
 
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -112,10 +113,19 @@ namespace Intex2.API.Controllers
         }
 
         [HttpGet("pingauth")]
-        [Authorize]
         public async Task<IActionResult> PingAuth()
         {
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                return Unauthorized(new { message = "Not authenticated" });
+            }
+
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found" });
+            }
+
             var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(new
@@ -126,6 +136,7 @@ namespace Intex2.API.Controllers
                 roles
             });
         }
+
 
         [HttpGet("me")]
         [Authorize]
