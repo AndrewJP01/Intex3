@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../pages/MovieHomePage.module.css';
 import { useNavigate } from 'react-router-dom';
+import { FeaturedMovie } from '../types/FeaturedMovie';
 
 
 export type Movie = {
@@ -20,7 +21,7 @@ export type Movie = {
 
 type ContentCarouselProps = {
   title: string;
-  movies: Movie[];
+  movies: FeaturedMovie[];
   delayRender?: number;
   onScrollEnd?: () => void;
 };
@@ -31,17 +32,18 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   delayRender,
 }) => {
   const navigate = useNavigate();
-  const [validMovies, setValidMovies] = useState<Movie[]>([]);
+  const [validMovies, setValidMovies] = useState<FeaturedMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredMovie, setHoveredMovie] = useState<Movie | null>(null);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [hoveredMovie, setHoveredMovie] = useState<FeaturedMovie | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<FeaturedMovie | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const imageCache = useRef<Map<string, boolean>>(new Map());
   const moviesPerPage = 6;
 
-  const getMovieImageUrl = (movieTitle: string) => {
-    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(movieTitle)}.jpg`;
+  const getMovieImageUrl = (title: string): string => {
+    const cleaned = title.replace(/[^\w\s-]/g, '').trim(); // Match AdminPage logic
+    return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(cleaned)}.jpg`;
   };
 
   const checkImage = async (url: string) => {
@@ -63,11 +65,11 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   useEffect(() => {
     const loadValidMovies = async () => {
       setLoading(true);
-      const filtered: Movie[] = [];
+      const filtered: FeaturedMovie[] = [];
 
       for (const movie of movies) {
-        const url = movie.imageUrl || getMovieImageUrl(movie.title);
-        
+        const url = getMovieImageUrl(movie.title); // Always rebuild image URL like Admin Page
+        const valid = await checkImage(url);
         filtered.push({
           ...movie,
           imageUrl: url, // Let onError handle fallback dynamically
@@ -110,6 +112,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const handleMovieClick = (id: string | number | undefined) => {
     if (id) navigate(`/${id}`);
   };
+  
 
   const getShortTitle = (title: string, wordLimit: number = 3) => {
     const words = title.split(' ');
@@ -190,7 +193,9 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
             disabled={
               currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
             }
-            hidden={currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1}
+            hidden={
+              currentIndex === Math.ceil(validMovies.length / moviesPerPage) - 1
+            }
           >
             &#10095;
           </button>
@@ -226,7 +231,7 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
 
               <button
                 className={styles.playButton}
-                onClick={() => handleMovieClick(selectedMovie.show_id)}
+                onClick={() => handleMovieClick(selectedMovie?.show_id)}
               >
                 ▶
               </button>
@@ -249,7 +254,6 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
           </div>
         </div>
       )}
-      
     </section>
   );
 };

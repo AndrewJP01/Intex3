@@ -16,7 +16,7 @@ export type Movie = {
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
-  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({});
+  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({}); 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,20 +27,18 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
       try {
         const res = await fetch('https://localhost:7023/api/Admin/movies', {
           method: 'GET',
-          credentials: 'include', // ✅ sends auth cookie!
+          credentials: 'include',
         });
 
-        // If the response is not ok, check for a 401 error and show a popup if so.
         if (!res.ok) {
           if (res.status === 401) {
             window.alert('Unauthorized. Please log in to continue.');
           }
-          throw new Error(
-            `Failed to fetch movies (Status code: ${res.status})`
-          );
+          throw new Error(`Failed to fetch movies (Status code: ${res.status})`);
         }
 
         const data = await res.json();
+
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
           genre: Array.isArray(item.genres)
@@ -61,7 +59,6 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         setAllMovies(transformed);
         setFilteredMovies(transformed);
 
-        // Initialize visible counts per genre
         const defaultCounts: Record<string, number> = {};
         transformed.forEach(movie => {
           const cat = movie.genre;

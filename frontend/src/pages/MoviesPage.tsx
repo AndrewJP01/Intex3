@@ -8,8 +8,8 @@ import { CategoryFilter } from '../components/CategoryFilter';
 import { useMovieData } from '../api/useMovieData';
 import { Navbar } from '../components/Navbar';
 import { useGenres } from '../api/useGenres';
-import { useFeaturedMovies } from '../api/useFeaturedMovies';
-import { FeaturedMovie } from '../types/FeaturedMovie';
+import { useFeaturedMovies, MovieGroup, toFeatured } from '../api/useFeaturedMovies';
+
 
 export const MoviesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,27 +28,46 @@ export const MoviesPage: React.FC = () => {
     error: genresError,
   } = useGenres();
 
-  // ✅ Correctly use the hook here (no redeclaration!)
   const {
     featuredMovies,
-    personalizedMovies,
+    rewatchFavorites,
+    topPicks,
+    sinceYouLiked,
+    genreRecommendations,
     loading: featuredLoading,
     error: featuredError,
   } = useFeaturedMovies();
 
-  // Sort the categories alphabetically or by any other logic
-  const sortedCategories = Object.entries(groupedByCategory).sort((a, b) => {
-    return a[0].localeCompare(b[0]); // sorts categories alphabetically, you can change this logic if needed
-  });
+  const sortedCategories = Object.entries(groupedByCategory).sort((a, b) => a[0].localeCompare(b[0]));
+
+  // Convert regular categories to MovieGroup[]
+const regularGenreGroups: MovieGroup[] = sortedCategories.map(([category, movies]) => ({
+  category,
+  movies: movies.map((m) => toFeatured(m, category)),
+}));
+
+// Shuffle both genre recs and regular genres separately
+const shuffledRecommendations = [...genreRecommendations].sort(() => 0.5 - Math.random());
+const shuffledRegulars = [...regularGenreGroups].sort(() => 0.5 - Math.random());
+
+// Interleave them so no two genreRecommendations appear back-to-back
+const mixedGenreRows: MovieGroup[] = [];
+const maxLen = Math.max(shuffledRecommendations.length, shuffledRegulars.length);
+
+for (let i = 0; i < maxLen; i++) {
+  if (i < shuffledRecommendations.length) mixedGenreRows.push(shuffledRecommendations[i]);
+  if (i < shuffledRegulars.length) mixedGenreRows.push(shuffledRegulars[i]);
+}
+
 
   return (
     <main className={styles.mainContainer}>
       <Navbar />
 
+      {/* 🎬 Featured Hero Banner */}
       {!featuredLoading && !featuredError && featuredMovies.length > 0 && (
         <Hero featuredMovies={featuredMovies} />
       )}
-
 
       <SearchBar searchTerm={searchTerm} onChange={setSearchTerm} />
 
@@ -58,6 +77,43 @@ export const MoviesPage: React.FC = () => {
         availableGenres={availableGenres}
       />
 
+      {/* 🎯 Top Picks for You */}
+      {topPicks && (
+        <ContentCarousel
+          title={topPicks.category}
+          movies={topPicks.movies}
+          delayRender={100}
+        />
+      )}
+
+      {/* 🔁 Rewatch Favorites */}
+      {rewatchFavorites && (
+        <ContentCarousel
+          title={rewatchFavorites.category}
+          movies={rewatchFavorites.movies}
+          delayRender={200}
+        />
+      )}
+
+      {/* ❤️ Since you liked... (up to 3) */}
+      {sinceYouLiked.map((group: MovieGroup, index) => (
+        <ContentCarousel
+          key={group.category}
+          title={group.category}
+          movies={group.movies}
+          delayRender={300 + index * 100}
+        />
+      ))}
+
+      {/* 🎭 Shuffled Genre-Based + Regular Genre Carousels */}
+      {mixedGenreRows.map((group: MovieGroup, index) => (
+        <ContentCarousel
+          key={group.category}
+          title={group.category}
+          movies={group.movies}
+          delayRender={0 + index * 100}
+        />
+      ))}
       {personalizedMovies.length > 0 && (
                 <ContentCarousel
                   title="Since you liked..."

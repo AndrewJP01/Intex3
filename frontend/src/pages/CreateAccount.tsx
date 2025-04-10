@@ -93,6 +93,8 @@ const CreateAccount = () => {
                   strokeWidth="2"
                   d="M5.121 17.804A8.966 8.966 0 0112 15c2.144 0 4.1.755 5.879 2.004M15 10a3 3 0 11-6 0 3 3 0 016 0zM12 2a10 10 0 100 20 10 10 0 000-20z"
                 />
+              <svg xmlns="httpss://www.w3.org/2000/svg" className="h-28 w-28 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A8.966 8.966 0 0112 15c2.144 0 4.1.755 5.879 2.004M15 10a3 3 0 11-6 0 3 3 0 016 0zM12 2a10 10 0 100 20 10 10 0 000-20z" />
               </svg>
             </div>
             <h1 className="text-4xl font-extrabold uppercase text-center mb-6">
@@ -160,7 +162,7 @@ const CreateAccount = () => {
                   placeholder="Jane Doe"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -176,7 +178,7 @@ const CreateAccount = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -192,7 +194,7 @@ const CreateAccount = () => {
                   placeholder="(555) 555-5555"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-black placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-md bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <button
