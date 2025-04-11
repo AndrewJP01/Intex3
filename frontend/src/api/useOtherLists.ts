@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Movie } from '../types/Movie';
 import { FeaturedMovie } from '../types/FeaturedMovie';
+import { useUser } from '../context/UserContext'; // ✅ custom hook
 
 export type MovieGroup = {
   category: string;
@@ -33,6 +34,7 @@ export const toFeatured = (movie: any, category?: string): FeaturedMovie => {
 };
 
 export const useOtherLists = () => {
+  const { userId } = useUser(); // ✅ use your custom context hook
   const [rewatchFavorites, setRewatchFavorites] = useState<MovieGroup | null>(
     null
   );
@@ -44,85 +46,81 @@ export const useOtherLists = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const userId = 11; // 🔒 TEMP: Replace with dynamic ID later
-
   useEffect(() => {
+    if (!userId) return;
+
     const fetchPersonalized = async () => {
       try {
         const base = import.meta.env.VITE_API_URL;
 
-        const rewatchRes = await fetch(
+        const fetchList = async (
+          url: string,
+          transform: (data: any) => void
+        ) => {
+          const res = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          if (!res.ok) throw new Error(`${url} failed (${res.status})`);
+          const data = await res.json();
+          transform(data);
+        };
+
+        await fetchList(
           `${base}/api/recommendations/category/${userId}/rewatch_favorite`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
+          (data) => {
+            setRewatchFavorites({
+              category: 'Rewatch Favorites',
+              movies: data.map((m: Movie) => toFeatured(m)),
+            });
           }
         );
-        const rewatchData = await rewatchRes.json();
-        setRewatchFavorites({
-          category: 'Rewatch Favorites',
-          movies: rewatchData.map((m: Movie) => toFeatured(m)),
-        });
 
-        const topPickRes = await fetch(
+        await fetchList(
           `${base}/api/recommendations/category/${userId}/top_picks`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
+          (data) => {
+            setTopPicks({
+              category: 'Top Picks for You',
+              movies: data.map((m: Movie) => toFeatured(m)),
+            });
           }
         );
-        const topPicksData = await topPickRes.json();
-        setTopPicks({
-          category: 'Top Picks for You',
-          movies: topPicksData.map((m: Movie) => toFeatured(m)),
-        });
 
-        const topRated = await fetch(
+        await fetchList(
           `${base}/api/recommendations/topRated/${userId}`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
+          (data) => {
+            const group: MovieGroup = {
+              category: 'Because You Liked...',
+              movies: data.map((m: Movie) => toFeatured(m)),
+            };
+            setSinceYouLiked([group]);
           }
         );
-        const sinceYouLikedData = await topRated.json();
-        const similarGroups: MovieGroup[] = sinceYouLikedData.map(
-          (group: any) => ({
-            category: group.category,
-            movies: group.movies.map((m: Movie) => toFeatured(m)),
-          })
-        );
-        setSinceYouLiked(similarGroups);
 
-        const genreRes = await fetch(
+        await fetchList(
           `${base}/api/recommendations/category/${userId}/genre_recommendation`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
+          (data) => {
+            const genreGroups: Record<string, Movie[]> = {};
+            for (const m of data) {
+              const genre = m.genre || 'Other';
+              if (!genreGroups[genre]) genreGroups[genre] = [];
+              genreGroups[genre].push(m);
+            }
+
+            const entries = Object.entries(genreGroups)
+              .sort(() => 0.5 - Math.random())
+              .slice(0, 10)
+              .map(([genre, movies]) => ({
+                category: `${genre} Recommendations For You`,
+                movies: movies.map((m: Movie) => toFeatured(m, genre)),
+              }));
+
+            setGenreRecommendations(entries);
           }
         );
-        const genreData = await genreRes.json();
-
-        const genreGroups: Record<string, Movie[]> = {};
-        for (const m of genreData) {
-          const genre = m.genre || 'Other';
-          if (!genreGroups[genre]) genreGroups[genre] = [];
-          genreGroups[genre].push(m);
-        }
-
-        const entries = Object.entries(genreGroups)
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 10)
-          .map(([genre, movies]) => ({
-            category: `${genre} Recommendations For You`,
-            movies: movies.map((m: Movie) => toFeatured(m, genre)),
-          }));
-
-        setGenreRecommendations(entries);
       } catch (err) {
+        console.error(err);
         setError('Failed to load personalized recommendations.');
       } finally {
         setLoading(false);
@@ -130,7 +128,7 @@ export const useOtherLists = () => {
     };
 
     fetchPersonalized();
-  }, []);
+  }, [userId]);
 
   return {
     rewatchFavorites,
