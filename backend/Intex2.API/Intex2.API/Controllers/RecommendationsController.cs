@@ -35,7 +35,7 @@ public class RecommendationsController : ControllerBase
                     m.release_year,
                     m.duration,
                     m.rating,
-                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id ?? "")}.jpgS"
+                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id ?? "")}.jpg"
                 })
                 .ToListAsync();
             return Ok(recommendedMovies);

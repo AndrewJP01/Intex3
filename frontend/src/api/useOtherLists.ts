@@ -52,7 +52,7 @@ export const useOtherLists = () => {
         // 1. Rewatch Favorites
         console.log(':repeat: Fetching Rewatch Favorites...');
         const rewatchRes = await fetch(
-          `https://intex2-backend-ezarg.azurewebsites.netS/api/recommendations/category/${userId}/rewatch_favorite`,
+          `${import.meta.env.VITE_API_URL}/api/recommendations/category/${userId}/rewatch_favorite`,
           {
             method: 'GET',
             credentials: 'include',
@@ -68,7 +68,7 @@ export const useOtherLists = () => {
         // 2. Top Picks
         console.log(':dart: Fetching Top Picks...');
         const topPickRes = await fetch(
-          `https://intex2-backend-ezarg.azurewebsites.net/api/recommendations/category/${userId}/top_picks`,
+          `${import.meta.env.VITE_API_URL}/api/recommendations/category/${userId}/top_picks`,
           {
             method: 'GET',
             credentials: 'include',
@@ -84,7 +84,7 @@ export const useOtherLists = () => {
         // 3. Since You Liked
         console.log(':eyes: Fetching Since You Liked...');
         const topRated = await fetch(
-          `https://intex2-backend-ezarg.azurewebsites.net/api/recommendations/topRated/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/recommendations/topRated/${userId}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -103,7 +103,7 @@ export const useOtherLists = () => {
         // 4. Genre Recommendations
         console.log(':performing_arts: Fetching Genre Recommendations...');
         const genreRes = await fetch(
-          `https://intex2-backend-ezarg.azurewebsites.net/api/recommendations/category/${userId}/genre_recommendation`,
+          `${import.meta.env.VITE_API_URL}/api/recommendations/category/${userId}/genre_recommendation`,
           {
             method: 'GET',
             credentials: 'include',
