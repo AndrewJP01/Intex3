@@ -21,7 +21,13 @@ public class RecommendationsController : ControllerBase
         _context = context;
     }
 
-    // ✅ GET recommendations for a given movie ID
+    private static string BuildPosterUrl(string? showId)
+    {
+        return !string.IsNullOrWhiteSpace(showId)
+            ? $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(showId)}.jpg"
+            : "https://posterstorage13.blob.core.windows.net/posters/fallback.jpg";
+    }
+
     [HttpGet("{showId}")]
     public async Task<IActionResult> GetRecommendations(string showId)
     {
@@ -42,7 +48,7 @@ public class RecommendationsController : ControllerBase
                     m.release_year,
                     m.duration,
                     m.rating,
-                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg"
+                    imageUrl = BuildPosterUrl(m.show_id)
                 })
                 .ToListAsync();
 
@@ -54,7 +60,6 @@ public class RecommendationsController : ControllerBase
         }
     }
 
-    // ✅ GET top-rated recommendations personalized by user
     [HttpGet("topRated/{userId}")]
     public async Task<IActionResult> GetTopRatedRecommendations(int userId)
     {
@@ -81,9 +86,6 @@ public class RecommendationsController : ControllerBase
 
                 var recs = _recommendationService.GetRecommendations(showId);
 
-                if (recs == null || !recs.Any())
-                    continue; // ⛔ Skip empty recs
-
                 var recommendedMovies = await _context.Movies
                     .Where(m => recs.Contains(m.show_id!))
                     .Select(m => new
@@ -94,7 +96,7 @@ public class RecommendationsController : ControllerBase
                         m.release_year,
                         m.duration,
                         m.rating,
-                        imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg"
+                        imageUrl = BuildPosterUrl(m.show_id)
                     })
                     .ToListAsync();
 
@@ -113,7 +115,6 @@ public class RecommendationsController : ControllerBase
         }
     }
 
-    // ✅ GET recommendations by category and user
     [HttpGet("category/{userId}/{category}")]
     public async Task<IActionResult> GetRecommendationsByCategory(int userId, string category)
     {
@@ -136,7 +137,7 @@ public class RecommendationsController : ControllerBase
                     m.release_year,
                     m.duration,
                     m.rating,
-                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg"
+                    imageUrl = BuildPosterUrl(m.show_id)
                 })
                 .ToListAsync();
 

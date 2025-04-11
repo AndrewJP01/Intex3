@@ -14,9 +14,7 @@ export type FeaturedMovie = {
 
 export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
-  const [personalizedMovies, setPersonalizedMovies] = useState<FeaturedMovie[]>(
-    []
-  );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -74,42 +72,8 @@ export const useFeaturedMovies = () => {
     fetchFeatured();
   }, []);
 
-  useEffect(() => {
-    const fetchPersonalized = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/recommendations/topRated/1`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(
-            `Personalized fetch failed (Status: ${res.status}) - ${text}`
-          );
-        }
-
-        const data = await res.json();
-        setPersonalizedMovies(data);
-      } catch (err: any) {
-        setError(
-          err.message || 'Unknown error while fetching personalized movies.'
-        );
-      }
-    };
-
-    fetchPersonalized();
-  }, []);
-
   return {
     featuredMovies,
-    personalizedMovies,
     loading,
     error,
   };
