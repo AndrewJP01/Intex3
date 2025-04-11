@@ -84,16 +84,16 @@ builder.Services.AddSingleton<RecommendationService>(provider =>
 var app = builder.Build();
 
 // CSP Middleware
-// app.Use(async (context, next) =>
-// {
-//     context.Response.Headers["Content-Security-Policy"] =
-//         "default-src 'self' https://lemon-glacier-042775c1e.6.azurestaticapps.net; " +
-//         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-//         "font-src 'self' https://fonts.gstatic.com; " +
-//         "img-src 'self' data: https:; " +
-//         "script-src 'self' 'unsafe-inline' 'unsafe-eval';";
-//     await next();
-// });
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Content-Security-Policy"] =
+        "default-src 'self' https://lemon-glacier-042775c1e.6.azurestaticapps.net; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+        "font-src 'self' https://fonts.gstatic.com; " +
+        "img-src 'self' data: https:; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval';";
+    await next();
+});
 
 if (!app.Environment.IsDevelopment())
 {
