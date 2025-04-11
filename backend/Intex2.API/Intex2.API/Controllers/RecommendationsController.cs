@@ -41,7 +41,8 @@ public class RecommendationsController : ControllerBase
                     m.release_year,
                     m.duration,
                     m.rating,
-                    imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg",
+
                 })
                 .ToListAsync();
 
@@ -89,7 +90,7 @@ public class RecommendationsController : ControllerBase
                                 m.release_year,
                                 m.duration,
                                 m.rating,
-                                imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                                imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg"
                             })
                             .ToListAsync();
 
@@ -131,7 +132,7 @@ public class RecommendationsController : ControllerBase
                     m.release_year,
                     m.duration,
                     m.rating,
-                    imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg"
                 })
                 .ToListAsync();
 

@@ -69,7 +69,7 @@ namespace Intex2.API.Controllers
                     rating = m.rating,
                     duration = m.duration,
                     releaseDate = m.release_year,
-                    imageUrl = $"https://localhost:7023/Movie%20Posters/{Uri.EscapeDataString(m.title ?? "")}.jpg",
+                    imageUrl = $"https://posterstorage13.blob.core.windows.net/posters/renamed_posters/{Uri.EscapeDataString(m.show_id)}.jpg",
                     ratingsCount = m.ratings.Count,
                     averageRating = m.ratings.Average(r => (double)r.rating)
                 })
