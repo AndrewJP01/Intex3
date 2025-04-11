@@ -46,6 +46,7 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
         }
 
         const data = await res.json();
+        console.log('📦 Raw API response', data); // Debug Log 1
 
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
@@ -62,6 +63,8 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
           duration: item.duration || 'Length TBD',
           releaseDate: item.release_year,
         }));
+
+        console.log('🎬 Transformed movies', transformed); // Debug Log 2
 
         setAllMovies(transformed);
         setFilteredMovies(transformed);
