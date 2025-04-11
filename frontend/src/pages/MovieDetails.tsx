@@ -19,7 +19,7 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`https://localhost:7023/api/Admin/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/Admin/${id}`, {
           method: 'GET',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -44,7 +44,7 @@ const MovieDetailsPage: React.FC = () => {
     // You could hardcode a test user_id or pull it from context/localStorage/auth
 
     try {
-      const res = await fetch(`https://localhost:7023/api/Admin/${id}/rate`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/Admin/${id}/rate`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
