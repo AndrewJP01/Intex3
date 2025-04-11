@@ -31,11 +31,18 @@ public class RecommendationsController : ControllerBase
             if (recommendedIds == null || !recommendedIds.Any())
                 return NotFound("No recommendations found.");
 
-            // Fetch full Movie records for those recommended IDs
             var recommendedMovies = await _context.Movies
                 .Where(m => recommendedIds.Contains(m.show_id!))
-                .Include(m => m.genres)
-                .Include(m => m.ratings)
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.description,
+                    m.release_year,
+                    m.duration,
+                    m.rating,
+                    imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                })
                 .ToListAsync();
 
             return Ok(recommendedMovies);
@@ -46,44 +53,93 @@ public class RecommendationsController : ControllerBase
         }
     }
 
+            [HttpGet("topRated/{userId}")]
+            public async Task<IActionResult> GetTopRatedRecommendations(int userId)
+            {
+                try
+                {
+                    var topRatedShowIds = await _context.MovieRatings
+                        .Where(r => r.user_id == userId)
+                        .OrderByDescending(r => r.rating)
+                        .Select(r => r.show_id)
+                        .Take(3)
+                        .ToListAsync();
 
-    [HttpGet("topRated/{userId}")]
-    public async Task<IActionResult> GetTopRatedRecommendations(int userId)
+                    if (!topRatedShowIds.Any())
+                        return NotFound("User has no rated movies.");
+
+                    var finalResult = new List<object>();
+
+                    foreach (var showId in topRatedShowIds)
+                    {
+                        var movieTitle = await _context.Movies
+                            .Where(m => m.show_id == showId)
+                            .Select(m => m.title)
+                            .FirstOrDefaultAsync() ?? $"Movie {showId}";
+
+                        var recs = _recommendationService.GetRecommendations(showId);
+
+                        var recommendedMovies = await _context.Movies
+                            .Where(m => recs.Contains(m.show_id!))
+                            .Select(m => new
+                            {
+                                m.show_id,
+                                m.title,
+                                m.description,
+                                m.release_year,
+                                m.duration,
+                                m.rating,
+                                imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                            })
+                            .ToListAsync();
+
+                        finalResult.Add(new
+                        {
+                            category = $"Because You Liked {movieTitle}",
+                            movies = recommendedMovies
+                        });
+                    }
+
+                    return Ok(finalResult);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest($"Error fetching personalized recommendations: {ex.Message}");
+                }
+            }
+
+
+    [HttpGet("category/{userId}/{category}")]
+    public async Task<IActionResult> GetRecommendationsByCategory(int userId, string category)
     {
         try
         {
-            // Step 1: Get top 3 movies rated by the user
-            var topRated = await _context.MovieRatings
-                .Where(r => r.user_id == userId)
-                .OrderByDescending(r => r.rating)
-                .Select(r => r.show_id)
-                .Take(3)
+            var recs = await Task.FromResult(_recommendationService.GetRecommendationsByCategory(userId, category));
+
+            if (recs == null || !recs.Any())
+                return NotFound("No recommendations found for this category.");
+
+            var movieIds = recs.Select(r => r.ShowId).ToList();
+
+            var movies = await _context.Movies
+                .Where(m => movieIds.Contains(m.show_id!))
+                .Select(m => new
+                {
+                    m.show_id,
+                    m.title,
+                    m.description,
+                    m.release_year,
+                    m.duration,
+                    m.rating,
+                    imageUrl = $"https://localhost:7023/Movies%20Posters/{Uri.EscapeDataString(m.title!)}.jpg"
+                })
                 .ToListAsync();
 
-            if (!topRated.Any())
-                return NotFound("User has no rated movies.");
-
-            // Step 2: Use recommendation service for each top movie
-            var recommendedShowIds = new HashSet<string>();
-            foreach (var showId in topRated)
-            {
-                var recs = _recommendationService.GetRecommendations(showId, 5);
-                foreach (var r in recs)
-                    recommendedShowIds.Add(r);
-            }
-
-            // Step 3: Get the full movie details
-            var recommendedMovies = await _context.Movies
-                .Where(m => recommendedShowIds.Contains(m.show_id!))
-                .Include(m => m.genres)
-                .Include(m => m.ratings)
-                .ToListAsync();
-
-            return Ok(recommendedMovies);
+            return Ok(movies);
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error fetching personalized recommendations: {ex.Message}");
+            return BadRequest($"Error loading recommendations: {ex.Message}");
         }
     }
 }

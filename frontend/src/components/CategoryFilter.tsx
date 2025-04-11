@@ -40,6 +40,9 @@ type CategoryFilterProps = {
         {isOpen && (
           <div className="category-panel">
             <h4 className="filter-subtitle">Genre</h4>
+            <button className="reset-button" onClick={handleReset}>
+              RESET
+            </button>
             <div className="tag-container">
               {availableGenres.map((genre, idx) => (
                 <div
@@ -53,9 +56,7 @@ type CategoryFilterProps = {
                 </div>
               ))}
             </div>
-            <button className="reset-button" onClick={handleReset}>
-              RESET
-            </button>
+
           </div>
         )}
       </div>

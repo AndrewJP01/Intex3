@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { RawMovie } from '../types/RawMovie';
 
 export type Movie = {
   title: string;
-  category: string;
+  genre: string;  // Single source of truth
   imageUrl?: string;
   id?: string | number;
   description?: string;
-  genre: string;
   rating: string;
   duration: string;
   releaseDate: number;
   show_id?: string;
 };
 
+
 export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
-  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>(
-    {}
-  );
+  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({}); 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,45 +26,43 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/Admin/movies`,
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+        const res = await fetch('https://localhost:7023/api/Admin/movies', {
+          method: 'GET',
+          credentials: 'include',
+        });
 
         if (!res.ok) {
           if (res.status === 401) {
             window.alert('Unauthorized. Please log in to continue.');
           }
-
-          const errorText = await res.text();
-          throw new Error(
-            `Failed to fetch movies (Status: ${res.status}) - ${errorText}`
-          );
+          throw new Error(`Failed to fetch movies (Status code: ${res.status})`);
         }
 
         const data = await res.json();
 
         const transformed: Movie[] = data.map((item: any) => ({
           title: item.title,
-          category: item.genres?.[0] || 'Uncategorized',
+          genre: Array.isArray(item.genres)
+          ? item.genres
+              .map((g: any) => typeof g === 'string' ? g : g.genre)
+              .filter((g: string) => g && g.trim() !== '')
+              .join(', ')
+          : '',
+
           show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
           description: item.description || 'No description available',
-          genre: item.genre,
-          rating: item.rating,
-          duration: item.duration,
+          rating: item.rating || 'NR',
+          duration: item.duration || 'Length TBD',
           releaseDate: item.release_year,
         }));
-
+        console.log('ANother Genres', transformed);
         setAllMovies(transformed);
         setFilteredMovies(transformed);
 
         const defaultCounts: Record<string, number> = {};
-        transformed.forEach((movie) => {
-          const cat = movie.category;
+        transformed.forEach(movie => {
+          const cat = movie.genre;
           defaultCounts[cat] = initialCount;
         });
         setVisibleCounts(defaultCounts);
@@ -85,36 +82,44 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
       const matchesSearch = movie.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-      const matchesCategory =
+        const matchesGenre =
         selectedCategories.length === 0 ||
-        selectedCategories.includes(movie.category);
-      return matchesSearch && matchesCategory;
+        selectedCategories.some((genre) => movie.genre.includes(genre)); // <---- THIS LINE IS THE FIX
+    
+      return matchesSearch && matchesGenre;
     });
+    
 
     setFilteredMovies(filtered);
   }, [searchTerm, selectedCategories, allMovies]);
 
-  const groupedByCategory = filteredMovies.reduce(
-    (acc, movie) => {
-      const category = movie.category;
-      acc[category] = acc[category] || [];
+  const groupedByCategory = filteredMovies.reduce((acc, movie) => {
+    const categories = movie.genre.split(',').map((c) => c.trim());  // Split on comma
+  
+    categories.forEach((category) => {
+      if (!acc[category]) acc[category] = [];
       acc[category].push(movie);
-      return acc;
-    },
-    {} as Record<string, Movie[]>
-  );
+    });
+  
+    return acc;
+  }, {} as Record<string, Movie[]>);
+  
+  
+  
 
-  const loadMoreByCategory = (category: string) => {
-    setVisibleCounts((prev) => ({
+  const loadMoreByGenre = (genre: string) => {
+    setVisibleCounts(prev => ({
       ...prev,
-      [category]: (prev[category] || initialCount) + 6,
+      [genre]: (prev[genre] || initialCount) + 6
     }));
   };
+  
 
   return {
     groupedByCategory,
     isLoading,
     error,
-    loadMoreByCategory,
+    loadMoreByGenre
   };
+  
 }

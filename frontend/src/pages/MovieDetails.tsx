@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './MovieDetailPage.module.css';
 import RecommendationsSection from '../components/RecommendationsSection';
+import { useUser } from '../context/UserContext';
 
 const MovieDetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -12,6 +13,8 @@ const MovieDetailsPage: React.FC = () => {
   const [error, setError] = useState('');
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [userRating, setUserRating] = useState<number | null>(null);
+  const { userId } = useUser();
+
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -28,6 +31,7 @@ const MovieDetailsPage: React.FC = () => {
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
+        window.scrollTo(0, 0); // <-- This scrolls to top
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch movie. ' + (err as Error).message);
@@ -41,7 +45,7 @@ const MovieDetailsPage: React.FC = () => {
   const submitRating = async () => {
     if (!userRating || !id) return;
 
-    const userId = 1; // Replace with actual user logic
+    // You could hardcode a test user_id or pull it from context/localStorage/auth
 
     try {
       const res = await fetch(
@@ -146,7 +150,7 @@ const MovieDetailsPage: React.FC = () => {
                   ))}{' '}
                 ({ratingCount} {ratingCount === 1 ? 'user' : 'users'})
               </p>
-
+              <div>Want to Submit a Rating highlight the number of stars you want to give</div>
               <div className={styles.stars}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span

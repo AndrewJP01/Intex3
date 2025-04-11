@@ -366,10 +366,17 @@ button:focus-visible {
   
 
 
-  .movieTitle {
-    font-size: 1rem;
-    font-weight: bold;
-  }
+    .movieTitle {
+      max-width: 140px;  /* match card width */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;  /* optional: smaller font */
+      text-align: center;
+      margin-top: 8px;  /* space from image */
+      color: white;
+    }
+    
   .carouselItem:hover .movieTitle {
     display: block;
     transform: translateY(0); 
@@ -389,20 +396,16 @@ button:focus-visible {
   }
   
   .carouselContainer {
+    overflow-x: auto;
     display: flex;
     align-items: center;
-    overflow-x: auto;
-    white-space: nowrap;
   }
   .carouselTrack {
-    display: flex;
-    gap: 50px; /* or try 16px, 32px, whatever feels good */
-    overflow-x: auto;
-    padding-bottom: 20px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    margin-left: 20px;
-    margin-right: 20px
+    overflow-y: hidden;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    width: 100%;
   }
 
   .selected .movieImage {
@@ -413,20 +416,20 @@ button:focus-visible {
   
   
   .cardWrapper {
+    position: relative;
     width: 160px;
     height: 240px;
     overflow: hidden;
     border-radius: 10px;
-    background: #111; /* fallback bg */
-    position: relative;
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   .carouselTrack::-webkit-scrollbar {
     display: none;
   }
+
+  .carouselItem:hover .hoverOverlay {
+    opacity: 1;
+  }
+  
   .carouselItem {
     position: relative;
     margin-right: 24px;
@@ -470,6 +473,14 @@ button:focus-visible {
 
 .backButton:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* or 100vh if full screen */
+  width: 100%;
 }
 
 .spinnerRow {
@@ -721,12 +732,12 @@ button:focus-visible {
     align-items: flex-start;
   }
   
-  .popupImage {
-    width: 200px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-  }
+.popupImage {
+  width: 180px;        /* or whatever your movie card width is */
+  height: 270px;       /* match the card height */
+  object-fit: cover;   /* keeps image proportional without distortion */
+  border-radius: 10px; /* optional - keeps it clean */
+}
   
   .popupDetails {
     flex: 1;
@@ -752,6 +763,21 @@ button:focus-visible {
     cursor: pointer;
     margin-top: 12px;
   }
+
+  .hoverOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
   .hoverPopup {
     position: absolute;
     bottom: 110%;
@@ -769,12 +795,23 @@ button:focus-visible {
   }
   
   .hoverTitle {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 4px;
+    position: absolute;
+    bottom: -40px;  /* Start hidden below */
+    left: 0;
+    width: 100%;
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    transition: bottom 0.3s ease;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
   }
-  
 
+  .cardWrapper:hover .hoverTitle {
+    bottom: 0;  /* Slide up into view */
+  }
   .hoverPopupContent {
     display: flex;
     flex-direction: column;

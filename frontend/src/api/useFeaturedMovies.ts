@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 
 export type FeaturedMovie = {
-  show_id: string;
   title: string;
+  genre: string;  // Single source of truth
+  imageUrl?: string;
+  id?: string | number;
   description?: string;
-  imageUrl: string;
+  rating: string;
+  duration: string;
+  releaseDate: number;
+  show_id?: string;
 };
+
 
 export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
@@ -13,7 +19,8 @@ export const useFeaturedMovies = () => {
     []
   );
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [personalizedMovies, setPersonalizedMovies] = useState<FeaturedMovie[]>([]); // Typed!
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -40,14 +47,36 @@ export const useFeaturedMovies = () => {
         }
 
         const data = await res.json();
-        setFeaturedMovies(data);
-      } catch (err: any) {
-        setError(
-          err.message || 'Unknown error while fetching featured movies.'
-        );
+
+        const transformed = data.map((item: any) => ({
+          title: item.title,
+          genre: Array.isArray(item.genres)
+          ? item.genres
+              .map((g: any) => typeof g === 'string' ? g : g.genre)
+              .filter((g: string) => g && g.trim() !== '')
+              .join(', ')
+          : '',
+
+          show_id: item.show_id.toString(),
+          imageUrl: item.imageUrl || undefined,
+          description: item.description || 'No description available',
+          rating: item.rating || 'NR',
+          duration: item.duration || 'Length TBD',
+          releaseDate: item.release_year,
+        }));
+
+        setFeaturedMovies(transformed);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
       }
     };
 
+    fetchFeatured();
+  }, []);
+
+  useEffect(() => {
     const fetchPersonalized = async () => {
       try {
         const res = await fetch(
@@ -77,9 +106,7 @@ export const useFeaturedMovies = () => {
       }
     };
 
-    Promise.all([fetchFeatured(), fetchPersonalized()]).finally(() =>
-      setLoading(false)
-    );
+    fetchPersonalized();
   }, []);
 
   return {

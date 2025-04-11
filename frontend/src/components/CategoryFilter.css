@@ -74,6 +74,19 @@
     color: #ffffff;
   }
   
+
+  .reset-button:hover{
+    background-color: #0096e6;   /* CINENICHE blue */
+    color: white;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+             /* Brighter text */
+    border-radius: 9999px;
+    cursor: pointer;
+  }
+
   .genre-tag.selected {
     background-color: #0096e6;   /* CINENICHE blue */
     color: white;
@@ -83,13 +96,14 @@
   
   
   .reset-button {
-    background: none;
+    background-color: #2a2a2a;   /* Lighter background than before */
     color: white;
     font-size: 14px;
     border: none;
     cursor: pointer;
     letter-spacing: 1px;
     font-weight: bold;
+    border-radius: 9999px;
     margin-top: 10px;
     transition: opacity 0.2s;
   }

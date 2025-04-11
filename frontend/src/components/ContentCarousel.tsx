@@ -1,23 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../pages/MovieHomePage.module.css';
+import contentStyles from './ContentCarousel.module.css';
 import { useNavigate } from 'react-router-dom';
+import { FeaturedMovie } from '../types/FeaturedMovie';
+import { buildImageUrl } from '../api/mappers';
 
-type Movie = {
+
+export type Movie = {
   title: string;
-  category: string;
+  genre: string;  // Single source of truth
   imageUrl?: string;
   id?: string | number;
   description?: string;
-  genre?: string;
-  rating?: string;
-  duration?: string;
+  rating: string;
+  duration: string;
+  releaseDate: number;
   show_id?: string;
-  releaseDate?: number;
 };
+
+
+
 
 type ContentCarouselProps = {
   title: string;
-  movies: Movie[];
+  movies: FeaturedMovie[];
   delayRender?: number;
   onScrollEnd?: () => void;
 };
@@ -28,51 +34,33 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   delayRender,
 }) => {
   const navigate = useNavigate();
-  const [validMovies, setValidMovies] = useState<Movie[]>([]);
+  const [validMovies, setValidMovies] = useState<FeaturedMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredMovie, setHoveredMovie] = useState<Movie | null>(null);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [hoveredMovie, setHoveredMovie] = useState<FeaturedMovie | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<FeaturedMovie | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const imageCache = useRef<Map<string, boolean>>(new Map());
-  const moviesPerPage = 6;
+  const [moviesPerPage, setMoviesPerPage] = useState(6);
 
   const getMovieImageUrl = (show_Id: string) => {
     return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${show_Id}.jpg`;
   };
 
-  const checkImage = async (url: string) => {
-    if (imageCache.current.has(url)) {
-      return imageCache.current.get(url);
-    }
 
-    try {
-      const res = await fetch(url);
-      const isValid = res.ok;
-      imageCache.current.set(url, isValid);
-      return isValid;
-    } catch {
-      imageCache.current.set(url, false);
-      return false;
-    }
-  };
 
   useEffect(() => {
     const loadValidMovies = async () => {
       setLoading(true);
-      const filtered: Movie[] = [];
-
-      for (const movie of movies) {
-        const url =
-          movie.imageUrl ||
-          (movie.show_id ? getMovieImageUrl(movie.show_id) : '');
-        const valid = await checkImage(url);
-        filtered.push({
-          ...movie,
-          imageUrl: valid ? url : '/fallback.jpg',
-        });
-      }
-
+      const filtered = movies.map((movie) => ({
+        ...movie,
+        genre: movie.genre,
+        rating: movie.rating,
+        duration: movie.duration,
+        releaseDate: movie.releaseDate,
+        show_id: movie.show_id,
+        imageUrl: getMovieImageUrl(movie.show_id || ''),
+      }));
       setValidMovies(filtered);
       setLoading(false);
     };
@@ -104,6 +92,32 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const handleMovieClick = (id: string | number | undefined) => {
     if (id) navigate(`/${id}`);
   };
+  
+
+  const getShortTitle = (title: string, wordLimit: number = 3) => {
+    const words = title.split(' ');
+    if (words.length <= wordLimit) return title;
+    return words.slice(0, wordLimit).join(' ') + '...';
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 2000) {
+        setMoviesPerPage(6);
+      } else if (window.innerWidth > 600) {
+        setMoviesPerPage(6);
+      } else if (window.innerWidth > 600) {
+        setMoviesPerPage(4);
+      } else {
+        setMoviesPerPage(2);
+      }
+    };
+  
+    window.addEventListener('resize', handleResize);
+    handleResize(); // initial run
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
 
   const handleNextClick = () => {
     const max = Math.ceil(validMovies.length / moviesPerPage) - 1;
@@ -119,7 +133,9 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
       <h2 className={styles.carouselTitle}>{title}</h2>
 
       {loading ? (
-        <div className={styles.spinnerRow}></div>
+            <div className={styles.spinnerContainer}>
+            <div className={styles.spinnerRow}></div>
+          </div>
       ) : (
         <div className={styles.carouselContainer}>
           <button
@@ -131,7 +147,8 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
             &#10094;
           </button>
 
-          <div className={styles.carouselTrack}>
+          <div className={styles.carouselTrack}
+          >
             {validMovies
               .slice(
                 currentIndex * moviesPerPage,
@@ -146,10 +163,13 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
                   onClick={() => setSelectedMovie(movie)}
                 >
                   <div className={styles.cardWrapper}>
-                    <img
+                  <img
                       src={movie.imageUrl}
                       alt={movie.title}
                       className={styles.movieImage}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/fallback.jpg';
+                      }}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -157,19 +177,12 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
                         borderRadius: '10px',
                       }}
                     />
-                  </div>
+                  <div className={styles.hoverOverlay}>
+                      <h4 className={styles.hoverTitle}>{getShortTitle(movie.title)}</h4>
 
-                  {hoveredMovie?.title === movie.title && !selectedMovie && (
-                    <div className={styles.hoverPopup}>
-                      <div className={styles.hoverPopupContent}>
-                        <h4 className={styles.hoverTitle}>{movie.title}</h4>
-                        <p className={styles.meta}>
-                          {movie.genre || 'Genre'} • {movie.rating || 'Rating'}{' '}
-                          • {movie.duration || 'Length'}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  </div>
+                  </div>
+                 
                 </div>
               ))}
           </div>
@@ -192,21 +205,30 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
       {selectedMovie && (
         <div className={styles.centerPopup} ref={popupRef}>
           <div className={styles.popupContent}>
-            <img
-              src={selectedMovie.imageUrl}
-              alt={selectedMovie.title}
-              className={styles.popupImage}
-              loading="lazy"
-            />
+          <img
+            src={selectedMovie.imageUrl}
+            alt={selectedMovie.title}
+            className={styles.popupImage}
+            loading="lazy"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/fallback.jpg';
+            }}
+          />
+
             <div className={styles.popupDetails}>
               <h3>{selectedMovie.title}</h3>
               <p>{selectedMovie.description}</p>
               <p>
-                {selectedMovie.releaseDate || 'TBD'} <br />
-                {selectedMovie.genre || 'Genre'} •{' '}
-                {selectedMovie.rating || 'Rating'} •{' '}
-                {selectedMovie.duration || 'Length'}
+                {selectedMovie.releaseDate} <br />       
               </p>
+              <p>
+              {selectedMovie.genre}
+              </p>
+                <p>{selectedMovie.rating || 'Rating'} •{' '}</p>
+                
+                <p>{selectedMovie.duration || 'Length'}</p>
+       
+
               <button
                 className={styles.playButton}
                 onClick={() => handleMovieClick(selectedMovie.show_id)}
@@ -214,11 +236,14 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
                 ▶
               </button>
               <button
-                className={styles.moreInfoButton}
-                onClick={() => handleMovieClick(selectedMovie.show_id)}
-              >
-                More Info
-              </button>
+                  className={styles.moreInfoButton}
+                  onClick={() => {
+                    setSelectedMovie(null);
+                    handleMovieClick(selectedMovie.show_id);
+                  }}
+                >
+                  More Info
+                </button>
               <button
                 className={styles.closeButton}
                 onClick={() => setSelectedMovie(null)}

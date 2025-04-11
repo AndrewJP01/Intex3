@@ -3,3 +3,5 @@ obj/
 bin/
 .DS_Store
 appsettings.Development.json
+backend/**/obj/
+.vs/
