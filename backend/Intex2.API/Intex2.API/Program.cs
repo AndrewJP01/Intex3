@@ -9,14 +9,12 @@ using Intex2.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Enable config from appsettings + secrets + env vars
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 
-// Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -26,7 +24,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ✅ CORS: Allow frontend for cookies
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -38,12 +36,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-// ✅ EF Core DbContext
 var connectionString = builder.Configuration.GetConnectionString("MovieConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// ✅ Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -62,12 +58,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// ✅ Cookie auth
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None; // ✅ Must be None for cross-origin
+    options.Cookie.SameSite = SameSiteMode.None;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.LoginPath = "/api/auth/login";
     options.LogoutPath = "/api/auth/logout";
@@ -80,7 +75,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
-// ✅ ML Recommendation Service
 builder.Services.AddSingleton<RecommendationService>(provider =>
 {
     var env = provider.GetRequiredService<IWebHostEnvironment>();
@@ -89,10 +83,32 @@ builder.Services.AddSingleton<RecommendationService>(provider =>
 
 var app = builder.Build();
 
-// ✅ Middleware setup
-app.UseHttpsRedirection();           // Must come first for secure cookies
-app.UseCors("AllowFrontend");        // CORS right after HTTPS
+// CSP Middleware
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Content-Security-Policy"] =
+        "default-src 'self' https://lemon-glacier-042775c1e.6.azurestaticapps.net; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+        "font-src 'self' https://fonts.gstatic.com; " +
+        "img-src 'self' data: https:; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval';";
+    await next();
+});
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains";
+        await next();
+    });
+}
+
+app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -101,14 +117,12 @@ app.UseSwaggerUI();
 
 app.MapControllers();
 
-// ✅ Optional: Log origin for debug
 app.Use(async (context, next) =>
 {
-    Console.WriteLine($">>> Request from Origin: {context.Request.Headers["Origin"]}");
-    await next.Invoke();
+    Console.WriteLine($"Request from Origin: {context.Request.Headers["Origin"]}");
+    await next();
 });
 
-// ✅ Test SQL connection
 try
 {
     using var connection = new SqlConnection(connectionString);
