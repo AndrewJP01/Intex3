@@ -9,10 +9,12 @@ import path from 'path';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem')),
-    },
+    ...(process.env.NODE_ENV === 'development' && {
+      https: {
+        key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
+        cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem')),
+      },
+    }),
     port: 5173,
   },
 });
