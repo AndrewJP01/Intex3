@@ -12,23 +12,24 @@ const buildImageUrl = (title: string): string => {
   return `https://localhost:7023/Movie%20Posters/${encodeURIComponent(title)}.jpg`;
 };
 
-export const toFeatured = (movie: Movie, category?: string): FeaturedMovie => {
-  if (!movie.show_id) {
-    console.warn(`⚠️ Missing show_id in movie:`, movie.title);
-  }
+export const toFeatured = (movie: any, category?: string): FeaturedMovie => {
+  const genreString = Array.isArray(movie.genres)
+    ? movie.genres.map((g: any) => typeof g === 'string' ? g : g.genre).join(', ')
+    : movie.genre || '';
 
   return {
     show_id: movie.show_id ?? '',
     title: movie.title,
     description: movie.description,
     imageUrl: buildImageUrl(movie.title),
-    genre: movie.genre || '',
+    genre: genreString,
     rating: movie.rating,
     duration: movie.duration,
     category,
     releaseDate: movie.releaseDate,
   };
 };
+
 
 
 export const useOtherLists = () => {
@@ -57,9 +58,8 @@ export const useOtherLists = () => {
         console.log('🔁 Rewatch Raw:', rewatchData);
         setRewatchFavorites({
           category: 'Rewatch Favorites',
-          movies: rewatchData.map((m: Movie) => toFeatured(m, 'Rewatch')),
+          movies: rewatchData.map((m: Movie) => toFeatured(m)),
         });
-
         // 2. Top Picks
         const topPickRes = await fetch(
           `https://localhost:7023/api/recommendations/category/${userId}/top_picks`, {
@@ -71,8 +71,9 @@ export const useOtherLists = () => {
         console.log('🎯 Top Picks Raw:', topPicksData);
         setTopPicks({
           category: 'Top Picks for You',
-          movies: topPicksData.map((m: Movie) => toFeatured(m, 'Top Picks')),
+          movies: topPicksData.map((m: Movie) => toFeatured(m)),
         });
+        
 
         // 3. Since You Liked (your buddy’s recommender)
         const topRated = await fetch(`https://localhost:7023/api/recommendations/topRated/${userId}`, {
@@ -85,7 +86,7 @@ export const useOtherLists = () => {
         
         const similarGroups: MovieGroup[] = sinceYouLikedData.map((group: any) => ({
           category: group.category,
-          movies: group.movies.map((m: Movie) => toFeatured(m, group.category)),
+          movies: group.movies.map((m: Movie) => toFeatured(m)),
         }));
         
         setSinceYouLiked(similarGroups);

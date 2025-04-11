@@ -18,50 +18,13 @@ export const MoviesPage: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(5);
 
-  const {
-    groupedByCategory,
-    isLoading: moviesLoading,
-    error: movieError,
-  } = useMovieData(searchTerm, selectedCategories);
+  const { groupedByCategory, isLoading: moviesLoading, error: movieError } = useMovieData(searchTerm, selectedCategories);
+  const { genres: availableGenres, isLoading: genresLoading, error: genresError } = useGenres();
+  const { featuredMovies, loading: featuredLoading, error: featuredError } = useFeaturedMovies();
+  const { rewatchFavorites, topPicks, sinceYouLiked, genreRecommendations } = useOtherLists();
 
-  const {
-    genres: availableGenres,
-    isLoading: genresLoading,
-    error: genresError,
-  } = useGenres();
-
-  const {
-    featuredMovies,
-    personalizedMovies,
-    loading: featuredLoading,
-    error: featuredError,
-  } = useFeaturedMovies();
-
-  const {
-    rewatchFavorites,
-    topPicks,
-    sinceYouLiked,
-    genreRecommendations,
-  } = useOtherLists();
-
-  const sortedCategories = Object.entries(groupedByCategory).sort((a, b) =>
-    a[0].localeCompare(b[0])
-  );
-
-  const regularGenreGroups: MovieGroup[] = sortedCategories.map(([category, movies]) => ({
-    category,
-    movies: movies.map((m) => toFeatured(m, category)),
-  }));
-
-  const shuffledRecommendations = [...genreRecommendations].sort(() => 0.5 - Math.random());
-  const shuffledRegulars = [...regularGenreGroups].sort(() => 0.5 - Math.random());
-
-  const mixedGenreRows: MovieGroup[] = [];
-  const maxLen = Math.max(shuffledRecommendations.length, shuffledRegulars.length);
-  for (let i = 0; i < maxLen; i++) {
-    if (i < shuffledRecommendations.length) mixedGenreRows.push(shuffledRecommendations[i]);
-    if (i < shuffledRegulars.length) mixedGenreRows.push(shuffledRegulars[i]);
-  }
+  const isLoading = moviesLoading || genresLoading || featuredLoading;
+  const hasError = movieError || genresError || featuredError;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,8 +37,31 @@ export const MoviesPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isLoading = moviesLoading || genresLoading || featuredLoading;
-  const hasError = movieError || genresError || featuredError;
+  const filterMovies = (movies: any[]) =>
+    movies.filter(
+      (movie) =>
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedCategories.length === 0 ||
+          selectedCategories.some((cat) => movie.genre?.toLowerCase().includes(cat.toLowerCase())))
+    );
+
+  const sortedCategories = Object.entries(groupedByCategory).sort((a, b) => a[0].localeCompare(b[0]));
+
+  const regularGenreGroups: MovieGroup[] = sortedCategories.map(([category, movies]) => ({
+    category,
+    movies: filterMovies(movies.map((m) => toFeatured(m))),
+  })).filter((group) => group.movies.length > 0);
+
+  const filteredRecommendations: MovieGroup[] = genreRecommendations.map(({ category, movies }) => ({
+    category,
+    movies: filterMovies(movies),
+  })).filter((group) => group.movies.length > 0);
+
+  const shouldPrioritizeGenres = searchTerm.length > 0 || selectedCategories.length > 0;
+
+  const mixedGenreRows: MovieGroup[] = shouldPrioritizeGenres
+    ? regularGenreGroups
+    : [...regularGenreGroups, ...filteredRecommendations];
 
   return (
     <main className={styles.mainContainer}>
@@ -106,30 +92,28 @@ export const MoviesPage: React.FC = () => {
             availableGenres={availableGenres}
           />
 
-          {topPicks && (
-            <ContentCarousel
-              title={topPicks.category}
-              movies={topPicks.movies}
-              delayRender={100}
-            />
+          {topPicks && filterMovies(topPicks.movies).length > 0 && (
+            <ContentCarousel title={topPicks.category} movies={topPicks.movies} delayRender={100} />
           )}
 
-          {rewatchFavorites && (
-            <ContentCarousel
-              title={rewatchFavorites.category}
-              movies={rewatchFavorites.movies}
-              delayRender={200}
-            />
+          {rewatchFavorites && filterMovies(rewatchFavorites.movies).length > 0 && (
+            <ContentCarousel title={rewatchFavorites.category} movies={rewatchFavorites.movies} delayRender={200} />
           )}
 
-          {sinceYouLiked.map((group: MovieGroup, index) => (
-                  <ContentCarousel
-                    key={group.category}
-                    title={group.category}
-                    movies={group.movies}
-                    delayRender={300 + index * 100}
-                  />
-                ))}
+          {sinceYouLiked.map((group, index) =>
+            filterMovies(group.movies).length > 0 ? (
+              <ContentCarousel
+                key={group.category}
+                title={group.category}
+                movies={filterMovies(group.movies)}
+                delayRender={300 + index * 100}
+              />
+            ) : null
+          )}
+
+          {mixedGenreRows.length === 0 && (
+            <p className={styles.noResults}>No movies found matching your search.</p>
+          )}
 
           {mixedGenreRows.slice(0, visibleCount).map((group, index) => (
             <ContentCarousel
@@ -144,3 +128,5 @@ export const MoviesPage: React.FC = () => {
     </main>
   );
 };
+
+export default MoviesPage;

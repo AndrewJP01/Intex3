@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../pages/MovieHomePage.module.css';
+import contentStyles from './ContentCarousel.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FeaturedMovie } from '../types/FeaturedMovie';
 import { buildImageUrl } from '../api/mappers';
@@ -40,34 +41,25 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const [selectedMovie, setSelectedMovie] = useState<FeaturedMovie | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const imageCache = useRef<Map<string, boolean>>(new Map());
-  const moviesPerPage = 6;
+  const [moviesPerPage, setMoviesPerPage] = useState(6);
 
   const getMovieImageUrl = (show_Id: string) => {
     return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${show_Id}.jpg`;
   };
 
-  const checkImage = async (url: string) => {
-    if (imageCache.current.has(url)) {
-      return imageCache.current.get(url);
-    }
 
-    try {
-      const res = await fetch(url);
-      const isValid = res.ok;
-      imageCache.current.set(url, isValid);
-      return isValid;
-    } catch {
-      imageCache.current.set(url, false);
-      return false;
-    }
-  };
 
   useEffect(() => {
     const loadValidMovies = async () => {
       setLoading(true);
       const filtered = movies.map((movie) => ({
         ...movie,
-        imageUrl: buildImageUrl(movie.title),
+        genre: movie.genre,
+        rating: movie.rating,
+        duration: movie.duration,
+        releaseDate: movie.releaseDate,
+        show_id: movie.show_id,
+        imageUrl: getMovieImageUrl(movie.show_id || ''),
       }));
       setValidMovies(filtered);
       setLoading(false);
@@ -107,6 +99,24 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
     if (words.length <= wordLimit) return title;
     return words.slice(0, wordLimit).join(' ') + '...';
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 2000) {
+        setMoviesPerPage(6);
+      } else if (window.innerWidth > 600) {
+        setMoviesPerPage(6);
+      } else if (window.innerWidth > 600) {
+        setMoviesPerPage(4);
+      } else {
+        setMoviesPerPage(2);
+      }
+    };
+  
+    window.addEventListener('resize', handleResize);
+    handleResize(); // initial run
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
 
   const handleNextClick = () => {
@@ -167,10 +177,12 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
                         borderRadius: '10px',
                       }}
                     />
-                  </div>
                   <div className={styles.hoverOverlay}>
-                  <h4 className={styles.hoverTitle}>{getShortTitle(movie.title)}</h4>
+                      <h4 className={styles.hoverTitle}>{getShortTitle(movie.title)}</h4>
+
                   </div>
+                  </div>
+                 
                 </div>
               ))}
           </div>
