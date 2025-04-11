@@ -52,7 +52,7 @@ export const useOtherLists = () => {
         // 1. Rewatch Favorites
         console.log(':repeat: Fetching Rewatch Favorites...');
         const rewatchRes = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/recommendations/category/${userId}/rewatch_favorite`,
+          `https://intex2-backend-ezargqcgdwbgd4hq.eastus-01.azurewebsites.net/api/recommendations/category/${userId}/rewatch_favorite`,
           {
             method: 'GET',
             credentials: 'include',
