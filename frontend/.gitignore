@@ -29,3 +29,5 @@ localhost.pem
 
 backend/**/obj/
 .vs/
+
+.env

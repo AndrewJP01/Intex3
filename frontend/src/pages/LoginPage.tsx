@@ -39,7 +39,7 @@ function LoginPage() {
       return;
     }
 
-    const loginUrl = `${import.meta.env.VITE_API_URL}/api/Auth/login`;
+    const loginUrl = `https://intex2-backend-ezargqcgdwbgd4hq.eastus-01.azurewebsites.net/api/Auth/login`;
 
     try {
       const response = await fetch(loginUrl, {
