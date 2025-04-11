@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export type FeaturedMovie = {
   title: string;
-  genre: string;  // Single source of truth
+  genre: string; // Single source of truth
   imageUrl?: string;
   id?: string | number;
   description?: string;
@@ -12,15 +12,13 @@ export type FeaturedMovie = {
   show_id?: string;
 };
 
-
 export const useFeaturedMovies = () => {
   const [featuredMovies, setFeaturedMovies] = useState<FeaturedMovie[]>([]);
   const [personalizedMovies, setPersonalizedMovies] = useState<FeaturedMovie[]>(
     []
   );
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [personalizedMovies, setPersonalizedMovies] = useState<FeaturedMovie[]>([]); // Typed!
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -51,11 +49,11 @@ export const useFeaturedMovies = () => {
         const transformed = data.map((item: any) => ({
           title: item.title,
           genre: Array.isArray(item.genres)
-          ? item.genres
-              .map((g: any) => typeof g === 'string' ? g : g.genre)
-              .filter((g: string) => g && g.trim() !== '')
-              .join(', ')
-          : '',
+            ? item.genres
+                .map((g: any) => (typeof g === 'string' ? g : g.genre))
+                .filter((g: string) => g && g.trim() !== '')
+                .join(', ')
+            : '',
 
           show_id: item.show_id.toString(),
           imageUrl: item.imageUrl || undefined,
