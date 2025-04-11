@@ -19,11 +19,15 @@ const MovieDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/Admin/${id}`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/Admin/${id}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setMovie(data);
@@ -44,15 +48,18 @@ const MovieDetailsPage: React.FC = () => {
     // You could hardcode a test user_id or pull it from context/localStorage/auth
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/Admin/${id}/rate`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rating: userRating,
-          user_id: userId,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/Admin/${id}/rate`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rating: userRating,
+            user_id: userId,
+          }),
+        }
+      );
 
       if (res.ok) {
         alert(`Rating submitted: ${userRating} stars!`);
