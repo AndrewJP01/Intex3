@@ -25,7 +25,7 @@ const RecommendationsSection: React.FC<Props> = ({ showId, title }) => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const res = await fetch(`https://localhost:7023/api/recommendations/${showId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/recommendations/${showId}`);
         if (!res.ok) throw new Error("Failed to fetch recommendations");
 
         const data = await res.json();
