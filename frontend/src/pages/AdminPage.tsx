@@ -162,8 +162,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    const normalizeTitle = (title: string) =>
-      encodeURIComponent(title.replace(/[^\w\s]/g, '').trim());
+
 
     const getMovieImageUrl = (showId: string) => {
       return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${showId.trim()}.jpg`;

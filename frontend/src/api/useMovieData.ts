@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { RawMovie } from '../types/RawMovie';
 
 export type Movie = {
   title: string;
@@ -20,7 +19,7 @@ export function useMovieData(searchTerm: string, selectedCategories: string[]) {
   const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({}); 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  console.log(visibleCounts)
   const initialCount = 6;
 
   useEffect(() => {

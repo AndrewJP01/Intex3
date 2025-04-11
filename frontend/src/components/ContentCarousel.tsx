@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../pages/MovieHomePage.module.css';
-import contentStyles from './ContentCarousel.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FeaturedMovie } from '../types/FeaturedMovie';
-import { buildImageUrl } from '../api/mappers';
 
 
 export type Movie = {
@@ -40,15 +38,14 @@ export const ContentCarousel: React.FC<ContentCarouselProps> = ({
   const [hoveredMovie, setHoveredMovie] = useState<FeaturedMovie | null>(null);
   const [selectedMovie, setSelectedMovie] = useState<FeaturedMovie | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  const imageCache = useRef<Map<string, boolean>>(new Map());
   const [moviesPerPage, setMoviesPerPage] = useState(6);
 
   const getMovieImageUrl = (show_Id: string) => {
     return `https://posterstorage13.blob.core.windows.net/posters/renamed_posters/${show_Id}.jpg`;
   };
 
-
-
+  console.log(hoveredMovie)
+  console.log
   useEffect(() => {
     const loadValidMovies = async () => {
       setLoading(true);

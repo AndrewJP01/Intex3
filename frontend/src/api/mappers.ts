@@ -1,4 +1,3 @@
-import { RawMovie } from '../types/RawMovie';
 import { FeaturedMovie } from '../types/FeaturedMovie';
 
 export const buildImageUrl = (title: string | undefined): string => {
